@@ -385,21 +385,859 @@ $(function () {
     //var result = [[1,2],[3,5]].map(([a,b])=>a+b);
     //console.log(result)
 
-    function move({x,y}={x:0,y:0}){
-        return [x,y]
+    //function move({x,y}={x:0,y:0}){
+    //    return [x,y]
+    //}
+    //var a = move ({x:3,y:8});
+    //var b = move({x:4});
+    //var c = move({});
+    //var d = move();
+    //console.log(a);
+    //console.log(b);
+    //console.log(c);
+    //console.log(d);
+
+    //undefined会触发函数参数的默认值;
+    //var arr = [1,undefined,3].map((x = 'moren')=>x);
+    //console.log(arr)
+    //var [a] = [a,1];
+    //a = 11;
+    //console.log(a)
+
+    //-------------  解构赋值的用途  -----------------------------------------
+    //交换变量的值
+    //let x = 1;
+    //let y = 2;
+    //console.log(x,y);
+    //[x, y] = [y, x];
+    //console.log(x,y);
+    // 从函数返回多个值或者对象取值;
+    //数组返回
+    //function returnArr (){
+    //    return [1,1,5];
+    //}
+    //let [a,b] = returnArr();
+    //console.log(a,b)
+
+    //对象返回
+    //function returnObj (){
+    //    return {foo:'12',bar:'123123'};
+    //}
+    //let {foo,bar} = returnObj();
+    //console.log(foo,bar)
+
+    //函数参数的定义
+    //解构赋值可以方便地将一组参数与变量名对应起来。
+    //有序数组传入
+    //function f([x,y,z]){
+    //    return x+y+z;
+    //}
+    //let a = f([1,4,3]);
+    //console.log(a);
+    //无序对象传入
+    //function objFun ({x,y,z}){
+    //    return {x:x,y:y+1111,z:z+2222}
+    //}
+    //let a = objFun({x:4,y:'字符串',z:1111});
+    //console.log(a)
+    //获取json对象的数据
+    //let jsonObj = {
+    //    id:111,
+    //    status:'ok啦'
+    //};
+    //let {id,status} = jsonObj;
+    //console.log(id+1)
+
+    //遍历Map结构
+    //const map = new Map();
+    //map.set('first','hello');
+    //map.set('second', 'world');
+    //for(let [key,value] of map){
+    //    console.log(key,value)
+    //}
+
+    //注入模块的指定方法
+    //const { SourceMapConsumer, SourceNode } = require("source-map");
+
+
+    /*-------------------------  字符串的扩展  -----------------------------*/
+    let str = 'hello world-';
+    //console.log(str.includes('he'));
+    //console.log(str.includes('ac'));
+    //console.log('开始位置6',str.startsWith('wo',6));
+    //console.log('开始位置0',str.startsWith('hello',0));
+    //console.log('结束位置',str.endsWith('lo', 4));
+    //console.log('index',str.indexOf('o'))
+    //重复字符串
+    //console.log('repeat--',str.repeat(3));
+
+    //模版字符串
+    //var speak = `hello ${str}`;
+    //console.log(speak);
+
+    /*--------------------------  正则扩展 -------------------------------*/
+
+    //构造函数合法
+    //var regex= new RegExp(/xyz/,'i');
+    //console.log(regex.test('xyz222'));
+    //console.log(regex.test('xy1z222'));
+
+    /*------------------------- 数值扩展 ---------------------------------*/
+
+    //二进制和八进制表示法
+    //ES6提供了二进制和八进制数值的新写法,二进制使用0B或者0b开头,而十六进制使用0加字母O,或者小写字母o;
+    //console则直接调用Number()方法,输出为十进制
+    //console.log(0b0001111);//15
+    //console.log(0o123);//83
+
+    //Number新增isFinite()检测数字是否有限
+    //console.log(
+    //    Number.isFinite(15), // true
+    //    Number.isFinite(0.8), // true
+    //    Number.isFinite(NaN),// false
+    //    Number.isFinite(Infinity), // false
+    //    Number.isFinite(-Infinity), // false
+    //    Number.isFinite('foo'), // false
+    //    Number.isFinite('15'), // false
+    //    Number.isFinite(true) // false
+    //);
+
+    //es5实现isFinite()方法
+    //(function (global) {
+    //    var global_isFinite = global.isFinite;
+    //
+    //    Object.defineProperty(Number, 'isFinite', {
+    //        value: function isFinite(value) {
+    //            return typeof value === 'number' && global_isFinite(value);
+    //        },
+    //        configurable: true,
+    //        enumerable: false,
+    //        writable: true
+    //    });
+    //})(this);
+
+    // Number新增isNaN()检查数字是否为NaN
+    //console.log(
+    //    Number.isNaN(NaN),// true
+    //    Number.isNaN(15), // false
+    //    Number.isNaN('15'), // false
+    //    Number.isNaN(true), // false
+    //    Number.isNaN(9 / NaN),// true
+    //    Number.isNaN('true' / 0),// true
+    //    Number.isNaN('true' / 'true') // true
+    //);
+//总结:
+//    Number.isFinite()对于非数值一律返回false, Number.isNaN()只有对于NaN才返回true，非NaN一律返回false
+
+//    Number.isInteger()用来判断一个值是否为整数。需要注意的是，
+//    在 JavaScript 内部，整数和浮点数是同样的储存方法，所以3和3.0被视为同一个值。
+//    Number.isInteger(25) // true
+//    Number.isInteger(25.0) // true
+//    Number.isInteger(25.1) // false
+//    Number.isInteger("15") // false
+//    Number.isInteger(true) // false
+//    ES5实现判断一个数字是否为整数
+//    (function (global) {
+//        var floor = Math.floor,
+//            isFinite = global.isFinite;
+//
+//        Object.defineProperty(Number, 'isInteger', {
+//            value: function isInteger(value) {
+//                return typeof value === 'number' &&
+//                    isFinite(value) &&
+//                    floor(value) === value;
+//            },
+//            configurable: true,
+//            enumerable: false,
+//            writable: true
+//        });
+//    })(this);
+
+//    新增常量Number.EPSILON,多用来判断两个浮点数是否相等
+//    Number.EPSILON的实质是一个可以接受的最小误差范围。
+//    console.log(0.1+0.2-0.3);
+//    console.log(Number.EPSILON * Math.pow(2, 2));
+//    console.log(0.1+0.2-0.3 < Number.EPSILON * Math.pow(2, 2));
+
+
+//    安全整数和 Number.isSafeInteger()
+//    JavaScript 能够准确表示的整数范围在-2^53到2^53之间（不含两个端点）
+//    console.log(9007199254740993) //9007199254740992,超过1,但没办法精确
+
+//    ES6引入了Number.MAX_SAFE_INTEGER和Number.MIN_SAFE_INTEGER这两个常量
+//    Number.MAX_SAFE_INTEGER === Math.pow(2, 53) - 1  // true
+//    Number.MAX_SAFE_INTEGER === 9007199254740991  // true
+//    Number.MIN_SAFE_INTEGER === -Number.MAX_SAFE_INTEGER  // true
+//    Number.MIN_SAFE_INTEGER === -9007199254740991// true
+
+
+    //Number.isSafeInteger()则是用来判断一个整数是否落在这个范围之内。
+
+    //Number.isSafeInteger('a') // false
+    //Number.isSafeInteger(null) // false
+    //Number.isSafeInteger(NaN) // false
+    //Number.isSafeInteger(Infinity) // false
+    //Number.isSafeInteger(-Infinity) // false
+    //
+    //Number.isSafeInteger(3) // true
+    //Number.isSafeInteger(1.2) // false
+    //Number.isSafeInteger(9007199254740990) // true
+    //Number.isSafeInteger(9007199254740992) // false
+    //
+    //Number.isSafeInteger(Number.MIN_SAFE_INTEGER - 1) // false
+    //Number.isSafeInteger(Number.MIN_SAFE_INTEGER) // true
+    //Number.isSafeInteger(Number.MAX_SAFE_INTEGER) // true
+    //Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 1) // false
+
+    //Math对象的扩展
+    //Math.trunc方法用于去除一个数的小数部分，返回整数部分。
+    //可以传入布尔值,字符串,数字,null
+    //console.log(Math.trunc('1.88'));
+    //console.log(Math.trunc(5.44));
+    //console.log(
+    //    Math.trunc('123.456'),// 123
+    //    Math.trunc(true), //1
+    //    Math.trunc(false), // 0
+    //    Math.trunc(null), // 0
+    //    Math.trunc('1.5a'), // 0
+    //    Math.trunc(NaN),     // NaN
+    //    Math.trunc('foo'),    // NaN
+    //    Math.trunc(),         // NaN
+    //    Math.trunc(undefined) // NaN
+    //);
+    //es5实现以上方法
+    //Math.trunc = Math.trunc || function(x) {
+    //        return x < 0 ? Math.ceil(x) : Math.floor(x);
+    //    };
+
+
+    //Math.sign方法用来判断一个数到底是正数、负数、还是零。对于非数值，会先将其转换为数值。
+    //console.log(
+    //    Math.sign(-5), // -1
+    //    Math.sign(5), // +1
+    //    Math.sign(0), // +0
+    //    Math.sign(-0), // -0
+    //    Math.sign(NaN) // NaN
+    //);
+    //Math.cbrt方法用于计算一个数的立方根
+    //console.log(
+    //    Math.cbrt(-1),// -1
+    //    Math.cbrt(0), // 0
+    //    Math.cbrt(1),  // 1
+    //    Math.cbrt(2),// 1.2599210498948734
+    //    Math.cbrt(27),  //3?
+    //    Math.cbrt(8) , //3?
+    //    Math.cbrt('8'),//3?
+    //    Math.cbrt('hello')  //3?
+    //);
+    //Es5实现方法
+    //Math.cbrt = Math.cbrt || function(x) {
+    //        var y = Math.pow(Math.abs(x), 1/3);
+    //        return x < 0 ? -y : y;
+    //    };
+
+    //JavaScript的整数使用32位二进制形式表示
+    //Math.clz32方法返回一个数的32位无符号整数形式有多少个前导0
+    //”count leading zero bits in 32-bit binary representations of a number“
+    //console.log(
+    //    Math.clz32(0),// 32
+    //    Math.clz32(1),// 31
+    //    Math.clz32(1000), // 22
+    //    Math.clz32(0b00000001000000000000000000000000),// 1
+    //    Math.clz32(0b00100000000000000000000000000000) // 2
+    //);
+    //对于小数，Math.clz32方法只考虑整数部分。
+//    Math.clz32(3.2) // 30
+//    Math.clz32(3.9) // 30
+
+//    对于空值或其他类型的值，Math.clz32方法会将它们先转为数值，然后再计算
+    //Math.clz32() // 32
+    //Math.clz32(NaN) // 32
+    //Math.clz32(Infinity) // 32
+    //Math.clz32(null) // 32
+    //Math.clz32('foo') // 32
+    //Math.clz32([]) // 32
+    //Math.clz32({}) // 32
+    //Math.clz32(true) // 31
+
+    // Math.imul()
+    // 如果只考虑最后32位，大多数情况下，Math.imul(a, b)与a * b的结果是相同的，
+    // 即该方法等同于(a * b)|0的效果（超过32位的部分溢出）。
+    // 之所以需要部署这个方法，是因为JavaScript有精度限制，超过2的53次方的值无法精确表示。
+    // 这就是说，对于那些很大的数的乘法，低位数值往往都是不精确的，
+    // Math.imul方法可以返回正确的低位数值。
+
+    //Math.fround()
+    //Math.fround方法返回一个数的单精度浮点数形式。
+//      Math.fround(0)     // 0
+//    Math.fround(1)     // 1
+//    Math.fround(1.337) // 1.3370000123977661
+//    Math.fround(1.5)   // 1.5
+//    Math.fround(NaN)   // NaN
+//    对于整数来说，Math.fround方法返回结果不会有任何不同，区别主要是那些无法用64个二进制位精确表示的小数。这时，Math.fround方法会返回最接近这个小数的单精度浮点数。
+//
+//对于没有部署这个方法的环境，可以用下面的代码模拟。
+
+    //Math.fround = Math.fround || function(x) {
+    //        return new Float32Array([x])[0];
+    //    };
+
+
+    //Math.hypot(),可以用来计算勾股定理
+    //Math.hypot方法返回所有参数的平方和的平方根。
+    //Math.hypot(3, 4);        // 5
+    //Math.hypot(3, 4, 5);     // 7.0710678118654755
+    //Math.hypot();            // 0
+    //Math.hypot(NaN);         // NaN
+    //Math.hypot(3, 4, 'foo'); // NaN
+    //Math.hypot(3, 4, '5');   // 7.0710678118654755
+    //Math.hypot(-3);          // 3
+
+
+    // Math.expm1(),返回(e的x次方 - 1)的结果
+    //Math.expm1(x)返回ex - 1，即Math.exp(x) - 1。
+
+    //Math.expm1(-1) // -0.6321205588285577
+    //Math.expm1(0)  // 0
+    //Math.expm1(1)  // 1.718281828459045
+
+    //ES5方法
+    //Math.expm1 = Math.expm1 || function(x) {
+    //        return Math.exp(x) - 1;
+    //    };
+
+    //Math.log1p()
+    //Math.log1p(x)方法返回1 + x的自然对数，即Math.log(1 + x)。如果x小于-1，返回NaN。
+
+    //Math.log1p(1)  // 0.6931471805599453
+    //Math.log1p(0)  // 0
+    //Math.log1p(-1) // -Infinity
+    //Math.log1p(-2) // NaN
+
+
+    //es5
+    //Math.log1p = Math.log1p || function(x) {
+    //        return Math.log(1 + x);
+    //    };
+
+
+    //Math.log10()返回以10为底的x的对数。如果x小于0，则返回NaN。
+
+    //Math.log10(2)      // 0.3010299956639812
+    //Math.log10(1)      // 0
+    //Math.log10(0)      // -Infinity
+    //Math.log10(-2)     // NaN
+    //Math.log10(100000) // 5
+
+    //ES5
+    //Math.log10 = Math.log10 || function(x) {
+    //        return Math.log(x) / Math.LN10;
+    //    };
+
+    //Math.log2(x)返回以2为底的x的对数。如果x小于0，则返回NaN。
+    //Math.log2(3)       // 1.584962500721156
+    //Math.log2(2)       // 1
+    //Math.log2(1)       // 0
+    //Math.log2(0)       // -Infinity
+    //Math.log2(-2)      // NaN
+    //Math.log2(1024)    // 10
+    //Math.log2(1 << 29) // 29
+
+    //ES5
+    //Math.log2 = Math.log2 || function(x) {
+    //        return Math.log(x) / Math.LN2;
+    //    };
+
+//    Math.sinh(x) 返回x的双曲正弦（hyperbolic sine）
+//Math.cosh(x) 返回x的双曲余弦（hyperbolic cosine）
+//Math.tanh(x) 返回x的双曲正切（hyperbolic tangent）
+//Math.asinh(x) 返回x的反双曲正弦（inverse hyperbolic sine）
+//Math.acosh(x) 返回x的反双曲余弦（inverse hyperbolic cosine）
+//Math.atanh(x) 返回x的反双曲正切（inverse hyperbolic tangent）
+
+    //Math.signbit()
+    //Math.sign()用来判断一个值的正负，但是如果参数是-0，它会返回-0。
+    //Math.sign(-0) // -0
+//这导致对于判断符号位的正负，Math.sign()不是很有用。
+// JavaScript 内部使用64位浮点数（国际标准IEEE 754）表示数值，
+// IEEE 754规定第一位是符号位，0表示正数，1表示负数。所以会有两种零，
+// +0是符号位为0时的零值，-0是符号位为1时的零值。实际编程中，
+// 判断一个值是+0还是-0非常麻烦，因为它们是相等的。
+
+//指数运算符**
+//    console.log(2 ** 8)
+
+    //指数运算符可以与等号结合，形成一个新的赋值运算符（**=）。
+    //let a = 1.5;
+    //a **= 2;
+    //在 V8 引擎中，指数运算符与Math.pow的实现不相同，对于特别大的运算结果，两者会有细微的差异。
+//    Math.pow(99, 99)
+//// 3.697296376497263e+197
+//
+//    99 ** 99
+//// 3.697296376497268e+197
+
+
+    /*------------------------------- 函数的扩展 ----------------------------------------------*/
+
+////函数可以指定默认值
+//    function Point(x = 0, y = 0) {
+//        this.x = 10;
+//        this.y = y;
+//    }
+//
+//    const p = new Point();
+//    console.log(p);// { x: 0, y: 0 }
+
+
+//    参数变量是默认声明的，所以不能用let或const再次声明。
+//    function foo(x = 5) {
+//        let x = 1; // error
+//        const x = 2; // error
+//    }
+
+
+    //一个容易忽略的地方是，参数默认值不是传值的，
+    // 而是每次都重新计算默认值表达式的值。
+    // 也就是说，参数默认值是惰性求值的。
+    //这里的x的值变化,重新执行函数则会重新计算
+    //let x = 99;
+    //function foo(p = x + 1) {
+    //    console.log(p);
+    //}
+    //foo() // 100
+    //
+    //x = 100;
+    //foo() // 101
+
+    //与解构赋值默认值结合使用
+    //参数默认值可以与解构赋值的默认值，结合起来使用。
+
+    //function foo({x,y= 5}){
+    //    console.log(x,y);
+    //}
+    //foo({});
+    //foo({x: 1});
+    //foo({x: 1,y:6});
+    //foo();//报错,读不到x或者y属性
+    //可以赋给一个空对象作为默认值
+    //function foo({x,y=1} = {}){
+    //    console.log(x,y)
+    //}
+    ////这代表如果没有传obj,传一个空的obj,然后y在其中有默认值为1。
+    //foo();
+
+
+    //如果函数fetch的第二个参数是一个对象，
+    // 就可以为它的三个属性设置默认值。
+    // 这种写法不能省略第二个参数，
+    // 如果结合函数参数的默认值，
+    // 就可以省略第二个参数。
+    // 这时，就出现了双重默认值。
+    //function fetch(url, { body = '', method = 'GET', headers = {} } = {}) {
+    //    console.log(method);
+    //}
+    //
+    ////函数fetch没有第二个参数时，函数参数的默认值就会生效，
+    //// 然后才是解构赋值的默认值生效，变量method才会取到默认值GET。
+    //fetch('http://example.com')
+
+    //function m1({x = 0 ,y = 0}={}) {
+    //    console.log([x, y]);
+    //    return [x, y]
+    //}
+    //
+    //function m2({x,y} = {x: 0, y: 0}) {
+    //    console.log([x, y]);
+    //    return [x, y]
+    //}
+
+    // 区别是
+    // 写法一 函数参数的默认值是空对象，但是设置了对象解构赋值的默认值；
+    // 写法二 函数参数的默认值是一个有具体属性的对象，但是没有设置对象解构赋值的默认值。
+    // 函数没有参数的情况
+    //m1(); // [0, 0]
+    //m2(); // [0, 0]
+
+// x 和 y 都有值的情况
+//    m1({x: 3, y: 8}) ;// [3, 8]
+//    m2({x: 3, y: 8}); // [3, 8]
+
+// x 有值，y 无值的情况
+//    m1({x: 3}); // [3, 0]
+//    m2({x: 3}); // [3, undefined]
+
+// x 和 y 都无值的情况
+//    m1({}) ;// [0, 0];
+//    m2({}); // [undefined, undefined]
+//
+//    m1({z: 3}); // [0, 0]
+//    m2({z: 3}); // [undefined, undefined]
+
+    //通常情况下，定义了默认值的参数，应该是函数的尾参数。
+    // 因为这样比较容易看出来，到底省略了哪些参数。
+    // 如果非尾部的参数设置默认值，实际上这个参数是没法省略的。
+
+    // 例一
+//    function f(x = 1, y) {
+//        return [x, y];
+//    }
+//
+//    f() // [1, undefined]
+//    f(2) // [2, undefined])
+//    f(, 1) // 报错
+//    f(undefined, 1) // [1, 1]
+//
+//// 例二
+//    function f(x, y = 5, z) {
+//        return [x, y, z];
+//    }
+//
+//    f() // [undefined, 5, undefined]
+//    f(1) // [1, 5, undefined]
+//    f(1, ,2) // 报错
+//    f(1, undefined, 2) // [1, 5, 2]
+
+//如果传入undefined，将触发该参数等于默认值，null则没有这个效果。
+//    function foo(x = 5, y = 6) {
+//        console.log(x, y);
+//    }
+//
+//    foo(undefined, null);//x参数对应undefined，结果触发了默认值，y参数等于null，就没有触发默认值。
+
+    //指定了默认值以后，函数的length属性，将返回没有指定默认值的参数个数。也就是说，指定了默认值后，length属性将失真。
+    //(function (a) {}).length // 1
+    //(function (a = 5) {}).length // 0
+    //(function (a, b, c = 5) {}).length // 2
+
+    //一旦设置了参数的默认值，函数进行声明初始化时，
+    // 参数会形成一个单独的作用域（context）。
+    // 等到初始化结束，这个作用域就会消失。
+    // 这种语法行为，在不设置参数默认值时，是不会出现的。
+    //参数y的默认值等于变量x。调用函数f时，参数形成一个单独的作用域。
+    // 在这个作用域里面，默认值变量x指向第一个参数x，而不是全局变量x，所以输出是2。
+    //var x = 1;
+    //
+    //function f(x, y = x) {
+    //    console.log(y);
+    //}
+    //
+    //f(2) // 2
+
+    //函数f调用时，参数y = x形成一个单独的作用域。
+    // 这个作用域里面，变量x本身没有定义，所以指向外层的全局变量x。
+    // 函数调用时，函数体内部的局部变量x影响不到默认值变量x。
+    //let x = 1;
+    //
+    //function f(y = x) {
+    //    let x = 2;
+    //    console.log(y);
+    //}
+    //
+    //f() ;// 1
+
+    //全局变量x不存在，就会报错。
+    //function f(y = x) {
+    //    let x = 2;
+    //    console.log(y);
+    //}
+    //
+    //f() // ReferenceError: x is not defined
+
+
+    //参数x = x形成一个单独作用域。
+    // 实际执行的是let x = x，由于暂时性死区的原因，
+    // 这行代码会报错”x 未定义“。
+    //var x = 1;
+    //
+    //function foo(x = x) {
+    //    // ...
+    //}
+    //
+    //foo() // ReferenceError: x is not defined
+
+    //函数bar的参数func的默认值是一个匿名函数，返回值为变量foo。
+    // 函数参数形成的单独作用域里面，并没有定义变量foo，
+    // 所以foo指向外层的全局变量foo，因此输出outer。
+    //let foo = 'outer';
+    //
+    //function bar(func = () => foo) {
+    //    let foo = 'inner';
+    //    console.log(func());
+    //}
+    //
+    //bar(); // outer
+
+
+    //报错。匿名函数里面的foo指向函数外层，但是函数外层并没有声明变量foo，所以报错了。
+    //function bar(func = () => foo) {
+    //    let foo = 'inner';
+    //    console.log(func());
+    //}
+    //
+    //bar(); // ReferenceError: foo is not defined
+
+    //y 有自己的作用域,x
+    //var x = 1;
+    //function foo(x, y = function() { x = 2; }) {
+    //    var x = 3;
+    //    y();
+    //    console.log(x);
+    //}
+    //
+    //foo() // 3
+    //x // 1
+
+//    函数foo的参数形成一个单独作用域。这个作用域里面，
+// 首先声明了变量x，然后声明了变量y，y的默认值是一个匿名函数。
+// 这个匿名函数内部的变量x，指向同一个作用域的第一个参数x。
+// 函数foo内部又声明了一个内部变量x，
+// 该变量与第一个参数x由于不是同一个作用域，
+// 所以不是同一个变量，因此执行y后，内部变量x和外部全局变量x的值都没变。
+//
+//如果将var x = 3的var去除，函数foo的内部变量x就指向第一个参数x，
+// 与匿名函数内部的x是一致的，所以最后输出的就是2，
+// 而外层的全局变量x依然不受影响。
+//
+//    var x = 1;
+//    function foo(x, y = function() { x = 2; }) {
+//        x = 3;
+//        y();
+//        console.log(x);
+//    }
+//
+//    foo() // 2
+//    x // 1
+
+
+//    ES6 引入 rest 参数（形式为...变量名），
+// 用于获取函数的多余参数，这样就不需要使用arguments对象了。
+// rest 参数搭配的变量是一个数组，该变量将多余的参数放入数组中。
+//    function add(...values) {
+//        let sum = 0;
+//
+//        for (var val of values) {
+//            sum += val;
+//        }
+//
+//        return sum;
+//    }
+//
+//    var sum = add(2, 5, 3) ;// 10
+//    console.log(sum)
+
+//arguments对象不是数组，而是一个类似数组的对象。
+// 所以为了使用数组的方法，
+// 必须使用Array.prototype.slice.call先将其转为数组。
+// rest 参数就不存在这个问题，它就是一个真正的数组，
+// 数组特有的方法都可以使用。
+// 下面是一个利用 rest 参数改写数组push方法的例子。
+// arguments变量的写法
+
+//    function sortNumbers() {
+//        return Array.prototype.slice.call(arguments).sort();
+//    }
+//
+//// rest参数的写法
+//    const sortRestNumbers = (...numbers) => numbers.sort();
+//    var a = sortNumbers(1,5);
+//    var b = sortRestNumbers(5,6);
+//    console.log(a,b);
+
+    //数字添加
+    //function push(array, ...items) {
+    //    items.forEach(function(item) {
+    //        if(item >= 2){
+    //            array.push(item);
+    //        }
+    //    });
+    //}
+    //
+    //var a = [];
+    //push(a, 1, 2, 3);
+    //console.log(a);
+
+
+    //rest 参数之后不能再有其他参数（即只能是最后一个参数），否则会报错
+    // 报错
+    //function f(a, ...b, c) {
+    //    // ...
+    //}
+    //函数的length属性，不包括 rest 参数。
+    //(function(a) {}).length  // 1
+    //(function(...a) {}).length  // 0
+    //(function(a, ...b) {}).length  // 1
+
+    //ES2016 做了一点修改，规定只要函数参数使用了默认值、解构赋值、或者扩展运算符，那么函数内部就不能显式设定为严格模式，否则会报错。
+//    // 报错
+//    function doSomething(a, b = a) {
+//        'use strict';
+//        // code
+//    }
+//
+//// 报错
+//    const doSomething = function ({a, b}) {
+//        'use strict';
+//        // code
+//    };
+//
+//// 报错
+//    const doSomething = (...a) => {
+//        'use strict';
+//        // code
+//    };
+//
+//    const obj = {
+//        // 报错
+//        doSomething({a, b}) {
+//            'use strict';
+//            // code
+//        }
+//    };
+//这样规定的原因是，函数内部的严格模式，同时适用于函数体和函数参数。
+// 但是，函数执行的时候，先执行函数参数，然后再执行函数体。
+// 这样就有一个不合理的地方，只有从函数体之中，
+// 才能知道参数是否应该以严格模式执行，但是参数却应该先于函数体执行。
+
+//解决:
+//第一种 ,全局性的严格模式
+    //'use strict';
+    //
+    //function doSomething(a, b = a) {
+    //    // code
+    //}
+
+//第二种是把函数包在一个无参数的立即执行函数里面。
+//    const doSomething = (function () {
+//        'use strict';
+//        return function(value = 42) {
+//            return value;
+//        };
+//    }());
+
+//函数新增name属性
+//    function foo() {}
+//    console.log(foo.name )// "foo"
+
+
+    /*--------------------------- 箭头函数 -----------------------------*/
+
+    //var f = v => v;
+    //
+    //等同于
+    //var f = function(v) {
+    //    return v;
+    //};
+
+
+    //var f = () => 5;
+    //// 等同于
+    //var f = function () { return 5 };
+
+//    var sum = (num1,num2)=> num1 + num2;
+//
+//    console.log(sum());
+//    console.log(sum(1,5));
+//    console.log(sum(1,'字符串'));
+//// 等同于
+//    var sum = function(num1, num2) {
+//        return num1 + num2;
+//    };
+
+
+    //如果箭头函数的代码块部分多于一条语句，
+    // 就要使用大括号将它们括起来，并且使用return语句返回。
+    //var sum = (num1, num2) => { return num1 + num2; }
+    //由于大括号被解释为代码块，
+    // 所以如果箭头函数直接返回一个对象，
+    // 必须在对象外面加上括号，否则会报错。
+//// 报错
+//    let getTempItem = id => { id: id, name: "Temp" };
+//
+//// 不报错
+//    let getTempItem = id => ({ id: id, name: "Temp" });
+
+    //如果箭头函数只有一行语句，且不需要返回值，可以采用下面的写法，就不用写大括号了。
+    //let fn = () => void doesNotReturn();
+
+    //箭头函数可以与变量解构结合使用。
+    //const full = ({first,last}) => {return first + last;}
+    //console.log(full({'11',22}))
+
+
+    //简洁的判断奇偶
+
+    //const isEven = n => n % 2 == 0;
+    //const square = n => n * n;
+    //console.log(isEven(7));
+    //console.log(isEven(8));
+    //console.log(square(7));
+
+
+//    // 正常函数写法
+//    var square = [1,2,3].map(function (x) {
+//        return x * x;
+//    });
+//    console.log(square);
+//// 箭头函数写法
+//    var square = [1,5,3].map(x => x * x);
+//    console.log(square);
+
+//      正常函数写法
+//    var result = values.sort(function (a, b) {
+//        return a - b;
+//    });
+//
+//       箭头函数写法
+//    var result = values.sort((a, b) => a - b);
+
+
+    //const numbers = (...nums) => nums;
+    //var result = numbers(1,5,5,4,5,4,5);
+    //console.log(result)
+    //
+    //const headAndTail = (head, ...tail) => [head, tail];
+    //
+    //headAndTail(1, 2, 3, 4, 5)
+
+
+    //
+    //箭头函数有几个使用注意点。
+    //
+    //（1）函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。
+    //
+    //（2）不可以当作构造函数，也就是说，不可以使用new命令，否则会抛出一个错误。
+    //
+    //（3）不可以使用arguments对象，该对象在函数体内不存在。如果要用，可以用 rest 参数代替。
+    //
+    //（4）不可以使用yield命令，因此箭头函数不能用作 Generator 函数。
+
+    //function foo() {
+    //    setTimeout(()=> {
+    //        console.log(this.msg);
+    //    },100)
+    //}
+    //var msg =  1000;
+    //foo.call({msg:1222});
+
+
+    function Timer() {
+        this.s1 = 0;
+        this.s2 = 0;
+        // 箭头函数
+        setInterval(() => this.s1++, 1000);
+        // 普通函数
+        setInterval(function () {
+            this.s2++;
+        }, 1000);
     }
-    var a = move ({x:3,y:8});
-    var b = move({x:4});
-    var c = move({});
-    var d = move();
-    console.log(a);
-    console.log(b);
-    console.log(c);
-    console.log(d);
 
+    var timer = new Timer();
 
-
+    setTimeout(() => console.log('s1: ', timer.s1), 3100);
+    setTimeout(() => console.log('s2: ', timer.s2), 3100);
 });
+
 
 
 
