@@ -1221,21 +1221,141 @@ $(function () {
     //foo.call({msg:1222});
 
 
-    function Timer() {
-        this.s1 = 0;
-        this.s2 = 0;
-        // 箭头函数
-        setInterval(() => this.s1++, 1000);
-        // 普通函数
-        setInterval(function () {
-            this.s2++;
-        }, 1000);
-    }
+    //function Timer() {
+    //    this.s1 = 0;
+    //    this.s2 = 0;
+    //    // 箭头函数
+    //    setInterval(() => this.s1++, 100);
+    //    // 普通函数
+    //    setInterval(function () {
+    //        this.s2++;
+    //    }, 100);
+    //}
+    //
+    //var timer = new Timer();
+    //
+    //setTimeout(() => console.log('s1: ', timer.s1), 310);
+    //setTimeout(() => console.log('s2: ', timer.s2), 310);
 
-    var timer = new Timer();
+//// ES6
+//    function foo() {
+//        setTimeout(() => {
+//            console.log('id:', this.id);
+//        }, 100);
+//    }
+//
+//// ES5
+//    function foo() {
+//        var _this = this;
+//        this.id = 10
+//        setTimeout(function () {
+//            console.log('id:', _this.id);
+//        }, 100);
+//    }
+//
+//    foo();
 
-    setTimeout(() => console.log('s1: ', timer.s1), 3100);
-    setTimeout(() => console.log('s2: ', timer.s2), 3100);
+    //只有一个this，就是函数foo的this，
+    // 所以t1、t2、t3都输出同样的结果。
+    // 因为所有的内层函数都是箭头函数，都没有自己的this，
+    // 它们的this其实都是最外层foo函数的this。
+    //function foo() {
+    //    return () => {
+    //        return () => {
+    //            return () => {
+    //                console.log('id:', this.id);
+    //            };
+    //        };
+    //    };
+    //}
+    //
+    //var f = foo.call({id: 10});
+    //
+    //var t1 = f.call({id: 2})()(); // id: 1
+    //var t2 = f().call({id: 3})(); // id: 1
+    //var t3 = f()().call({id: 4}); // id: 1
+    //console.log(f,t1,t2,t3)
+
+    //function foo() {
+    //
+    //    setTimeout(()=> {
+    //        console.log('args', arguments)
+    //    }, 100)
+    //}
+    //
+    //foo(1, 2, 3)
+
+    //由于箭头函数没有自己的this，
+    // 所以当然也就不能用call()、apply()、bind(),这些方法去改变this的指向。
+    //箭头函数没有自己的this，所以bind方法无效，内部的this指向外部的this。
+    //不报错但无效
+    //var _this = (function() {
+    //    return [
+    //        (() => this.x).bind({ x: 'inner' })()
+    //    ];
+    //}).call({ x: 'outer' });
+    //console.log(_this)
+
+
+    //ES5 语法的多重嵌套函数。
+    //function insert(value) {
+    //    return {into: function (array) {
+    //        return {after: function (afterValue) {
+    //            array.splice(array.indexOf(afterValue) + 1, 0, value);
+    //            return array;
+    //        }};
+    //    }};
+    //}
+    //
+    //insert(2).into([1, 3]).after(1); //[1, 2, 3]
+
+    //let insert = (value) =>({into:(array) => ({after:(afterValue) => {
+    //    array.splice(array.indexOf(afterValue+1),0,value);
+    //    return array
+    //}})})
+    //let newArray = insert(1).into([1,3]).after(1);
+    //console.log(newArray)
+
+    //数组reduce
+    //var arr = [1, 2, 5, 4, 3, 55, 44];
+    //var maxNum = arr.reduce(function (prev, next,index,array) {
+    //    console.log(prev, next,index,array);
+    //    if (prev > next) {
+    //        return prev
+    //    } else {
+    //        return next
+    //    }
+    //});
+    //console.log(maxNum)
+
+    //部署管道机制（pipeline）
+
+    const pipeline = (...funs)=> val => funs.reduce((a,b) => b(a),val)
+
+    const plus1= 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
 
 
