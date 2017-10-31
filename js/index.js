@@ -1329,33 +1329,77 @@ $(function () {
     //console.log(maxNum)
 
     //部署管道机制（pipeline）
+    //
+    //const pipeline = (...funs)=> val=> funs.reduce((a, b) => {
+    //    console.log('-----', a, b);
+    //    var result = b(a);
+    //    console.log(result);
+    //    return result
+    //}, val);
+    //
+    //const plus1 = a =>a + 1;
+    //
+    //const mult2 = a => a * 2;
+    //
+    //const addThenMult = pipeline(plus1, mult2);
+    //
+    //var a = addThenMult(5);
+    ////console.log(addThenMult)
+    //console.log(a)
 
-    const pipeline = (...funs)=> val => funs.reduce((a,b) => b(a),val)
+    //这种写法可读性高
+    //const plus1 = a => a + 1;
+    //const mult2 = a => a * 2;
+    //mult2(plus1(5));
 
-    const plus1= 1;
+    //-------  双冒号运算符 ----------
+
+    //var foo = {a:11};
+    //function bar(){
+    //    console.log(this.a)
+    //}
+    //
+    ////foo::bar;
+    //bar();
+    ////等同于
+    ////bar.apply(foo,arguments);
+
+    //尾调用优化
+    //function addOne(a){
+    //    var one = 1;
+    //    function inner(b){
+    //        console.log('in',b);
+    //        return b + one;
+    //    }
+    //    return inner(22);
+    //}
+    //var inner = addOne(1);
+    //console.log(inner);
+
+    //递归、尾递归
+    //function factorial(n) {
+    //    console.log(n)
+    //    if (n === 1) return 1;
+    //    return n * factorial(n - 1);
+    //}
+    //
+    //var result = factorial(5); // 120
+    //console.log(result)
+    //计算n的阶乘,使用尾递归,只保留一个调用记录
+    //function factorial(n, total) {
+    //    //console.log(n)
+    //    if (n == 1) {
+    //        return total
+    //    }
+    //    console.log(n-1)
+    //    return factorial(n-1, n * total);
+    //}
+    //
+    //var result = factorial(5,1);
+    //console.log(result)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //Fibonacci 写到这里
 });
 
 
