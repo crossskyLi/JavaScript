@@ -1397,9 +1397,162 @@ $(function () {
     //
     //var result = factorial(5,1);
     //console.log(result)
+    //
+    // var i = 0;
+    //
+    // function Fibonacci(n) {
+    //     if (n <= 1) {
+    //         return 1
+    //     }
+    //     i++;
+    //     console.log(i,n);
+    //     // console.log(n-1)
+    //     // console.log(n-2)
+    //     //console.log(Fibonacci(n - 1) + Fibonacci(n - 2));
+    //     return Fibonacci(n - 1) + Fibonacci(n - 2);
+    // }
+    //
+    // var result = Fibonacci(10); // 89
+    // console.log(result)
+
+    //
+    // var arr = new Array(10);
+    // arr[0] = 1;
+    // arr[1] = 1;
+    // var result = 0;
+    // for (var i = 2; i < 10; i++) {
+    //     arr[i] = arr[i - 1] + arr[i - 2];
+    //     console.log(arr)
+    // }
+    // for (var i =0;i<arr.length;i++){
+    //     result += arr[i]
+    // }
+    // console.log(result)
 
 
-    //Fibonacci 写到这里
+    // function tailFactorial(n,total) {
+    //     if(n===1){
+    //         return total
+    //     }
+    //     var newNum = n-1;
+    //     console.log(newNum,n*total)
+    //     console.log(total)
+    //     return tailFactorial(newNum,n*total)
+    // }
+    // function factorial(n) {
+    //     return tailFactorial(n, 1);
+    // }
+    // var result = factorial(5);
+    // console.log(result)
+
+    // 提示:  循环可以用递归代替，
+    //        而一旦使用递归，就最好使用尾递归。
+
+    // ES6 的尾调用优化只在严格模式下开启，正常模式是无效的。
+    // 这是因为在正常模式下，函数内部有两个变量，可以跟踪函数的调用栈。
+    // func.arguments：返回调用时函数的参数。
+    // func.caller：返回调用当前函数的那个函数。
+    // 尾调用优化发生时，函数的调用栈会改写，
+    // 因此上面两个变量就会失真。
+    // 严格模式禁用这两个变量，
+    // 所以尾调用模式仅在严格模式下生效。
+    //
+    // function restricted() {
+    //     'use strict';
+    //     restricted.caller;    // 报错
+    //     restricted.arguments; // 报错
+    // }
+    // restricted();
+
+    // es5尾递归优化
+    // function tco(f) {
+    //     var value;
+    //     var active = false;
+    //     var accumulated = [];
+    //
+    //     return function accumulator() {
+    //         console.log(arguments);
+    //         accumulated.push(arguments);
+    //         console.log(accumulated);
+    //
+    //         if (!active) {
+    //             active = true;
+    //             while (accumulated.length) {
+    //                 console.log('length',accumulated.length)
+    //                 console.log('active',active)
+    //                 value = f.apply(this, accumulated.shift());
+    //                 console.log('value---',value);
+    //                 console.log('------------');
+    //             }
+    //             console.log('value',value);
+    //
+    //             active = false;
+    //             return value;
+    //         }
+    //     };
+    // }
+    //
+    // var sum = tco(function(x, y) {
+    //     if (y > 0) {
+    //         return sum(x + 1, y - 1)
+    //     }
+    //     else {
+    //         return x
+    //     }
+    // });
+    //
+    // var result = sum(1, 10);
+    // console.log(result)
+
+
+    // 扩展运算符（spread）是三个点（...）。
+    // 它好比 rest 参数的逆运算，
+    // 将一个数组转为用逗号分隔的参数序列。
+    // console.log(...['sdf', {aa: 11}, 3])
+
+
+    // 该运算符主要用于函数调用。
+    // function push(array, ...items) {
+    //     // var moreParam = (...items)
+    //     console.log(...items);
+    //     array.push(...items);
+    //     return array
+    // }
+    //
+    // function add(x, y) {
+    //     return x + y;
+    // }
+    //
+    // const numbers = [4, 38];
+    // var result = add(...numbers);
+    // console.log(result)// 42
+    // var newArray1 = push([100], ...[1, 5, 1, 5, 4, 7]);
+    // var newArray2 = push([100], 1,5,4,78,5,8787);
+    // console.log(newArray1)
+    // console.log(newArray2)
+
+    //把数组对应的元素传入
+    // function f(v, w, x, y, z) {
+    //     console.log(v, w, x, y, z)
+    // }
+    // const args = [0, 1];
+    // f(-1, ...args, 2, ...[3,5]);
+
+    //使用数组下标作为key返回一个object
+    // let x = 10;
+    // let result =  {...[5,12,111,55]};
+    // console.log(result);
+
+    //求数组最大值
+    // ES5 的写法
+    // var result = Math.max.apply(null, [14, 3, 77]);
+    // console.log(result)
+    // // ES6 的写法
+    // result = Math.max(...[14, 3, 78]);
+    // console.log(result)
+    // // 等同于
+    // result = Math.max(14, 3, 79);
+    // console.log(result)
 });
 
 
