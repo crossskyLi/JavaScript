@@ -1553,6 +1553,7 @@ $(function () {
     // // 等同于
     // result = Math.max(14, 3, 79);
     // console.log(result)
+    console.log('test git')
 });
 
 
