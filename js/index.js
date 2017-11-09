@@ -1553,7 +1553,100 @@ $(function () {
     // // 等同于
     // result = Math.max(14, 3, 79);
     // console.log(result)
-    console.log('test git')
+
+    //push函数扩展
+    //es5写法
+    // var arr1= [1,2,3];
+    // var arr2 =[1.5,5];
+    // var result = Array.prototype.push.apply(arr1,arr2);
+    // console.log(result);//返回长度
+    // console.log(arr1);//改变了arr1
+    // console.log(arr2);//arr2不变
+
+    // let arr1= [1,2,3];
+    // let arr2 =[1.5,5];
+    // //es6写法
+    // var result = arr1.push(...arr2)
+    // console.log(result);//5,数组长度
+    // console.log(arr1);//改变了arr1
+    // console.log(arr2);//arr2不变
+
+    //时间扩展
+    //es5
+    // var time = new(Date.bind.apply(Date,[null,2015,10,10]));
+    // console.log(time)
+    // //es6
+    // var timeEs6 = new Date(...[2015,10,1]);
+    // console.log(timeEs6)
+
+
+    //扩展-复制数组
+    //数组是复合的数据类型，直接复制的话，
+    // 只是复制了指向底层数据结构的指针，
+    // 而不是克隆一个全新的数组。
+    // const arr = [1,2];
+    // const arr2 = arr;
+    // arr2[1]=10;
+    // console.log(arr)//[1,10],会导致两个数组都变化
+
+    //es5实现复制的方法
+    // const arr = [1,2];
+    // const arr1 = arr.concat();
+    // console.log(arr,arr1);
+    // arr1[1] = 10;
+    // console.log(arr,arr1)
+    // //es6写法
+    // const arr = [1, 2];
+    // //第一种写法
+    // const arr2 = [...arr];
+    // //第二种写法
+    // const [...arr3] = arr;
+    // arr2[0] = 10;
+    // arr3[1] = 123;
+    // // console.log(arr);
+    // // console.log(arr2);
+    // // console.log(arr3);
+
+    // //es5合并数组
+    // var arr5 = arr.concat(arr2,arr3);
+    // console.log(arr5)
+    // //es6合并数组
+    // const arr4 = [...arr,...arr2,...arr3];
+    // console.log(arr4)
+
+    //解构赋值结合
+    // var list = ['11',12,13,15];
+    // var a = list[0];
+    // //第一个值作为起始下标截取到下一个值的前一位
+    // var rest = list.slice(1,3);
+    // console.log(rest);
+    // console.log(a);
+
+    //es6写法;
+    //截取第一个元素给a
+    // ,剩下的给rest,
+    // rest必须为最后一个参数
+    // var list = ['11',12,13,15,15666];
+    // var [a,...rest] = list;
+    // // var [a,...rest,b] = list;//出错
+    // // var [a,...rest,...b] = list;//出错
+    //
+    // console.log(a,rest)
+
+    //其他例子
+    // const[first,...rest] = [];
+    // //undefined可以用来判别数组第一个元素有没有,
+    // // 还有有时可以用来判别是不是空数组
+    // console.log(first);
+
+    // const [[first,second,third], ...rest] = ["foo"];
+    // //取出第一个元素并且解构字符串
+    // console.log(first,second,third) ; // "f" "o" "o"
+    // console.log(rest) ; // []
+
+
+
+
 });
 
 
