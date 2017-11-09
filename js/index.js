@@ -461,7 +461,7 @@ $(function () {
 
 
     /*-------------------------  字符串的扩展  -----------------------------*/
-    let str = 'hello world-';
+    // let str = 'hello world-';
     //console.log(str.includes('he'));
     //console.log(str.includes('ac'));
     //console.log('开始位置6',str.startsWith('wo',6));
