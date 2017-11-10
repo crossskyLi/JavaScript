@@ -1644,6 +1644,94 @@ $(function () {
     // console.log(first,second,third) ; // "f" "o" "o"
     // console.log(rest) ; // []
 
+    //结构字符串
+    // var strArr = [...'hello world'];
+    // console.log(strArr,strArr.length)
+
+    // console.log('x\uD83D\uDE80y'.length )// 4
+    // console.log('x\uD13D\uDE80y' )// 4
+    // console.log(  [...'x\ue13a\uDE80y'].length )// 3
+    // console.log(  [...'x\ue13a\uDE80y'])// 3
+
+    // 实现iterator接口对象
+    // let nodeList = $('div'); //返回一个对象
+    // let arr = [...nodeList];//返回一个真正的数组
+    // console.log(nodeList instanceof Array);
+    // console.log(arr instanceof Array);
+
+//     let arrayLike = {
+//         '0': 'a',
+//         '1': 'b',
+//         '2': 'c',
+//         length: 3
+//     };
+//     // 对于那些没有部署 Iterator 接口的类似数组的对象，
+//     // 扩展运算符就无法将其转为真正的数组。
+// // TypeError: Cannot spread non-iterable object.
+//     let arr = [...arrayLike];
+
+
+    // let map = new Map([
+    //     [1,'2'],
+    //     [3,'3'],
+    //     [2,'4']
+    // ]);
+    // console.log(map);
+    // console.log(...map);
+    // console.log(...map.keys());
+    // console.log([...map.keys()])
+
+
+    //yield 执行到yeild声明位置暂停,
+    // 保留上下文只有当调用返回的对象的next方法,
+    // 才会继续执行上下文
+    // const go = function*(){
+    //     yield 1;
+    //     yield 2;
+    //     yield 3;
+    // };
+    // var value = go();
+    // console.log(value.next());
+    // console.log(value.next());
+    // console.log(value.next());
+    // console.log(value.next());
+    // console.log(...go());
+
+
+    // function* fib2(){
+    //     yield 0;//状态0，第一次调用next，返回0，并改变状态
+    //     yield 1;//状态1，第二次调用next，返回1，并改变状态
+    //
+    //     var p1 = 0
+    //         ,p2 =1
+    //         ,cur = p1+p2;
+    //     while(true){
+    //
+    //         yield cur;//状态2，后面调用next，返回相应的几个，状态不在改变
+    //
+    //         p1 = p2;
+    //         p2 = cur;
+    //         cur = p1+p2;
+    //     }
+    // }
+    //
+    // var fibIter2 = fib2();
+    // for(var i =0;i<8;i++){
+    //     console.log(fibIter2.next().value);
+    // }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
