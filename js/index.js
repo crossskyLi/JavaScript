@@ -1721,20 +1721,98 @@ $(function () {
     // }
 
 
+    //合并数组
+    //es5做法
+    // let result = [1,5].concat([1.5,5]);
+    // console.log(result)
+
+    //es6
+    // let arr1 = [111,55,4845,45];
+    // let arr2 = [11.5,5454,444,44,];
+    // let result = [...arr1,...arr2];
+    // console.log(result)
 
 
+    // let map = new Map([
+    //     [1, 'one'],
+    //     [2, 'two'],
+    //     [15,'key', 'three',5],
+    //     []
+    // ]);
+    // let arr = [...map.keys()];
+    // console.log(arr)
 
 
+    // const go = function *() {
+    //     yield 1;
+    //     yield 2;
+    //     yield 3;
+    //     return 45;
+    // };
+    // let result = [...go()];//[1,2,3]
+    // console.log(result);
 
+    //Array.from()
+    // let arrLike = {
+    //     '0':1,
+    //     '1':3,
+    //     '2':6,
+    //     '8':1,
+    //     length:4
+    // }
+    // // es5,es6都出现因为length为4,es6在控制台会把undefined打印,而es5不会
+    // // es5写法
+    // var arr1 = [].slice.call(arrLike);//改变this指向
+    // console.log(arr1);
+    // console.log(arr1[4]);
+    //
+    // //es6写法
+    // let arr2 = Array.from(arrLike);
+    // console.log(arr2);
+    // console.log(arr2.length);
 
+    //实际应用中，常见的类似数组的对象是
+    // DOM 操作返回的 NodeList 集合，
+    // 以及函数内部的arguments对象。
+    // Array.from都可以将它们转为真正的数组。
+    //把dom返回的nodeList集合转为数组
+    // let ps = $('p');
+    // console.log(ps);
+    // console.log(ps[0]);
+    // console.log(typeof ps);
+    // console.log('是不是数组', ps instanceof Array);
+    // console.log('是不是对象', ps instanceof Object);
+    // Array.from(ps).forEach(function (p) {
+    //     console.log(p);
+    //     console.log(p.innerHTML);
+    // });
+    // //把函数内部的arguments转为数组
+    // function foo() {
+    //     var args = Array.from(arguments);
+    //     console.log(args)
+    // }
+    // foo(1,5,87,544,444);
+    //
+    // let result = Array.from('hello');
+    // console.log(result)
+    //
+    // let nameSet = new Set(['a','v']);
+    // console.log(nameSet);
+    // console.log(Array.from(nameSet));
 
+    // 扩展运算符（...）也可以将某些数据结构转为数组。
 
+// // arguments对象
+//     function foo() {
+//         const args = [...arguments];
+//     }
+//
+// // NodeList对象
+//     var nodeList = [...document.querySelectorAll('div')]
 
-
-
-
-
-
+    //只要有length都可以部署数组接口
+    let result = Array.from({ '2':4,'3':3,length: 3 });
+    console.log(result)
 });
 
 
