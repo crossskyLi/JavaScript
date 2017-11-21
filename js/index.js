@@ -1811,8 +1811,67 @@ $(function () {
 //     var nodeList = [...document.querySelectorAll('div')]
 
     //只要有length都可以部署数组接口
-    let result = Array.from({ '2':4,'3':3,length: 3 });
-    console.log(result)
+    // let result = Array.from({ '2':4,'3':3,length: 3 });
+    // console.log(result);
+
+    //数组的默认值转换
+    // let result = Array.from([1, , 2, , 3], (n) => n || 1);
+    // console.log(result)
+
+    //数组元素的类型判断
+    // function typesOf() {
+    //     return Array.from(arguments,value =>typeof(value))
+    // }
+    // console.log(typesOf(null,[],NaN));
+
+    //生成指定长度的特殊类型数组
+    // let result = Array.from({length: 2}, () => {
+    //     return (Math.random() * 10).toFixed(0)
+    // });
+    // console.log(result)
+
+    //字符串长度计算
+    // function countSymbols(string) {
+    //     return Array.from(string).length;
+    // }
+    //
+    // let result = countSymbols('1234567890');
+    // console.log(result)
+
+    //Array.of()
+    //用来替代new Array
+    // let result = Array.of(1,5,{aa:122});
+    // let result = Array.of([1,3],55);
+    // console.log(result);
+
+    //数组实例的copyWithin
+
+    // Array.prototype.copyWithin(target, start = 0, end = this.length)。
+    // target（必需）：从该位置开始替换数据
+    // start（可选）：从该位置开始读取数据，默认为 0。包括start
+    // 如果为负值，表示倒数。
+    // end（可选）：到该位置前停止读取数据，不包括end
+    // 默认等于数组长度。如果为负值，表示倒数。
+    // let arr = [1,2,3,4,5];
+    // let result = arr.copyWithin(3,2,5);//[1,2,3,3,4]
+    // console.log(result)
+
+    //数组的find()
+    let arr = [9, 3, 8, 3, 4, 5, -1];
+    //不加返回会一直循环到结束
+    //这个结果是真就会把 n 抛出
+    //不会把return的值抛出只会 n 抛出
+    let result = arr.find((n) => {
+        // console.log(n);
+        // if (n > 3) {
+            // console.log(n );
+            // return n - 9;
+        // } else {
+            return n % 3
+        // }
+    });
+    console.log('结果', result)
+
 });
 
 
