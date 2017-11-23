@@ -1681,7 +1681,7 @@ $(function () {
     // console.log(...map.keys());
     // console.log([...map.keys()])
 
-
+    //yield 练习
     //yield 执行到yeild声明位置暂停,
     // 保留上下文只有当调用返回的对象的next方法,
     // 才会继续执行上下文
@@ -1720,21 +1720,70 @@ $(function () {
     //     console.log(fibIter2.next().value);
     // }
 
+    // //函数中又有另外的一个函数
+    // function* foo() {
+    //     yield 1;
+    //     yield 2;
+    //     yield 3;
+    //     return 4;
+    // }
+    //
+    // function* bar() {
+    //     yield foo();//生成器本身也是迭代器，所以可以用在yield*的后面
+    //     yield foo();//生成器本身也是迭代器，所以可以用在yield*的后面
+    // }
+    //
+    // //函数内不加 * 则 直接返回foo函数;
+    // let first = bar();
+    // let secondNext = first;
+    //
+    // console.log('第一个指向',first);//执行保存上下文,等待下一个调用
+    // let firstNext = first.next();//调用返回{value:foo,done:false}
+    // //---------------------
+    // //若加这两行则会让下面的方法无法继续,但是会不会还有上下文?
+    // console.log('调用第一个yield结果',firstNext);
+    // // firstNext.value = 1;
+    // // firstNext.done = false;
+    //
+    // // let secondNext = first;
+    // console.log('第二个指向',secondNext);
+    // let secondResult = secondNext.next();
+    // console.log('调用第二个yield结果',secondResult);
+    // console.log(first.next());
+    // console.log(first.next());
 
 
+    //----------------------
+    // console.log( typeof firstNext, firstNext);//调用,执行yield的返回
+    // let secondNext = firstNext.value;
+    // console.log('1',secondNext.next());
+    // console.log('2',secondNext.next());
+    // console.log('3',secondNext.next());
+    // console.log('4',secondNext.next());
+    // function* bar() {
+    //     yield* foo();//生成器本身也是迭代器，所以可以用在yield*的后面
+    // }
+    // let first = bar();
+    // console.log('1',first);
+    // console.log('2',first.next());
+    // console.log('3',first.next());
+    // console.log('4',first.next());
 
 
+    function* foo(x) {
+        // let result = 0;
+        console.log('x的值',x);
+        if (x < 4) {
+            x = yield* foo( x + 1 );
+            // console.log('第二次',x);
+        }
+        let result = x + 2;
+        console.log('后面x的值',result);
+        return result;
+    }
 
-
-
-
-
-
-
-
-
-
-
+    var g = foo(1);
+    console.log(g.next());
 });
 
 
