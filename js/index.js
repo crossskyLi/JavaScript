@@ -1771,20 +1771,20 @@ $(function () {
     // console.log('4',first.next());
 
 
-    function* foo(x) {
-        // let result = 0;
-        console.log('x的值',x);
-        if (x < 4) {
-            x = yield* foo( x + 1 );
-            // console.log('第二次',x);
-        }
-        let result = x + 2;
-        console.log('后面x的值',result);
-        return result;
-    }
-
-    var g = foo(1);
-    console.log(g.next());
+    // function* foo(x) {
+    // let result = 0;
+    // console.log('x的值',x);
+    // if (x < 4) {
+    //     x = yield* foo( x + 1 );
+    // console.log('第二次',x);
+    // }
+    // let result = x + 2;
+    // console.log('后面x的值',result);
+    // return result;
+    // }
+    //
+    // var g = foo(1);
+    // console.log(g.next());
 
     //合并数组
     //es5做法
@@ -1927,16 +1927,280 @@ $(function () {
     //这个结果是真就会把 n 抛出
     //不会把return的值抛出只会 n 抛出
     // let result = arr.find((n) => {
-        // console.log(n);
-        // if (n > 3) {
-            // console.log(n );
-            // return n - 9;
-        // } else {
-        //     return n % 3
-        // }
+    // console.log(n);
+    // if (n > 3) {
+    // console.log(n );
+    // return n - 9;
+    // } else {
+    //     return n % 3
+    // }
     // });
     // console.log('结果', result)
+
+
+    //遍历键值对
+    // for(let [index,elem] of ['a','b'].entries()){
+    //     console.log(index,elem)
+    // }
+
+    //数组实力的includes()
+    //Array.prototype.includes方法返回一个布尔值,表示数字是否包含给定的值
+    //传递两个参数,第一个为要查找的元素,第二个为要查找的起始下标
+    // let arr = [{}, NaN, 2,3,5];
+    // let result = arr.includes({});
+    // console.log(result);
+    // result = arr.includes(NaN);
+    // console.log(result);
+    // result = arr.includes(3);
+    // console.log(result);
+    // result = arr.includes(3 ,3);
+    // console.log(result);
+    // result = arr.includes(3 ,-2);
+    // console.log(result);
+    // result = arr.includes(3 ,-1);
+    // console.log(result);
+
+    //数组的空位
+    // let arr = new Array(3);
+    //空位不是undefined,一个位置的值等于undefined,依然是有值的,空位是没有任何值的
+    //例如
+    // console.log(0 in arr);
+    // console.log(0 in [undefined])
+    //编码时候要注意避免出现空位,以免引起空位问题
+    //es5方法会忽略,而es6方法不会
+
+
+    /*
+    * -----对象的扩展-----
+    * */
+
+    //属性的简洁表示法
+    // const foo = 'aa';
+    // const baz= [foo];
+    // const baz1= {foo};//等同于{foo:'aa'}
+    // console.log(baz,baz1)
+
+    // function f(x, y) {
+    //     return {x,y}
+    // }
+    // 等同于
+    // function f1(x, y) {
+    //     return{x:x,y:y}
+    // }
+    // let result = f(1,2);
+    // let result1 = f1(1,2);
+    // console.log(result,result1)
+
+    //方法简写
+    // const o = {
+    //     method(){
+    //         return "简写"
+    //     }
+    // };
+    //相当于
+    // const o1= {
+    //     method:function () {
+    //         return '没有简写'
+    //     }
+    // }
+
+    //例子
+    // let birth = '2010/10/10';
+    // const person = {
+    //     name: '张山',
+    //     birth,
+    //     hello() {
+    //        return 'hello '+this.name
+    //     }
+    // };
+    // console.log(person.hello())
+
+    //用于写函数的返回值,比较方便
+    // function getP(x, y) {
+    //     const a = x+10;
+    //     const b = y+12;
+    //     const result = x+y;
+    //     return {a,b,result}
+    // }
+    // let obj = getP(15,5);
+    // console.log(obj)
+
+    //commonJS模块输出一组变量
+    // let ms = {};
+    // function getItem(key) {
+    //     return key in ms ?ms[key]:null
+    // }
+    // function setItem(key,value) {
+    //     ms[key] = value;
+    // }
+    // function clear() {
+    //     ms = {};
+    // }
+    // module.exports = {getItem,setItem,clear}
+    // //等同于
+    // module.exports = {
+    //     getItem:getItem,
+    //     setItem:setItem,
+    //     clear:clear,
+    // }
+
+    //属性赋值器(setter)和取值器(getter),也是采用这个写法
+    // const cart = {
+    //     _wheels: 4,
+    //     get wheels() {
+    //         return this._wheels
+    //     },
+    //     set wheels(value) {
+    //         if (value < this._wheels) {
+    //             throw new Error('轮子太小了');
+    //         }
+    //         if (value % 2) {
+    //             throw new Error('轮子必须为双数');
+    //         }
+    //         this._wheels = value
+    //     }
+    // }
+    // cart.wheels = 10;
+    // console.log(cart._wheels);
+    // cart.wheels = 11;
+    // console.log(cart._wheels);
+
+    //简写的属性名总是字符串,所以不要写一些不好的简写名字
+    // const obj = {
+    //     class(){
+    //         return undefined
+    //     }
+    // };
+    // console.log(obj.class)
+    // //这会相当于
+    // const obj = {
+    //     'class':function () {
+    //         return undefined
+    //     }
+    // }
+    //
+
+    //如果方法的值是一个 Generator 函数 ,方法名前加星号
+    // const obj = {
+    //     * myGenerator() {
+    //         yield 'hello'
+    //     }
+    // };
+    // let result = obj.myGenerator()
+    // console.log(result)
+    // console.log(result.next())
+    // console.log(result.next())
+
+    //______________________
+    //-----属性名表达式-----
+
+    //定义对象属性
+    // let obj = {}
+    // obj.foo= 132;
+    // obj[obj.foo+'ss'] = 123;
+    // console.log(obj)
+
+
+    //使用字面量定义对象,es5写法
+    // let obj = {
+    //     foo:true,
+    //     bac:'11'
+    // };
+
+    //es6 允许一下定义
+    // let propKey = 'foo';
+    // let obj = {
+    //     [propKey]:true,
+    //     ['a'+'b'] :'123'
+    // }
+    // console.log(obj)
+
+    // let lastWord = 'last word';
+    // const a = {
+    //     'first word':'123',
+    //     [lastWord]:'321'
+    // };
+    // console.log(a['first word']);
+    // console.log(a[lastWord]);
+    // console.log(a['lastWord']);
+    // console.log(a['last word']);
+
+
+    //表达式还可以用于定义方法名
+    //不推荐吧?????
+    // let obj = {
+    //     ['hel'+'lo'](){
+    //         return 'say hi'
+    //     }
+    // }
+    // console.log(obj.hello())
+
+
+    // const foo = 'bar';
+    // const bar = 'abc';
+    //错误写法
+    // const baz = {[foo]}
+    //正确写法
+    // const baz = {[foo]:bar};
+    // console.log(baz)
+
+    //特别注意,属性表达式如果是一个对象,默认情况下会自动将对象转为字符串[object object];
+    // const keyA = {a:1};
+    // const keyB = {b:1};
+    // const obj = {
+    //     [keyA] : 'A',
+    //     [keyB] : '1'
+    // };
+    // console.log(obj)
+
+    //[keyA]和[keyB]得到的都是[object Object]，所以[keyB]会把[keyA]覆盖掉，而myObject最后只有一个[object Object]属性。
+
+    //方法的 name 属性
+
+
+
+
+
+
+
+
+
+
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
