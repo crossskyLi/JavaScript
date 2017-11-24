@@ -2156,16 +2156,41 @@ $(function () {
     //[keyA]和[keyB]得到的都是[object Object]，所以[keyB]会把[keyA]覆盖掉，而myObject最后只有一个[object Object]属性。
 
     //方法的 name 属性
+    //每个函数都有name属性
+    // const person = {
+    //     say() {
+    //         console.log(this.name)
+    //     }
+    // };
+    // console.log(person.say.name);
+    // person.say();
 
+    //如果对象方法使用了取值函数,存值函数,name会在方法名的get和set的属性上面
+    // const obj = {
+    //     get foo(){},
+    //     set foo(x){}
+    // };
+    // console.log(obj.foo.name)
+    // const descriptor = Object.getOwnPropertyDescriptor(obj,'foo');
+    // console.log(descriptor.get);
+    // console.log(descriptor.get.name);
+    // console.log(descriptor.set.name);
 
+    //bind 方法创造函数,name属性返回bound 加上原函数的名
+    //function构造函数创造的函数,name属性返回anonymous
+    // console.log((new Function()).name)
 
-
-
-
-
-
-
-
+    // let doSome = function () {
+    //     console.log(this.name);
+    //     return this
+    // };
+    // let obj = {name:12};
+    // let result = doSome.bind(obj.name);
+    // console.log('外面',obj);
+    // console.log('bind后',result);
+    // let newDoSome = doSome.bind(obj);
+    // let newObj = newDoSome();
+    // console.log(newObj)
 });
 
 
