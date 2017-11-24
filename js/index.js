@@ -2191,6 +2191,177 @@ $(function () {
     // let newDoSome = doSome.bind(obj);
     // let newObj = newDoSome();
     // console.log(newObj)
+
+    //Object.is()
+    //es6解决==和===的缺陷方法,用来比较两个对象是否严格相等
+    // let flag = Object.is('foo', 'foo');
+    // console.log(flag);
+    // let obj = {a: 1};
+    // let obj1 = {a: 1};
+    // flag = Object.is({}, {});//false
+    // flag = Object.is(obj, obj1);//false
+    // flag =  Object.is(1,1)
+    // console.log(flag);
+
+
+    // Object.assign方法用于对象的合并 ,
+    // 将源对象的所有可枚举属性复制到目标对象;
+    //是一个浅拷贝方法,
+    // 并且,如果目标对象和源对象有相同的属性,目标对象会被覆盖
+    // const target = {a:1};
+    // const source1 = {b:1};
+    // const source2 = {a:2};
+    // const source3 = {a:3};
+    // source3.__proto__.b = 123;
+    // Object.assign(target,source1);
+    // console.log(target);
+    // Object.assign(target,source2);
+    // console.log(target);
+    // Object.assign(target,source3);
+    // console.log(target);
+    //如果只有一个参数,那么会直接返回传入参数
+
+    //不是对象会直接转为对象
+    // console.log(Object.assign(2))
+
+    //undefined和null 不能作为参数,
+    // 如果作为参数会报错,
+    // 不作为第一参数,则不会报错,会被跳过
+
+    //如果只是传入字符串,字符串会被转为数组
+    // let arr = Object.assign('BASIC');
+    // console.log(arr[0],arr instanceof Array) // B,false
+    // console.log(arr,arr instanceof Object)
+
+    //浅拷贝
+    //源对象的某个属性的值是对象,那么目标对象拷贝得到的是这个对象的引用;
+    // const obj = {
+    //     a: {ba: 1}
+    // };
+    // const obj1 = Object.assign({},obj);
+    // console.log(obj,obj1);
+    // obj.a.ba = 123456789;
+    // console.log(obj,obj1);
+    //源对象的任何变动都会映射到目标对象中去
+
+    //Object.assign还可以用来处理数组;
+    // let result = Object.assign([1,2,3],[3,2,1])
+    // console.log(result)
+
+    //Object.assign只能用来值的复制,如果要复制的值是一个取值函数 ,那么将求值后复制
+    // var a = 10;
+    // const source = {
+    //     get foo() {
+    //         return a
+    //     },
+    //     set foo(x) {
+    //         return x + a
+    //     }
+    // };
+    // const target = {};
+    // Object.assign(target, source);
+    // source.foo = 1000;
+    // console.log('foo',source.foo)
+    // console.log(target)
+
+    // Object.assign 方法用处
+    // 1）为对象添加属性
+    // class Point {
+    //     construtor(x,y){
+    //         Object.assign(this,{x,y})
+    //     }
+    // }
+    // console.log(Point)
+
+    // 2)为对象添加方法
+    // let someClass = {};
+    // Object.assign(someClass.prototype,{
+    //     //将两个方法添加到someClass
+    //     method1(){
+    //
+    //     },
+    //     method2(){
+    //
+    //     }
+    // })
+
+    // 3)克隆对象
+    // function clone(origin) {
+    //     return Object.assign({},origin)
+    // }
+    // 将原始对象拷贝到一个空对象，就得到了原始对象的克隆。
+    // 保持继承链的话,则要:
+    // function clone(origin) {
+    //     let orignProto = Object.getPrototypeOf(origin);
+    //     return Object.assign(Object.create(orignProto),origin)
+    // }
+    //
+    // // 4)合并多个对象
+    // const merge = (target,...source) => Object.assign(target,...source);
+    // let result = merge({},{a:1},{b:123});
+    // console.log(result)
+
+    // 5)为属性指定默认值
+    //  注意,如果有同名属性那么就被覆盖
+    //  由于浅拷贝的问题,default 最好属性都是简单类型,不要有复合类型,不要指向另外的对象
+    //  否则很可能出现不被期待的结果
+    // const defaultValue = {
+    //     logLevel : 0 ,
+    //     outPutFormat :'html'
+    // };
+    // function processContent(newOptions, defaultValue) {
+    //     return Object.assign({}, newOptions, defaultValue);
+    // }
+
+    // let result = processContent({a:111});
+    // console.log(result)
+
+    //应用例子如端口改造
+    // const defaultApiPort = {
+    //     url: {
+    //         host: 'xxx.xxx.xxx.xx',
+    //         port: 9100
+    //     }
+    // };
+    // let newDefaultApiPort = processContent({url: {port: 8888}}, defaultApiPort);
+    // console.log(newDefaultApiPort)
+    //结果:{
+    // url :{
+    //     host :'xxx.xxx.xxx.xx',
+    //     port:9100
+    // }}
+    // 与期待的结果不一致,所以最好就是要简单类型
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
 
 
