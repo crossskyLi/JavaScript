@@ -2332,34 +2332,150 @@ $(function () {
     // }}
     // 与期待的结果不一致,所以最好就是要简单类型
 
+    //属性的可枚举性和便利
+    //可枚举性
+    //descriptor
+    //Object.getOwnPropertyDescriptor
+    // let obj = {
+    //     foo:11
+    // };
+    // let property = Object.getOwnPropertyDescriptor(obj,'foo');
+    // console.log(property)
+    //  {
+    //    value: 11,//值
+    //    writable: true,//可重写性
+    //    enumerable: true,//可枚举性
+    //    configurable: true//可配置
+    //  }
 
+    // let obj1 = {foo:{a:11}};
+    // property = Object.getOwnPropertyDescriptor(obj1,'foo');
+    // console.log(property)
+    // 如果enumerable 为false,会被以下四个操作忽略
+    // for...in 循环 //只遍历对象自身的和继承的可枚举的属性
+    // Object.keys() 返回对象滋生的所有可枚举的属性的键名
+    // JSON.stringify() 只串行化对象自身的可枚举的属性
+    // Object.assign 忽略enumerable 为false的属性,只拷贝对象自身可枚举的属性
+    // 可枚举性是为了规避 对象原形上的属性和方法,比如 toString,数组的length属性
 
+    // let propertyEnumerable = Object.getOwnPropertyDescriptor(Object.prototype,'toString').enumerable;
+    // console.log('toString',propertyEnumerable)
+    //
+    // let arrPropertyLength = Object.getOwnPropertyDescriptor([],'length').enumerable;
+    // console.log('lengthEnumerable',arrPropertyLength)
 
+    // ES6 规定，所有 Class 的原型的方法都是不可枚举的。
+    // let result = Object.getOwnPropertyDescriptor(class {foo(){}}.prototype,'foo').enumerable
+    //
+    // console.log('class',result)
 
+    //操作中引入继承的属性会让问题复杂化,尽量用Object.keys替代for...in,result
+    // let obj = {
+    //     a: {b: '1'},
+    //     b: '1'
+    // };
+    // Object.keys(obj).forEach(function (value) {
+    //     obj[value] = {c: 1}
+    // });
+    // console.log(obj)
 
+    //属性的遍历
+    // 1 for ... in
+    //for ... in 循环遍历对象自身的和集成的可枚举属性（不含 Symbol 属性）
 
+    // 2 Object.keys(obj)
+    // 返回一个数组,包括对象自身的(不含继承的)所有可枚举的属性
 
+    // 3 Object.getOwnPropertyNames(obj)
+    // 返回一个数组,包含对象自身的所有属性,(不含symbol属性,但是包括不可枚举的属性)的键名
+    // this.c = 10;
+    // let obj1 = {
+    //     a: {
+    //         c:101,
+    //         b: function () {
+    //             console.log('...', this)
+    //             console.log('...', this.constructor)
+    //             return this.c
+    //         }
+    //     },
+    // };
+    //
+    // let b = obj1.a.b.bind(obj1.a);
+    // console.log(b());
+    // let result = Object.getOwnPropertyNames(obj1);
+    // console.log(result)
 
+    // 4 Object.getOwnPropertySymbols(obj)
+    // 返回一个数组,包含对象本身的所有symbol属性的键名
+    // let obj = {
+    //     a:1
+    // };
+    // let result = Object.getOwnPropertySymbols(obj);
+    // console.log(result)
 
+    // 5 Reflect.ownKeys(obj)
+    // 返回一个数组,包含对象自身的所有键名,不管键名是symbol或者字符串,也不管是否可枚举
 
+    //次序规则如下:
+    // - 首先遍历所有数值键,按照数值升序排列
+    // - 其次遍历所有字符串键,按照加入时间顺序排列
+    // - 最后遍历所有 Symbol 值,按照加入时间升序排列
 
+    // Object.getOwnPropertySymbols(obj)
+    // 方法返回某个对象属性的所有自身属性(非继承属性)的描述对象
+    // let obj = {}
+    // Object.getOwnPropertySymbols(obj)
+    // { foo:
+    //    { value: 123,
+    //      writable: true,
+    //      enumerable: true,
+    //      configurable: true },
+    //   bar:
+    //    { get: [Function: get bar],
+    //      set: undefined,
+    //      enumerable: true,
+    //      configurable: true }
+    // }
 
+    // Object.getOwnPropertyDescriptors 配合 Object.defineProperties的方法,可以实现正确拷贝
+    // const source = {
+    //     set foo(value) {
+    //         console.log(value);
+    //         return value
+    //     }
+    // };
+    // source.foo = 10;
+    // console.log(source)
+    // const target = {};
+    // Object.defineProperties(target, Object.getOwnPropertyDescriptors(source))
+    // let foo = Object.getOwnPropertyDescriptor(target, 'foo');
+    // console.log(foo)
+    // // 合并简写函数如下
+    // const mergeObject = (target, source) => Object.defineProperties(
+    //     target,
+    //     Object.getOwnPropertyDescriptors(source)
+    // );
 
+    // Object.getOwnPropertyDescriptors 方法的另一个用处,
+    // 是配合Object.create 方法,将对象属性克隆到新对象,属于浅拷贝
+    //
+    // const clone = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj))
+    //或者
+    // const anotherClone = (obj) => Object.create(
+    //     Object.getPrototypeOf(obj),
+    //     Object.getOwnPropertyDescriptors(obj)
+    // )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //es5 一个对象继承另一个对象
+    // const prot = {};
+    // const obj = {
+    //     __proto__: prot,
+    //     foo: 123
+    // }
+    //es6 规定 __proto__只有浏览器部署,其他环境不用部署
+    //去掉 __proto__,写法如下
+    // const prot = {}
+    // const obj = Object.creat(prot)
 
 
 });
