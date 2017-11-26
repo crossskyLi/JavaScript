@@ -2515,7 +2515,6 @@ $(function () {
     //去掉 __proto__,写法如下
     // const prot = {}
     // const obj = Object.creat(prot)
->>>>>>> b18f68105afe6ecbe9e91dadd48bf6eb8ac53b77
 
 
 });
