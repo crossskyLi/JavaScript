@@ -1681,7 +1681,7 @@ $(function () {
     // console.log(...map.keys());
     // console.log([...map.keys()])
 
-
+    //yield 练习
     //yield 执行到yeild声明位置暂停,
     // 保留上下文只有当调用返回的对象的next方法,
     // 才会继续执行上下文
@@ -1720,6 +1720,71 @@ $(function () {
     //     console.log(fibIter2.next().value);
     // }
 
+
+    // //函数中又有另外的一个函数
+    // function* foo() {
+    //     yield 1;
+    //     yield 2;
+    //     yield 3;
+    //     return 4;
+    // }
+    //
+    // function* bar() {
+    //     yield foo();//生成器本身也是迭代器，所以可以用在yield*的后面
+    //     yield foo();//生成器本身也是迭代器，所以可以用在yield*的后面
+    // }
+    //
+    // //函数内不加 * 则 直接返回foo函数;
+    // let first = bar();
+    // let secondNext = first;
+    //
+    // console.log('第一个指向',first);//执行保存上下文,等待下一个调用
+    // let firstNext = first.next();//调用返回{value:foo,done:false}
+    // //---------------------
+    // //若加这两行则会让下面的方法无法继续,但是会不会还有上下文?
+    // console.log('调用第一个yield结果',firstNext);
+    // // firstNext.value = 1;
+    // // firstNext.done = false;
+    //
+    // // let secondNext = first;
+    // console.log('第二个指向',secondNext);
+    // let secondResult = secondNext.next();
+    // console.log('调用第二个yield结果',secondResult);
+    // console.log(first.next());
+    // console.log(first.next());
+
+
+    //----------------------
+    // console.log( typeof firstNext, firstNext);//调用,执行yield的返回
+    // let secondNext = firstNext.value;
+    // console.log('1',secondNext.next());
+    // console.log('2',secondNext.next());
+    // console.log('3',secondNext.next());
+    // console.log('4',secondNext.next());
+    // function* bar() {
+    //     yield* foo();//生成器本身也是迭代器，所以可以用在yield*的后面
+    // }
+    // let first = bar();
+    // console.log('1',first);
+    // console.log('2',first.next());
+    // console.log('3',first.next());
+    // console.log('4',first.next());
+
+
+    // function* foo(x) {
+    // let result = 0;
+    // console.log('x的值',x);
+    // if (x < 4) {
+    //     x = yield* foo( x + 1 );
+    // console.log('第二次',x);
+    // }
+    // let result = x + 2;
+    // console.log('后面x的值',result);
+    // return result;
+    // }
+    //
+    // var g = foo(1);
+    // console.log(g.next());
 
     //合并数组
     //es5做法
@@ -1857,11 +1922,11 @@ $(function () {
     // console.log(result)
 
     //数组的find()
-    // let arr1 = [9, 3, 8, 3, 4, 5, -1];
+    // let arr = [9, 3, 8, 3, 4, 5, -1];
     //不加返回会一直循环到结束
     //这个结果是真就会把 n 抛出
     //不会把return的值抛出只会 n 抛出
-    // let result = arr1.find((n) => {
+    // let result = arr.find((n) => {
     // console.log(n);
     // if (n > 3) {
     // console.log(n );
@@ -1871,6 +1936,7 @@ $(function () {
     // }
     // });
     // console.log('结果', result)
+
 
     // let arr1 = [9, 3, 8, 3, 4, 5, -1];
     // let indexOfValue = '';
@@ -1897,22 +1963,596 @@ $(function () {
     //fill 会把括号内只执行一次后,运算结果保存填充到数组中
     // arr = new Array(3).fill( (Math.random()* 10 ));
     // console.log(arr)
-    let result = ['a','b'].keys()
-    console.log(result.next());
-    console.log(result.next());
-    console.log(result.next());
-    for(let index of ['a','b'].keys()){
-        console.log(index)
-    }
+    // let result = ['a','b'].keys()
+    // console.log(result.next());
+    // console.log(result.next());
+    // console.log(result.next());
+    // for(let index of ['a','b'].keys()){
+    //     console.log(index)
+    // }
 
 
 
 
 
 
+
+    //遍历键值对
+    // for(let [index,elem] of ['a','b'].entries()){
+    //     console.log(index,elem)
+    // }
+
+    //数组实力的includes()
+    //Array.prototype.includes方法返回一个布尔值,表示数字是否包含给定的值
+    //传递两个参数,第一个为要查找的元素,第二个为要查找的起始下标
+    // let arr = [{}, NaN, 2,3,5];
+    // let result = arr.includes({});
+    // console.log(result);
+    // result = arr.includes(NaN);
+    // console.log(result);
+    // result = arr.includes(3);
+    // console.log(result);
+    // result = arr.includes(3 ,3);
+    // console.log(result);
+    // result = arr.includes(3 ,-2);
+    // console.log(result);
+    // result = arr.includes(3 ,-1);
+    // console.log(result);
+
+    //数组的空位
+    // let arr = new Array(3);
+    //空位不是undefined,一个位置的值等于undefined,依然是有值的,空位是没有任何值的
+    //例如
+    // console.log(0 in arr);
+    // console.log(0 in [undefined])
+    //编码时候要注意避免出现空位,以免引起空位问题
+    //es5方法会忽略,而es6方法不会
+
+
+    /*
+    * -----对象的扩展-----
+    * */
+
+    //属性的简洁表示法
+    // const foo = 'aa';
+    // const baz= [foo];
+    // const baz1= {foo};//等同于{foo:'aa'}
+    // console.log(baz,baz1)
+
+    // function f(x, y) {
+    //     return {x,y}
+    // }
+    // 等同于
+    // function f1(x, y) {
+    //     return{x:x,y:y}
+    // }
+    // let result = f(1,2);
+    // let result1 = f1(1,2);
+    // console.log(result,result1)
+
+    //方法简写
+    // const o = {
+    //     method(){
+    //         return "简写"
+    //     }
+    // };
+    //相当于
+    // const o1= {
+    //     method:function () {
+    //         return '没有简写'
+    //     }
+    // }
+
+    //例子
+    // let birth = '2010/10/10';
+    // const person = {
+    //     name: '张山',
+    //     birth,
+    //     hello() {
+    //        return 'hello '+this.name
+    //     }
+    // };
+    // console.log(person.hello())
+
+    //用于写函数的返回值,比较方便
+    // function getP(x, y) {
+    //     const a = x+10;
+    //     const b = y+12;
+    //     const result = x+y;
+    //     return {a,b,result}
+    // }
+    // let obj = getP(15,5);
+    // console.log(obj)
+
+    //commonJS模块输出一组变量
+    // let ms = {};
+    // function getItem(key) {
+    //     return key in ms ?ms[key]:null
+    // }
+    // function setItem(key,value) {
+    //     ms[key] = value;
+    // }
+    // function clear() {
+    //     ms = {};
+    // }
+    // module.exports = {getItem,setItem,clear}
+    // //等同于
+    // module.exports = {
+    //     getItem:getItem,
+    //     setItem:setItem,
+    //     clear:clear,
+    // }
+
+    //属性赋值器(setter)和取值器(getter),也是采用这个写法
+    // const cart = {
+    //     _wheels: 4,
+    //     get wheels() {
+    //         return this._wheels
+    //     },
+    //     set wheels(value) {
+    //         if (value < this._wheels) {
+    //             throw new Error('轮子太小了');
+    //         }
+    //         if (value % 2) {
+    //             throw new Error('轮子必须为双数');
+    //         }
+    //         this._wheels = value
+    //     }
+    // }
+    // cart.wheels = 10;
+    // console.log(cart._wheels);
+    // cart.wheels = 11;
+    // console.log(cart._wheels);
+
+    //简写的属性名总是字符串,所以不要写一些不好的简写名字
+    // const obj = {
+    //     class(){
+    //         return undefined
+    //     }
+    // };
+    // console.log(obj.class)
+    // //这会相当于
+    // const obj = {
+    //     'class':function () {
+    //         return undefined
+    //     }
+    // }
+    //
+
+    //如果方法的值是一个 Generator 函数 ,方法名前加星号
+    // const obj = {
+    //     * myGenerator() {
+    //         yield 'hello'
+    //     }
+    // };
+    // let result = obj.myGenerator()
+    // console.log(result)
+    // console.log(result.next())
+    // console.log(result.next())
+
+    //______________________
+    //-----属性名表达式-----
+
+    //定义对象属性
+    // let obj = {}
+    // obj.foo= 132;
+    // obj[obj.foo+'ss'] = 123;
+    // console.log(obj)
+
+
+    //使用字面量定义对象,es5写法
+    // let obj = {
+    //     foo:true,
+    //     bac:'11'
+    // };
+
+    //es6 允许一下定义
+    // let propKey = 'foo';
+    // let obj = {
+    //     [propKey]:true,
+    //     ['a'+'b'] :'123'
+    // }
+    // console.log(obj)
+
+    // let lastWord = 'last word';
+    // const a = {
+    //     'first word':'123',
+    //     [lastWord]:'321'
+    // };
+    // console.log(a['first word']);
+    // console.log(a[lastWord]);
+    // console.log(a['lastWord']);
+    // console.log(a['last word']);
+
+
+    //表达式还可以用于定义方法名
+    //不推荐吧?????
+    // let obj = {
+    //     ['hel'+'lo'](){
+    //         return 'say hi'
+    //     }
+    // }
+    // console.log(obj.hello())
+
+
+    // const foo = 'bar';
+    // const bar = 'abc';
+    //错误写法
+    // const baz = {[foo]}
+    //正确写法
+    // const baz = {[foo]:bar};
+    // console.log(baz)
+
+    //特别注意,属性表达式如果是一个对象,默认情况下会自动将对象转为字符串[object object];
+    // const keyA = {a:1};
+    // const keyB = {b:1};
+    // const obj = {
+    //     [keyA] : 'A',
+    //     [keyB] : '1'
+    // };
+    // console.log(obj)
+
+    //[keyA]和[keyB]得到的都是[object Object]，所以[keyB]会把[keyA]覆盖掉，而myObject最后只有一个[object Object]属性。
+
+    //方法的 name 属性
+    //每个函数都有name属性
+    // const person = {
+    //     say() {
+    //         console.log(this.name)
+    //     }
+    // };
+    // console.log(person.say.name);
+    // person.say();
+
+    //如果对象方法使用了取值函数,存值函数,name会在方法名的get和set的属性上面
+    // const obj = {
+    //     get foo(){},
+    //     set foo(x){}
+    // };
+    // console.log(obj.foo.name)
+    // const descriptor = Object.getOwnPropertyDescriptor(obj,'foo');
+    // console.log(descriptor.get);
+    // console.log(descriptor.get.name);
+    // console.log(descriptor.set.name);
+
+    //bind 方法创造函数,name属性返回bound 加上原函数的名
+    //function构造函数创造的函数,name属性返回anonymous
+    // console.log((new Function()).name)
+
+    // let doSome = function () {
+    //     console.log(this.name);
+    //     return this
+    // };
+    // let obj = {name:12};
+    // let result = doSome.bind(obj.name);
+    // console.log('外面',obj);
+    // console.log('bind后',result);
+    // let newDoSome = doSome.bind(obj);
+    // let newObj = newDoSome();
+    // console.log(newObj)
+
+    //Object.is()
+    //es6解决==和===的缺陷方法,用来比较两个对象是否严格相等
+    // let flag = Object.is('foo', 'foo');
+    // console.log(flag);
+    // let obj = {a: 1};
+    // let obj1 = {a: 1};
+    // flag = Object.is({}, {});//false
+    // flag = Object.is(obj, obj1);//false
+    // flag =  Object.is(1,1)
+    // console.log(flag);
+
+
+    // Object.assign方法用于对象的合并 ,
+    // 将源对象的所有可枚举属性复制到目标对象;
+    //是一个浅拷贝方法,
+    // 并且,如果目标对象和源对象有相同的属性,目标对象会被覆盖
+    // const target = {a:1};
+    // const source1 = {b:1};
+    // const source2 = {a:2};
+    // const source3 = {a:3};
+    // source3.__proto__.b = 123;
+    // Object.assign(target,source1);
+    // console.log(target);
+    // Object.assign(target,source2);
+    // console.log(target);
+    // Object.assign(target,source3);
+    // console.log(target);
+    //如果只有一个参数,那么会直接返回传入参数
+
+    //不是对象会直接转为对象
+    // console.log(Object.assign(2))
+
+    //undefined和null 不能作为参数,
+    // 如果作为参数会报错,
+    // 不作为第一参数,则不会报错,会被跳过
+
+    //如果只是传入字符串,字符串会被转为数组
+    // let arr = Object.assign('BASIC');
+    // console.log(arr[0],arr instanceof Array) // B,false
+    // console.log(arr,arr instanceof Object)
+
+    //浅拷贝
+    //源对象的某个属性的值是对象,那么目标对象拷贝得到的是这个对象的引用;
+    // const obj = {
+    //     a: {ba: 1}
+    // };
+    // const obj1 = Object.assign({},obj);
+    // console.log(obj,obj1);
+    // obj.a.ba = 123456789;
+    // console.log(obj,obj1);
+    //源对象的任何变动都会映射到目标对象中去
+
+    //Object.assign还可以用来处理数组;
+    // let result = Object.assign([1,2,3],[3,2,1])
+    // console.log(result)
+
+    //Object.assign只能用来值的复制,如果要复制的值是一个取值函数 ,那么将求值后复制
+    // var a = 10;
+    // const source = {
+    //     get foo() {
+    //         return a
+    //     },
+    //     set foo(x) {
+    //         return x + a
+    //     }
+    // };
+    // const target = {};
+    // Object.assign(target, source);
+    // source.foo = 1000;
+    // console.log('foo',source.foo)
+    // console.log(target)
+
+    // Object.assign 方法用处
+    // 1）为对象添加属性
+    // class Point {
+    //     construtor(x,y){
+    //         Object.assign(this,{x,y})
+    //     }
+    // }
+    // console.log(Point)
+
+    // 2)为对象添加方法
+    // let someClass = {};
+    // Object.assign(someClass.prototype,{
+    //     //将两个方法添加到someClass
+    //     method1(){
+    //
+    //     },
+    //     method2(){
+    //
+    //     }
+    // })
+
+    // 3)克隆对象
+    // function clone(origin) {
+    //     return Object.assign({},origin)
+    // }
+    // 将原始对象拷贝到一个空对象，就得到了原始对象的克隆。
+    // 保持继承链的话,则要:
+    // function clone(origin) {
+    //     let orignProto = Object.getPrototypeOf(origin);
+    //     return Object.assign(Object.create(orignProto),origin)
+    // }
+    //
+    // // 4)合并多个对象
+    // const merge = (target,...source) => Object.assign(target,...source);
+    // let result = merge({},{a:1},{b:123});
+    // console.log(result)
+
+    // 5)为属性指定默认值
+    //  注意,如果有同名属性那么就被覆盖
+    //  由于浅拷贝的问题,default 最好属性都是简单类型,不要有复合类型,不要指向另外的对象
+    //  否则很可能出现不被期待的结果
+    // const defaultValue = {
+    //     logLevel : 0 ,
+    //     outPutFormat :'html'
+    // };
+    // function processContent(newOptions, defaultValue) {
+    //     return Object.assign({}, newOptions, defaultValue);
+    // }
+
+    // let result = processContent({a:111});
+    // console.log(result)
+
+    //应用例子如端口改造
+    // const defaultApiPort = {
+    //     url: {
+    //         host: 'xxx.xxx.xxx.xx',
+    //         port: 9100
+    //     }
+    // };
+    // let newDefaultApiPort = processContent({url: {port: 8888}}, defaultApiPort);
+    // console.log(newDefaultApiPort)
+    //结果:{
+    // url :{
+    //     host :'xxx.xxx.xxx.xx',
+    //     port:9100
+    // }}
+    // 与期待的结果不一致,所以最好就是要简单类型
+
+    //属性的可枚举性和便利
+    //可枚举性
+    //descriptor
+    //Object.getOwnPropertyDescriptor
+    // let obj = {
+    //     foo:11
+    // };
+    // let property = Object.getOwnPropertyDescriptor(obj,'foo');
+    // console.log(property)
+    //  {
+    //    value: 11,//值
+    //    writable: true,//可重写性
+    //    enumerable: true,//可枚举性
+    //    configurable: true//可配置
+    //  }
+
+    // let obj1 = {foo:{a:11}};
+    // property = Object.getOwnPropertyDescriptor(obj1,'foo');
+    // console.log(property)
+    // 如果enumerable 为false,会被以下四个操作忽略
+    // for...in 循环 //只遍历对象自身的和继承的可枚举的属性
+    // Object.keys() 返回对象滋生的所有可枚举的属性的键名
+    // JSON.stringify() 只串行化对象自身的可枚举的属性
+    // Object.assign 忽略enumerable 为false的属性,只拷贝对象自身可枚举的属性
+    // 可枚举性是为了规避 对象原形上的属性和方法,比如 toString,数组的length属性
+
+    // let propertyEnumerable = Object.getOwnPropertyDescriptor(Object.prototype,'toString').enumerable;
+    // console.log('toString',propertyEnumerable)
+    //
+    // let arrPropertyLength = Object.getOwnPropertyDescriptor([],'length').enumerable;
+    // console.log('lengthEnumerable',arrPropertyLength)
+
+    // ES6 规定，所有 Class 的原型的方法都是不可枚举的。
+    // let result = Object.getOwnPropertyDescriptor(class {foo(){}}.prototype,'foo').enumerable
+    //
+    // console.log('class',result)
+
+    //操作中引入继承的属性会让问题复杂化,尽量用Object.keys替代for...in,result
+    // let obj = {
+    //     a: {b: '1'},
+    //     b: '1'
+    // };
+    // Object.keys(obj).forEach(function (value) {
+    //     obj[value] = {c: 1}
+    // });
+    // console.log(obj)
+
+    //属性的遍历
+    // 1 for ... in
+    //for ... in 循环遍历对象自身的和集成的可枚举属性（不含 Symbol 属性）
+
+    // 2 Object.keys(obj)
+    // 返回一个数组,包括对象自身的(不含继承的)所有可枚举的属性
+
+    // 3 Object.getOwnPropertyNames(obj)
+    // 返回一个数组,包含对象自身的所有属性,(不含symbol属性,但是包括不可枚举的属性)的键名
+    // this.c = 10;
+    // let obj1 = {
+    //     a: {
+    //         c:101,
+    //         b: function () {
+    //             console.log('...', this)
+    //             console.log('...', this.constructor)
+    //             return this.c
+    //         }
+    //     },
+    // };
+    //
+    // let b = obj1.a.b.bind(obj1.a);
+    // console.log(b());
+    // let result = Object.getOwnPropertyNames(obj1);
+    // console.log(result)
+
+    // 4 Object.getOwnPropertySymbols(obj)
+    // 返回一个数组,包含对象本身的所有symbol属性的键名
+    // let obj = {
+    //     a:1
+    // };
+    // let result = Object.getOwnPropertySymbols(obj);
+    // console.log(result)
+
+    // 5 Reflect.ownKeys(obj)
+    // 返回一个数组,包含对象自身的所有键名,不管键名是symbol或者字符串,也不管是否可枚举
+
+    //次序规则如下:
+    // - 首先遍历所有数值键,按照数值升序排列
+    // - 其次遍历所有字符串键,按照加入时间顺序排列
+    // - 最后遍历所有 Symbol 值,按照加入时间升序排列
+
+    // Object.getOwnPropertySymbols(obj)
+    // 方法返回某个对象属性的所有自身属性(非继承属性)的描述对象
+    // let obj = {}
+    // Object.getOwnPropertySymbols(obj)
+    // { foo:
+    //    { value: 123,
+    //      writable: true,
+    //      enumerable: true,
+    //      configurable: true },
+    //   bar:
+    //    { get: [Function: get bar],
+    //      set: undefined,
+    //      enumerable: true,
+    //      configurable: true }
+    // }
+
+    // Object.getOwnPropertyDescriptors 配合 Object.defineProperties的方法,可以实现正确拷贝
+    // const source = {
+    //     set foo(value) {
+    //         console.log(value);
+    //         return value
+    //     }
+    // };
+    // source.foo = 10;
+    // console.log(source)
+    // const target = {};
+    // Object.defineProperties(target, Object.getOwnPropertyDescriptors(source))
+    // let foo = Object.getOwnPropertyDescriptor(target, 'foo');
+    // console.log(foo)
+    // // 合并简写函数如下
+    // const mergeObject = (target, source) => Object.defineProperties(
+    //     target,
+    //     Object.getOwnPropertyDescriptors(source)
+    // );
+
+    // Object.getOwnPropertyDescriptors 方法的另一个用处,
+    // 是配合Object.create 方法,将对象属性克隆到新对象,属于浅拷贝
+    //
+    // const clone = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj))
+    //或者
+    // const anotherClone = (obj) => Object.create(
+    //     Object.getPrototypeOf(obj),
+    //     Object.getOwnPropertyDescriptors(obj)
+    // )
+
+    //es5 一个对象继承另一个对象
+    // const prot = {};
+    // const obj = {
+    //     __proto__: prot,
+    //     foo: 123
+    // }
+    //es6 规定 __proto__只有浏览器部署,其他环境不用部署
+    //去掉 __proto__,写法如下
+    // const prot = {}
+    // const obj = Object.creat(prot)
+>>>>>>> b18f68105afe6ecbe9e91dadd48bf6eb8ac53b77
 
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
