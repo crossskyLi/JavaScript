@@ -1972,11 +1972,6 @@ $(function () {
     // }
 
 
-
-
-
-
-
     //遍历键值对
     // for(let [index,elem] of ['a','b'].entries()){
     //     console.log(index,elem)
@@ -2513,8 +2508,95 @@ $(function () {
     // }
     //es6 规定 __proto__只有浏览器部署,其他环境不用部署
     //去掉 __proto__,写法如下
-    // const prot = {}
-    // const obj = Object.creat(prot)
+    //原形链上的继承,__proto__会把aa属性继承
+    // const prot = { aa:123};
+    // const obj = Object.create(prot);
+    // let prot = { aa:123};
+    // const obj = Object.assign(
+    //     Object.create(prot),
+    //     {foo: 13}
+    // );
+    // console.log(obj);
+
+    //使用Object.getOwnPropertyDescriptors,另一种写法
+    // let prot = { aa:23};
+    // const obj = Object.create(prot,Object.getOwnPropertyDescriptors({foo:123}))
+    // console.log(obj)
+
+    // 实现混入模式
+    //使用Object,getOwnPropertyDescriptors,实现混入模式
+    // let mix = (obj) => ({
+    //     with: (...mixins) => mixins.reduce(
+    //         (c, mixin) => Object.create(
+    //             c, Object.getOwnPropertyDescriptors(mixin)
+    //         ), obj)
+    // });
+    // let a = {
+    //     a: "a"
+    // };
+    // let b = {
+    //     b: 'b'
+    // };
+    // let c = {
+    //     c: 'c'
+    // };
+    // let d = mix(c).with(a, b);
+    // console.log(d)
+    // console.log(d.c)
+    // console.log(d.b)
+    // console.log(d.a)
+
+    //es6 操作__proto__属性
+    // let obj1 = {}
+    // const obj = {
+    //     method:function () {
+    //         //.....//
+    //     }
+    // }
+    // obj.__proto__ =  obj1
+    //
+    // //es5中如下
+    // var obj2 = Object.create(obj1);
+    // obj2.method = function () {
+    //     //.....//
+    // }
+
+
+    //__proto只有浏览器支持,其他运行环境并不一定要部署
+    //如果要用的话,最好还是使用
+    // 读操作 Object.getPrototypeOf()
+    // 写操作 Object.setPrototypeOf()
+    // 生成操作 Object.create();
+    //__proto__调用的是Object.prototype.__proto__
+    // console.log(Object.prototype)
+    //
+    // Object.defineProperty(Object.prototype, '__proto__', {
+    //     get() {
+    //         let _thisObj = Object(this);
+    //         return Object.getPrototypeOf(_thisObj);
+    //     },
+    //     set(proto) {
+    //         if (this === undefined || this === null) {
+    //             throw new TypeError();
+    //         }
+    //         if (!isObject(this)) {
+    //             return undefined;
+    //         }
+    //         if (!isObject(proto)) {
+    //             return undefined;
+    //         }
+    //         let status = Reflect.setPrototypeOf(this, proto);
+    //         if (!status) {
+    //             throw new TypeError();
+    //         }
+    //     },
+    // });
+    //
+    // function isObject(value) {
+    //     return Object(value) === value;
+    // }
+
+
 
 
 });
