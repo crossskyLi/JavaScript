@@ -1857,20 +1857,60 @@ $(function () {
     // console.log(result)
 
     //数组的find()
-    let arr = [9, 3, 8, 3, 4, 5, -1];
+    // let arr1 = [9, 3, 8, 3, 4, 5, -1];
     //不加返回会一直循环到结束
     //这个结果是真就会把 n 抛出
     //不会把return的值抛出只会 n 抛出
-    let result = arr.find((n) => {
-        // console.log(n);
-        // if (n > 3) {
-            // console.log(n );
-            // return n - 9;
-        // } else {
-            return n % 3
-        // }
-    });
-    console.log('结果', result)
+    // let result = arr1.find((n) => {
+    // console.log(n);
+    // if (n > 3) {
+    // console.log(n );
+    // return n - 9;
+    // } else {
+    //     return n % 3
+    // }
+    // });
+    // console.log('结果', result)
+
+    // let arr1 = [9, 3, 8, 3, 4, 5, -1];
+    // let indexOfValue = '';
+    // //find 接受三个参数
+    // let result = arr1.find((value, index, arr) => {
+    //     console.log(value, index, arr);
+    //     indexOfValue = index;
+    //     return value > 4
+    // });
+    // console.log('返回结果',result,'下标',indexOfValue)
+
+    //数组查找对应元素下标方法 findIndex
+    // [1, 5, 10, 15].findIndex(function(value, index, arr) {
+    //     return value > 9;
+    // }) // 2
+    //找出NaN
+    // let arr1 = [1,1,1,NaN,4,57];
+    // let result = arr1.findIndex(y => Object.is(NaN, y));
+    // console.log('下标',result)
+
+    //数组实例方法fill 填充数组
+    // let arr = ['a', 'a', 'a', 'a', 0].fill(7);
+    // console.log(arr);
+    //fill 会把括号内只执行一次后,运算结果保存填充到数组中
+    // arr = new Array(3).fill( (Math.random()* 10 ));
+    // console.log(arr)
+    let result = ['a','b'].keys()
+    console.log(result.next());
+    console.log(result.next());
+    console.log(result.next());
+    for(let index of ['a','b'].keys()){
+        console.log(index)
+    }
+
+
+
+
+
+
+
 
 });
 
