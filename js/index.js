@@ -2596,7 +2596,14 @@ $(function () {
     //     return Object(value) === value;
     // }
 
+    //如果一个对象本身部署了__proto__属性,该属性的值就是对象的原型
+    // let a = Object.getPrototypeOf('__proto__');
+    // console.log(a)
 
+    // Object.setPrototypeOf()
+    // Object.setPrototypeOf()作用与__proto__相同,用来设置一个对象的prototype对象,
+    // 返回参数对象本身
+    //es6推荐使用setPrototypeOf
 
 
 });
