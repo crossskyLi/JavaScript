@@ -2897,7 +2897,47 @@ $(function () {
     // let ab = {...a,...b,...c};
     // console.log(ab)
 
+    //与数组的扩展运算符一样,对象的扩展运算符后面可以跟表达式
+    // this.b = 10;
+    // const obj = {
+    //     ...(this.b > 0? {a:1}:{}),
+    //     b:1
+    // };
+    // console.log(obj)
 
+    //如果扩展运算符的参数是null或者undefined,两个值会被忽略
+    // let emptyObject = { ...null, ...undefined }; // 不报错
+
+    //扩展运算符的参数对象之中，如果有取值函数get，这个函数是会执行的。
+    // 并不会抛出错误，因为 x 属性只是被定义，但没执行
+    // let aWithXGetter = {
+    //     ...a,
+    //     get x() {
+    //         throw new Error('not throw yet');
+    //     }
+    // };
+
+// 会抛出错误，因为 x 属性被执行了
+//     let runtimeError = {
+//         ...a,
+//         ...{
+//             get x() {
+//                 throw new Error('throw now');
+//             }
+//         }
+//     };
+
+
+    //---Null 传导运算符
+    //传统判定对象内部是否有某个属性
+    // const first = (message && message.xx && message.xx.xx) || 'default';
+    // console.log(first)
+    // 提案中的写法
+    // const firstName = message?.body?.user?.firstName || 'default';
+
+
+    //----------symbol---------
+    // 解决问题
 });
 
 
