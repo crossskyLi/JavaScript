@@ -2891,11 +2891,13 @@ $(function () {
     // )
 
     // 扩展运算符用于合并多个对象
-    let a = {a:'1'};
-    let b = {b:'12'};
-    let c = {z:'12'};
-    let ab = {...a,...b,...c};
-    console.log(ab)
+    // let a = {a:'1'};
+    // let b = {b:'12'};
+    // let c = {z:'12'};
+    // let ab = {...a,...b,...c};
+    // console.log(ab)
+
+
 });
 
 
