@@ -2937,7 +2937,56 @@ $(function () {
 
 
     //----------symbol---------
-    // 解决问题
+    // 解决 es5中对象属性名都是字符串,容易造成属性名冲突的问题
+    // es6 引入新的原始数据类型 Symbol是第七种数据类型
+    // 表示独一无二的值
+
+    // let s = Symbol('12111');
+    // console.log(typeof s);
+    // console.log(s);
+    // s = 123;
+    // console.log(typeof s);
+    // console.log(s);
+
+    //Symbol函数前不能使用new命令，否则会报错。
+    // 这是因为生成的 Symbol 是一个原始类型的值，不是对象。
+    // 也就是说，由于 Symbol 值不是对象，
+    // 所以不能添加属性。基本上，它是一种类似于字符串的数据类型。
+
+    //如果Symbol 的参数是一个对象,就会调用该对象的toString 方法,将其转为字符串
+    // const obj = {
+    //     toString(){
+    //         return '123'
+    //     }
+    // };
+    // const symbolObj = Symbol(obj);
+    // console.log(symbolObj);
+
+    //Symbol 函数的参数只是表示对当前Symbol值的描述,相同参数的Symbol函数的返回值是不相等的
+    // let s1= Symbol();
+    // let s2= Symbol();
+    //
+    // console.log(s1 === s2);//false
+
+    // let s1= Symbol('foo');
+    // let s2= Symbol('foo');
+    // console.log(s1 === s2);  //false
+
+    //symbol值可以显式转为字符串,不可以和其他类型的值进行运算
+    // let sym = Symbol('test');
+    // console.log(String(sym));
+    // console.log(sym.toString())
+
+    // let sym = Symbol();
+    // let result = Boolean(sym);
+    // console.log(result)
+    // console.log(!sym);
+
+    // Number(sym)//TypeError
+    // sym+2 ;//TypeError
+
+
+    
 });
 
 
