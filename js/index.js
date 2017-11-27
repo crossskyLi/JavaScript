@@ -2985,8 +2985,12 @@ $(function () {
     // Number(sym)//TypeError
     // sym+2 ;//TypeError
 
+    //作为属性名的Symbol,使用symbol值作为标识符,
+    // 用于对象的属性名,保证不会出现同名的属性
+    // 防止改写或者覆盖
+    let mySymbol = Symbol();
+    //
 
-    
 });
 
 
