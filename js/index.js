@@ -3005,10 +3005,62 @@ $(function () {
     // console.log(a[mySymbol])
 
     // 注意，Symbol 值作为对象属性名时，不能用点运算符。
-    const mySymbol = Symbol();
-    const a = {};
-    a.mySymbol = 'hello';
-    console.log(a[mySymbol]);
+    // const mySymbol = Symbol();
+    // const a = {};
+    // a.mySymbol = 'hello';
+    // console.log(a[mySymbol]);
+    // console.log(a['mySymbol']);
+
+    //对象内部,使用symbol值定义属性时,symbol值必须放在方括号中
+    // let s = Symbol();
+    // let obj = {
+    //     [s]:function (arg) {
+    //         console.log(arg)
+    //     }
+    // };
+    // obj[s](123);
+
+    // 简写
+    // let s = Symbol();
+    // let obj = {
+    //     [s](arg) {
+    //         console.log(arg)
+    //     }
+    // };
+
+    //Symbol 类型可以用于定义一组常量,保证这组常量的值都是不相等的
+    // let log = {};
+    // let log = function (level,str) {
+    //     console.log(level,str)
+    // }
+    // log.levels = {
+    //     DEBUG:Symbol('debug'),
+    //     INFO:Symbol('info'),
+    //     WARN:Symbol('warn')
+    // };
+    // log(log.levels.DEBUG,'Debug');
+    // log(log.levels.INFO,'info');
+
+    // const COLOR_RED = Symbol();
+    // const COLOR_GREEN = Symbol();
+    //
+    // function getComplement(color) {
+    //     switch (color) {
+    //         case COLOR_RED:
+    //             return 'red';
+    //         case COLOR_GREEN:
+    //             return 'green';
+    //         default:
+    //             throw new Error('undefined color')
+    //     }
+    // }
+    // let result = getComplement(COLOR_GREEN);
+    // console.log(result)
+
+    
+
+
+
 
 });
 
