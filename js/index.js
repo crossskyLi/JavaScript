@@ -2604,8 +2604,246 @@ $(function () {
     // Object.setPrototypeOf()作用与__proto__相同,用来设置一个对象的prototype对象,
     // 返回参数对象本身
     //es6推荐使用setPrototypeOf
+    // 格式
+    // Object.setPrototypeOf(obj,proto)
+    // 使用
+    // const obj = Object.setPrototypeOf({},{a:11});
+    // console.log(obj)
+    // 相当于es5如下
+    // function setPrototype(obj,proto) {
+    //     obj.__proto__ = proto;
+    //     return obj;
+    // }
+
+    // let proto = {};
+    // let obj = {x:10};
+    // Object.setPrototypeOf(obj,proto);
+    // proto.y = 20;
+    // console.log(obj.x)
+    // console.log(obj.y)
+    // console.log(obj)
+
+    //如果第一个参数不是对象，会自动转为对象。
+    // 但是由于返回的还是第一个参数，所以这个操作不会产生任何效果。
+    // Object.setPrototypeOf(1, {}) === 1 // true
+    // Object.setPrototypeOf('foo', {}) === 'foo' // true
+    // Object.setPrototypeOf(true, {}) === true // true
+    //由于undefined和null无法转为对象，
+    // 所以如果第一个参数是undefined或null，就会报错。
+    // Object.setPrototypeOf(undefined, {})
+    // TypeError: Object.setPrototypeOf called on null or undefined
+
+    // Object.setPrototypeOf(null, {})
+    // TypeError: Object.setPrototypeOf called on null or undefined
+
+    //Object.getPrototypeOf(),用于读取一个对象的原型对象
+    // function rectTangle() {
+    //     this.a = 10
+    // }
+    // rectTangle.b = 10
+    // const rec = new rectTangle();
+    // console.log(Object.getPrototypeOf(rec));
+    // console.log(rectTangle.prototype);
+    // console.log(Object.getPrototypeOf(rec) === rectTangle.prototype);
+
+    // 同样,参数不是对象,会被自动转为对象,
+    // 如果参数是undefined或者null,无法转为对象,会报错
+    // 等同于 Object.getPrototypeOf(Number(1))
+    // Object.getPrototypeOf(1)
+    // Number {[[PrimitiveValue]]: 0}
+
+    // 等同于 Object.getPrototypeOf(String('foo'))
+    //     Object.getPrototypeOf('foo')
+    // String {length: 0, [[PrimitiveValue]]: ""}
+
+    // 等同于 Object.getPrototypeOf(Boolean(true))
+    //     Object.getPrototypeOf(true)
+    // Boolean {[[PrimitiveValue]]: false}
+
+    // Object.getPrototypeOf(1) === Number.prototype // true
+    // Object.getPrototypeOf('foo') === String.prototype // true
+    // Object.getPrototypeOf(true) === Boolean.prototype // true
+    // Object.getPrototypeOf(null)
+    // TypeError: Cannot convert undefined or null to object
+
+    // Object.getPrototypeOf(undefined)
+    // TypeError: Cannot convert undefined or null to object
 
 
+    //---super关键字---
+    // this关键字总是指向函数所在的当前对象
+    // super指向的是当前对象的原型对象
+    // const proto = {
+    //     hello:'hello'
+    // };
+    // const obj = {
+    //     find(){
+    //         return super.hello;
+    //     }
+    // }
+    // Object.setPrototypeOf(obj,proto);
+    // console.log(obj.find())//'hello'
+
+    // 注意,super 关键字标识原型对象时,只能用在对象的方法中,用在其他地方报错
+    //报错
+    // const obj = {
+    //     foo:super.foo
+    // };
+    // 报错
+    // const obj = {
+    //     foo:() => super.foo
+    // };
+    // 报错
+    // const obj = {
+    //     foo:function () {
+    //         return super.foo
+    //     }
+    // }
+
+    //JavaScript 引擎内部，
+    // super.foo等同于Object.getPrototypeOf(this).foo（属性）
+    // 或Object.getPrototypeOf(this).foo.call(this)（方法）。
+
+
+    // const proto = {
+    //     x: 'hello',
+    //     foo() {
+    //         console.log(this.x);
+    //     },
+    // };
+    //
+    // const obj = {
+    //     x: 'world',
+    //     foo() {
+    //         super.foo();
+    //     }
+    // }
+    //
+    // Object.setPrototypeOf(obj, proto);
+    // //原型链查找只会找到 obj自身属性,自身属性找不到才往上找
+    // obj.foo() // "world"
+
+
+    //----Object.keys(),Object.values(),Object.entries();----
+
+    // Object.keys();
+    //ES5 引入了Object.keys方法，返回一个数组，
+    // 成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键名。
+    // let obj = {
+    //     foo:'bar',
+    //     bar:'123'
+    // };
+    // console.log(Object.keys(obj));
+    //es6 引入和keys方法对应的方法
+    //keys,键名
+    //values 键值
+    // entries 键值和键名两个数组组成的数组
+    // let {keys, values, entries} = Object;
+    // let obj = {
+    //     foo: 'bar',
+    //     bar: '123'
+    // };
+    // console.log( keys(obj))
+    // console.log( values(obj))
+    // console.log( entries(obj))
+
+    // 遍历时,属性名为数值的属性,是按照数值大小,从小到大遍历的
+    // const obj = { 100: 'a', 2: 'b', 7: 'c' };
+    // Object.values(obj)
+    // ["b", "c", "a"]
+
+    //Object.values 只返回对象自身可遍历属性
+    // const obj = Object.create({},{p:{value:123}});
+    // console.log(Object.values(obj));
+    // Object.create 不显式声明的话,默认是不可遍历的 p 属性描述对象的enumerable 则默认false
+    //如果要可枚举则需要把enumerable设置为true
+    // const obj = Object.create({},{p:{
+    //     value:123,
+    //     enumerable: true
+    // }})
+    // console.log(Object.keys(obj))
+    // console.log(Object.values(obj))
+
+    // Object.values() 会过滤属性名字为Symbol值的属性
+    // let result = Object.values({[Symbol()]:123,foo: '321'});
+    // console.log(result)
+
+    //如果 Object.values() 参数为 字符串 ,那么会返回字符组成的一个数组
+    // let result = Object.values('foo');
+    // console.log(result)
+
+
+    // 如果参数不是对象，Object.values会先将其转为对象。
+    // 由于--数值和布尔值--的包装对象，
+    // 都不会为实例添加非继承的属性。
+    // 所以，Object.values会返回空数组。
+    // Object.values(42) // []
+    // Object.values(true) // []
+
+    //Object.entries()
+    // Object.entries 方法返回一个数组,
+    // 成员是参数对象自身的(不含继承的)
+    // 所有可遍历的(enumerable)属性的键值对数组
+    // 除了返回值不一样,该方法的行为与Object.values一致
+
+    // const obj = { foo: 'bar', baz: 42 };
+    // const map = new Map(Object.entries(obj));
+    // console.log(map) // Map { foo: "bar", baz: 42 }
+
+    // // Generator函数的版本
+    //     function* entries(obj) {
+    //         for (let key of Object.keys(obj)) {
+    //             yield [key, obj[key]];
+    //         }
+    //     }
+    //
+    // // 非Generator函数的版本
+    //     function entries(obj) {
+    //         let arr = [];
+    //         for (let key of Object.keys(obj)) {
+    //             arr.push([key, obj[key]]);
+    //         }
+    //         return arr;
+    //     }
+
+
+    //对象的扩展运算符
+
+    // 1 解构赋值
+    // 对象的解构赋值用于从一个对象取值,相当于将所有可遍历的,但尚未被读取的属性
+    //分配到指定对象上去,所有的键值都会拷贝到新的对象上面
+
+    // let {x, y, ...z} = {x: 1, y: 2, a: 23, b: 123};
+    // console.log(x)
+    // console.log(y)
+    // console.log(z)
+
+    // 由于解构赋值要求等号右边是一个对象，
+    // 所以如果等号右边是undefined或null，
+    // 就会报错，因为它们无法转为对象。
+    // 报错
+    // let {x ,...y} = null;
+    // 报错
+    // let {x ,...y} = undefined;
+
+    // 注意,解构赋值必须为最后一个参数,否则会报错
+    // let { ...x, y, z } = obj; // 句法错误
+    // let { x, ...y, ...z } = obj; // 句法错误
+
+    //注意,解构赋值的拷贝是浅拷贝,如果一个键值为复合类型的值,
+    // 那么解构赋值拷贝的是这个值的引用,而不是副本
+    // let obj = {a: {b: 1}};
+    // let {...x} = obj;
+    // obj.a.b = 123;
+    // console.log(x) //{a :{ b:123 }}
+
+    //另外,扩展运算符的解构赋值,不能复制继承自原型对象的属性
+    let obj1 = {a:1};
+    let obj2 = {b:2};
+    obj2.__proto__ = obj1;
+    let { ...a } = obj2;
+    console.log(a);
+    console.log(a.a)
 });
 
 
