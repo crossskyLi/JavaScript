@@ -2988,8 +2988,27 @@ $(function () {
     //作为属性名的Symbol,使用symbol值作为标识符,
     // 用于对象的属性名,保证不会出现同名的属性
     // 防止改写或者覆盖
-    let mySymbol = Symbol();
-    //
+
+    // let mySymbol = Symbol();
+    // 第一种写法
+    // let a = {};
+    // a[mySymbol] = 'hello';
+
+    //第二种写法
+    // let b = {
+    //     [mySymbol]:'hello'
+    // };
+
+    //第三种写法
+    // let a = {};
+    // Object.defineProperty(a,mySymbol,{value:'hello'});
+    // console.log(a[mySymbol])
+
+    // 注意，Symbol 值作为对象属性名时，不能用点运算符。
+    const mySymbol = Symbol();
+    const a = {};
+    a.mySymbol = 'hello';
+    console.log(a[mySymbol]);
 
 });
 
