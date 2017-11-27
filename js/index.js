@@ -2872,24 +2872,30 @@ $(function () {
     // console.log(n1,n2)
 
     //以上只拷贝了对象实例的属性,如果系那个完整拷贝一个对象,拷贝对象原型的属性
-    let obj = {a: 2, b: 4};
-    //方法一,适用于浏览器
-    const clone = {
-        __proto__: Object.getPrototypeOf(obj),
-        ...obj
-    };
-    //方法二
-    const clone1 = Object.assign(
-        Object.create(
-            Object.getPrototypeOf(obj)
-        ),
-        obj);
-    //方法三,低版本不支持
-    const clone2 = Object.create(
-        Object.getPrototypeOf(obj),
-        Object.getOwnPropertyDescriptors(obj)
-    )
+    // let obj = {a: 2, b: 4};
+    // //方法一,适用于浏览器
+    // const clone = {
+    //     __proto__: Object.getPrototypeOf(obj),
+    //     ...obj
+    // };
+    // //方法二
+    // const clone1 = Object.assign(
+    //     Object.create(
+    //         Object.getPrototypeOf(obj)
+    //     ),
+    //     obj);
+    // //方法三,低版本不支持
+    // const clone2 = Object.create(
+    //     Object.getPrototypeOf(obj),
+    //     Object.getOwnPropertyDescriptors(obj)
+    // )
 
+    // 扩展运算符用于合并多个对象
+    let a = {a:'1'};
+    let b = {b:'12'};
+    let c = {z:'12'};
+    let ab = {...a,...b,...c};
+    console.log(ab)
 });
 
 
