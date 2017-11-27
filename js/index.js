@@ -3057,10 +3057,129 @@ $(function () {
     // let result = getComplement(COLOR_GREEN);
     // console.log(result)
 
-    
+    // 消除魔术字符串
+    // 魔术字符串是指在代码中多次出现,与代码形成强耦合的某一具体的字符串,或者数值,
+    // 代码应尽量消除魔术字符串
 
+    // function getArea(shape, option) {
+    //     let area = 0;
+    //     switch (shape){
+    //         case 'triangle'://魔术字符串
+    //             area = 0.5 * option.width * option.height;
+    //             break;
+    //         default:
+    //             return 'err'
+    //     }
+    //     return area
+    // }
+    // let area = getArea('triangle',{width:100,height:100});
+    // console.log(area)
 
+    //消除魔术字符串
+    // 中间变量,查看代码只需要看这个中间变量
+    // const shapeType = {
+    //     triangle: 'Triangle'
+    // };
+    //
+    // function getArea(shape, options) {
+    //     let area = 0;
+    //     switch (shape) {
+    //         case shapeType.triangle:
+    //             area = 0.5 * option.width * option.height;
+    //             break;
+    //         default:
+    //             return 0
+    //     }
+    //     return area
+    // }
+    // let area= getArea(shapeType.triangle,{width:100,height:100})
 
+    //这时候可以发现shapType.triangle等于哪个值并不重要,
+    // 只要确保不会跟其他shapeType属性的值冲突即可
+    // const shapeType = {
+    //     triangle:Symbol()
+    // }
+
+    // --- 属性名的遍历 ---
+    //Symbol 作为属性名,该属性不会出现在for...in 、for ...of 循环中
+    // 不会被Object.keys(),Object.getOwnPropertyName()、JSON.stringify 返回,
+    // 但是它又不是一个私有属性,有一个 Object.getOwnPropertySymbols 方法,
+    // 可以获取指定对象的所有Symbol属性名
+    // Object.getOwnPropertySymbols() 方法返回一个数组,
+    // 成员是当前对象的所有用作属性名的symbol值
+    // const obj = {};
+    // let a = Symbol('a');
+    // let b = Symbol('b');
+    // obj[a] = 'hello';
+    // obj[b] = 'world';
+    // const result = Object.getOwnPropertySymbols(obj);
+    // console.log(result)
+    // console.log(obj[result[0]])
+    //
+    //  Object.getOwnPropertySymbols方法与for...in循环、
+    //  Object.getOwnPropertyNames方法进行对比的例子
+    // const obj = {a: 123};
+    // let foo = Symbol('foo');
+    // obj.__proto__.b = '321';
+    // Object.defineProperty(obj, foo, {value: 'foobar'});
+    //
+    // console.log(obj);
+    // console.log(obj.b);
+    // console.log('==========')
+    // for (let i in obj) {
+    //     console.log(i);
+    // }
+    // console.log('==========')
+    // let property = Object.getOwnPropertyNames(obj);
+    // let symbolResult = Object.getOwnPropertySymbols(obj);
+    // console.log(property);
+    // console.log('==========')
+    // console.log(symbolResult);
+
+    // Reflect.ownKeys 方法可以返回所有类型的键名,包括常规键名和Symbol 键名
+    // let obj = {
+    //     [Symbol('key')]:1,
+    //     enum :1,
+    //     nonEnum :3
+    // };
+    // let result = Reflect.ownKeys(obj);
+    // console.log(Reflect)
+    // let valuesResult = Reflect.ownValues(obj);
+    // console.log(result)
+
+    // 由于以Symbol 值作为名称的属性,不会被常规方法遍历到,
+    // 可以利用这个特性,为对象定义一些非私有但又只用于内部的方法
+
+    let size = Symbol('size');
+
+    class Collection {
+        constructor() {
+            this[size] = 0;
+        }
+
+        add(item) {
+            console.log('this.size',this.size)
+            this[this.size] = item;
+            this[size]++;
+        }
+        static sizeOf(instance){
+            console.log('instance',instance)
+            return instance[size]
+        }
+    }
+    let x = new Collection();
+    let x1 = Collection.sizeOf(x);
+    console.log('x1',x1);
+    x.add('foo');
+    let x2 = Collection.sizeOf(x);
+    console.log('x1',x2);
+
+    let keys= Object.keys(x);
+    let propertyNames = Object.getOwnPropertyNames(x);
+    let propertySymbol = Object.getOwnPropertySymbols(x);
+    console.log('key',keys);
+    console.log('propertyNames',propertyNames);
+    console.log('propertySymbol',propertySymbol);
 
 });
 
