@@ -2838,12 +2838,58 @@ $(function () {
     // console.log(x) //{a :{ b:123 }}
 
     //另外,扩展运算符的解构赋值,不能复制继承自原型对象的属性
-    let obj1 = {a:1};
-    let obj2 = {b:2};
-    obj2.__proto__ = obj1;
-    let { ...a } = obj2;
-    console.log(a);
-    console.log(a.a)
+    // let obj1 = {a:1};
+    // let obj2 = {b:2};
+    // obj2.__proto__ = obj1;
+    //只复制了o2自身的属性，没有复制它的原型对象o1的属性
+    // let { ...a } = obj2;
+    // console.log(a);
+    // console.log(a.a)
+
+    // const obj = Object.create({x: 1, y: 2});
+    // obj.z = 3;
+    // console.log(obj);
+    // // let {x} = obj
+    // let {x, z, y, ...c} = obj;
+    // console.log(x);
+    // console.log(y);
+    // console.log(z);
+    // function baseFunction({ a, b }) {
+    //     // ...
+    // }
+    // function wrapperFunction({ x, y, ...restConfig }) {
+    //     // 使用x和y参数进行操作
+    //     // 其余参数传给原始函数
+    //     return baseFunction(restConfig);
+    // }
+
+    //扩展运算符用于取出参数对象的所有可遍历属性,拷贝到当前对象之中
+    // let z = {a: 2, b: 4};
+    // 有相同属性,属性放在结构的对象后面,会把解构的属性覆盖
+    // let n1 = {...z,a:124,c:456};
+    // 放在前面则被解构对象覆盖
+    // let n2 = {a:124,...z,c:456};
+    // console.log(n1,n2)
+
+    //以上只拷贝了对象实例的属性,如果系那个完整拷贝一个对象,拷贝对象原型的属性
+    let obj = {a: 2, b: 4};
+    //方法一,适用于浏览器
+    const clone = {
+        __proto__: Object.getPrototypeOf(obj),
+        ...obj
+    };
+    //方法二
+    const clone1 = Object.assign(
+        Object.create(
+            Object.getPrototypeOf(obj)
+        ),
+        obj);
+    //方法三,低版本不支持
+    const clone2 = Object.create(
+        Object.getPrototypeOf(obj),
+        Object.getOwnPropertyDescriptors(obj)
+    )
+
 });
 
 
