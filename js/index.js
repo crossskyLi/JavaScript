@@ -3150,37 +3150,39 @@ $(function () {
     // 由于以Symbol 值作为名称的属性,不会被常规方法遍历到,
     // 可以利用这个特性,为对象定义一些非私有但又只用于内部的方法
 
-    let size = Symbol('size');
+    // let size = Symbol('size');
 
-    class Collection {
-        constructor() {
-            this[size] = 0;
-        }
+    // class Collection {
+    //     constructor() {
+    //         this[size] = 0;
+    //     }
+    //
+    //     add(item) {
+    //         console.log('this.size',this[size])
+    //         this[this[size]] = item;
+    //         this[size]++;
+    //     }
+    //     static sizeOf(instance){
+    //         console.log('instance',instance)
+    //         return instance[size]
+    //     }
+    // }
+    // let x = new Collection();
+    // let x1 = Collection.sizeOf(x);
+    // console.log('x1',x1);
+    // x.add('foo');
+    // console.log('foo',x)
+    // let x2 = Collection.sizeOf(x);
+    // console.log('x2',x2);
 
-        add(item) {
-            console.log('this.size',this.size)
-            this[this.size] = item;
-            this[size]++;
-        }
-        static sizeOf(instance){
-            console.log('instance',instance)
-            return instance[size]
-        }
-    }
-    let x = new Collection();
-    let x1 = Collection.sizeOf(x);
-    console.log('x1',x1);
-    x.add('foo');
-    let x2 = Collection.sizeOf(x);
-    console.log('x1',x2);
+    // let keys= Object.keys(x);
+    // let propertyNames = Object.getOwnPropertyNames(x);
+    // let propertySymbol = Object.getOwnPropertySymbols(x);
+    // console.log('key',keys);
+    // console.log('propertyNames',propertyNames);
+    // console.log('propertySymbol',propertySymbol);
 
-    let keys= Object.keys(x);
-    let propertyNames = Object.getOwnPropertyNames(x);
-    let propertySymbol = Object.getOwnPropertySymbols(x);
-    console.log('key',keys);
-    console.log('propertyNames',propertyNames);
-    console.log('propertySymbol',propertySymbol);
-
+    
 });
 
 
