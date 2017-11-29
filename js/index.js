@@ -3368,8 +3368,23 @@ $(function () {
 
     // WeakSet
     // 与set 类似,但是有两个区别
-    // weakSet成员只能是对象,不能是其他的值
-    
+    // WeakSet成员只能是对象,不能是其他类型的值
+    // const ws = new WeakSet();
+    // console.log(ws)
+    // ws.add(1);// 报错
+    // ws.add (Symbol())// 报错
+    // ws.add ({});
+    // console.log(ws);
+
+    // WeakSet 中的对象都是弱引用,WeakSet 适合临时存放一组对象,以及存放跟对象绑定的信息,
+    // 只要这些对象在外部消失,它在WeakSet 里面的引用就会自动消失
+
+
+
+
+
+
+
 });
 
 
