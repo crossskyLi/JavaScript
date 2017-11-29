@@ -3378,15 +3378,67 @@ $(function () {
 
     // WeakSet 中的对象都是弱引用,WeakSet 适合临时存放一组对象,以及存放跟对象绑定的信息,
     // 只要这些对象在外部消失,它在WeakSet 里面的引用就会自动消失
+    // 应该少用,跳过 unFinish
+    // 防止内存泄漏
+    // const foos = new WeakSet()
+    // class Foo {
+    //     constructor() {
+    //         foos.add(this)
+    //     }
+    //     method () {
+    //         if (!foos.has(this)) {
+    //             throw new TypeError('Foo.prototype.method 只能在Foo的实例上调用！');
+    //         }
+    //     }
+    // }
 
 
+    // 3 Map
+    //ES6 提供了 Map 数据结构。它类似于对象，也是键值对的集合，
+    // 但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。
+    // 也就是说，Object 结构提供了“字符串—值”的对应，Map 结构提供了“值—值”的对应，
+    // 是一种更完善的 Hash 结构实现。
+    // 如果你需要“键值对”的数据结构，Map 比 Object 更合适。
 
+    // 使用 Map 结构的set方法，将对象o当作m的一个键，
+    // 然后又使用get方法读取这个键，
+    // 接着使用delete方法删除了这个键。
+    // const m = new Map();
+    // const o = {p: 'hello world'};
+    // // let result = m.get();
+    // // console.log(result)
+    // m.set(o,'content');
+    // let result = m.get(o);
+    // console.log(result);
+    //
+    // console.log('has',m.has(o));
+    // console.log('delete',m.delete(o));
+    // console.log('has',m.has(o));
 
-
-
-
-
-
+    // 作为构造函数，Map 也可以接受一个数组作为参数。
+    // 该数组的成员是一个个表示键值对的数组
+    // const map = new Map([
+    //     ['name','名字'],
+    //     ['title','author']
+    // ])
+    // console.log(map.size);
+    // console.log(map.has('name'));
+    // console.log(map.get('name'));
+    // console.log(map.has('title'));
+    // console.log(map.get('title'));
+    // 等价于
+    let map = new Map();
+    const items = [
+        ['name','名字'],
+        [ 'title','author']
+    ];
+    items.forEach(([key,value])=> map.set(key,value));
+    console.log(map);
+    console.log(map.size);
+    console.log(map.has('name'));
+    console.log(map.get('name'));
+    console.log(map.has('title'));
+    console.log(map.get('title'));
 });
 
 
