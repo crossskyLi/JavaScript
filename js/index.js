@@ -3366,6 +3366,10 @@ $(function () {
     // set1 = new Set(Array.from(set1, val => val * 3));
     // console.log(set1)
 
+    // WeakSet
+    // 与set 类似,但是有两个区别
+    // weakSet成员只能是对象,不能是其他的值
+    
 });
 
 
