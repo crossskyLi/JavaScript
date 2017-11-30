@@ -3701,42 +3701,73 @@ $(function () {
     //     });
 
     // 调用 Ajax 操作例子
-    const getJson = function (url) {
-        const promise = new Promise(function (resolve, reject) {
-            const handler = function () {
-                if (this.readyState !== 4){
-                    return '不成功'
-                }
-                if(this.status === 200){
-                    resolve(this.response);
-                }else {
-                    reject(new Error(this.statusText))
-                }
-            };
-            const client = new XMLHttpRequest();
-            client.open('GET',url);
-            client.onreadystatechange = handler;
-            client.responseType = 'json';
-            client.setRequestHeader('Accept','application/json');
-            client.send();
-        });
-        return promise;
-    };
-    let url = 'http://121.199.24.124:3200/readingStatistics/week?' +
-        'classId=25&startDate=2017-11-23&endDate=2017-11-29';
-    getJson(url)
-        .then(function (res) {
-            console.log(res)
-        },function (err) {
-            console.log(err)
-        })
+    // const getJson = function (url) {
+    //     const promise = new Promise(function (resolve, reject) {
+    //         const handler = function () {
+    //             if (this.readyState !== 4){
+    //                 return '不成功'
+    //             }
+    //             if(this.status === 200){
+    //                 resolve(this.response);
+    //             }else {
+    //                 reject(new Error(this.statusText))
+    //             }
+    //         };
+    //         const client = new XMLHttpRequest();
+    //         client.open('GET',url);
+    //         client.onreadystatechange = handler;
+    //         client.responseType = 'json';
+    //         client.setRequestHeader('Accept','application/json');
+    //         client.send();
+    //     });
+    //     return promise;
+    // };
+    // let url = 'http://121.199.24.124:3200/readingStatistics/week?' +
+    //     'classId=25&startDate=2017-11-23&endDate=2017-11-29';
+    // getJson(url)
+    //     .then(function (res) {
+    //         console.log(res)
+    //     },function (err) {
+    //         console.log(err)
+    //     })
 
+    // 两个异步操作的执行
+    // const promise = new Promise(function (resolve, reject) {
+    //     console.log('第一个异步进行');
+    //     // resolve('第一个异步完成');
+    //     setTimeout(function () {
+    //         resolve('第一个异步完成');
+    //         //被拒绝,p2抛出错误
+    //         // reject('不让你成功,咋滴')
+    //     },100)
+    // });
+    // const promise2 = new Promise(function (resolve, reject) {
+    //     console.log('第二个异步进行');
+    //     resolve(promise)
+    // });
+    // promise.then(function (successValue) {
+    //     console.warn('第一个promise成功',successValue);
+    // }).catch(function (err) {
+    //     console.error('第一个promise错误',err)
+    // });
+    // promise2
+    //     .then(result => {
+    //         console.log('第二个promise结束',result)
+    //     })
+    //     .catch(err => {
+    //         console.error(err);
+    //     })
 
-
-
-
-
-
+    //调用resolve或reject并不会终结 Promise 的参数函数的执行。
+    // new Promise((resolve, reject) => {
+    //     resolve(1);
+    //     //这里是不会被阻塞的
+    //     console.log(2);
+    // }).then(r => {
+    //     console.log(r);
+    // });
+    // 立即 resolved 的 Promise 是在本轮事件循环的末尾执行，
+    // 总是晚于本轮循环的同步任务。
 
 
 });
