@@ -3607,7 +3607,7 @@ $(function () {
     // let myMap = new Map().set('yes', true).set('no', false);
     // strMapToJson(myMap)
 
-     // Map 的键名有非字符串,可以选择转为数组JSON
+    // Map 的键名有非字符串,可以选择转为数组JSON
     // function mapToArrayJson(map) {
     //     return JSON.stringify([...map]);
     // }
@@ -3628,23 +3628,108 @@ $(function () {
     // unFinish
 
 
-
-
     //------ 12 proxy 跳过 元编程 unFinish------
     //------ 13 Reflect 跳过 元编程 unFinish------
 
 
     // Promise 对象
-    // 
+
+    //es6 规定,Promise对象是个构造函数,用来生成Promise实例
+    // const promise = new Promise(function (resolve, reject) {
+    //     // 一些执行代码后
+    //     if (true) {// 异步操作成功
+    //         resolve(value);//成功回调
+    //     } else {
+    //         reject(error);// 失败回调
+    //     }
+    // })
+
+    // 执行完成后调用回调
+    //接受两个参数,第一个是成功回调,第二是失败回调
+    // promise.then(
+    //     function (value) {
+    //         console.log(value)
+    //     }, function (err) {
+    //         console.log(err)
+    //     }
+    // )
 
 
+    // 一个简单的timeout 定制时间方法
+    // function timeoutDemo(ms) {
+    //     return new Promise((resolve,reject)=>{
+    //         setTimeout(resolve,ms,'done')
+    //     })
+    // }
+    // timeoutDemo(100).then((value)=>{
+    //     console.log(value)
+    // })
 
+    //promise 新建后就会立即执行
+    // let promise = new Promise(function (resolve, reject) {
+    //     console.log('promise');
+    //     resolve('done')
+    // });
+    // promise.then(function (str) {
+    //     console.log(str)
+    // },function (err) {
+    //     console.log(err)
+    // });
+    // console.log(' 在 done 之前')
 
+    //图片异步加载
+    // function loadImageAsync(url) {
+    //     return new Promise(function (resolve,reject) {
+    //         const image = new Image();
+    //         image.onload = function () {
+    //             setTimeout(function(){
+    //                 resolve(image)
+    //             },2000)
+    //         };
+    //         image.onerror = function () {
+    //             reject(new Error('图片加载出现问题'+url))
+    //         };
+    //         image.src = url;
+    //     })
+    // }
+    // loadImageAsync('http://localhost:4800/images/indexIcon-3-1.png')
+    //     .then(function (image) {
+    //         $('img').attr('src',image.src)
+    //         console.log(image)
+    //     },function (err) {
+    //         console.log(err)
+    //     });
 
-
-
-
-
+    // 调用 Ajax 操作例子
+    const getJson = function (url) {
+        const promise = new Promise(function (resolve, reject) {
+            const handler = function () {
+                if (this.readyState !== 4){
+                    return '不成功'
+                }
+                if(this.status === 200){
+                    resolve(this.response);
+                }else {
+                    reject(new Error(this.statusText))
+                }
+            };
+            const client = new XMLHttpRequest();
+            client.open('GET',url);
+            client.onreadystatechange = handler;
+            client.responseType = 'json';
+            client.setRequestHeader('Accept','application/json');
+            client.send();
+        });
+        return promise;
+    };
+    let url = 'http://121.199.24.124:3200/readingStatistics/week?' +
+        'classId=25&startDate=2017-11-23&endDate=2017-11-29';
+    getJson(url)
+        .then(function (res) {
+            console.log(res)
+        },function (err) {
+            console.log(err)
+        })
 
 
 
