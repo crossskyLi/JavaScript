@@ -3590,15 +3590,54 @@ $(function () {
     // console.log('===', arr) // [empty × 123, 123, empty × 197, 321]
 
     // 对象 转为Map
-    function objToStrMap(obj) {
-        let strMap = new Map();
-        for (let key of Object.keys(obj)){
-            strMap.set(key,obj[key])
-        }
-        return strMap;
-    }
-    let result = objToStrMap({1:22,2:'34'});
-    console.log(result)
+    // function objToStrMap(obj) {
+    //     let strMap = new Map();
+    //     for (let key of Object.keys(obj)){
+    //         strMap.set(key,obj[key])
+    //     }
+    //     return strMap;
+    // }
+    // let result = objToStrMap({1:22,2:'34'});
+    // console.log(result)
+
+    // map 转 JSON
+    // function strMapToJson(strMap) {
+    //     return JSON.stringify(strMapToObj(strMap))
+    // }
+    // let myMap = new Map().set('yes', true).set('no', false);
+    // strMapToJson(myMap)
+
+     // Map 的键名有非字符串,可以选择转为数组JSON
+    // function mapToArrayJson(map) {
+    //     return JSON.stringify([...map]);
+    // }
+    // let myMap = new Map().set(true, 7).set({foo: 3}, ['abc']);
+    // mapToArrayJson(myMap)
+
+    // 6 JSON 转为Map
+    // function jsonToStrMap(jsonStr) {
+    //     return objToStrMap(JSON.parse(jsonStr))
+    // }
+    // let json = '{"yes": true, "no": false}';
+    // jsonToStrMap(json);
+
+    // WeakMap 结构与 map结构类似,也是用于生成键值对的集合
+    // 区别: weakMap 只接受对象作为键名(null 除外),不接受其他类型的值作为键名
+    // weakMap不计入垃圾回收机制
+    // 忽略其他学习部分
+    // unFinish
+
+
+
+
+    //------ 12 proxy 跳过 元编程 unFinish------
+    //------ 13 Reflect 跳过 元编程 unFinish------
+
+
+    // Promise 对象
+    //
+
+
 
 
 
