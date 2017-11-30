@@ -3801,6 +3801,16 @@ $(function () {
     // Promise.prototype.then();
     // promise 可以采用链式写法
 
+    let promise = new Promise(function (resolve, reject) {
+        return resolve(1);
+    });
+    promise.then(function (success) {
+        console.log(success)
+    }).then(function (success) {
+        console.log(success)
+    }).then(function (err) {
+        console.log('第三次调用')
+    })
 
 
 
