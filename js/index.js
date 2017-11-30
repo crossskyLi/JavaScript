@@ -3768,6 +3768,47 @@ $(function () {
     // });
     // 立即 resolved 的 Promise 是在本轮事件循环的末尾执行，
     // 总是晚于本轮循环的同步任务。
+    // 调用resolve或reject以后，Promise 的使命就完成了，
+    // 后继操作应该放到then方法里面，而不应该直接写在resolve或reject的后面。
+    // 所以，最好在它们前面加上return语句，这样就不会有意外。
+    // let i = 10;
+    // let timer = setInterval(function () {
+    //     console.log(i);
+    //     if (i < 0){
+    //         clearInterval(timer);
+    //         return
+    //     }else{
+    //         i--;
+    //     }
+    //     let promise = new Promise((resolve,reject) => {
+    //         let result = 10* Math.random()-5;
+    //         console.log(result);
+    //         if(result > 0){
+    //             return resolve('结果   大   于0');
+    //         }else{
+    //             return reject('结果   小   于0')
+    //         }
+    //         //后面语句就不会执行
+    //         console.log(2);
+    //     });
+    //     promise.then(function (success) {
+    //         console.log(success)
+    //     }).catch(function (err) {
+    //         console.log(err)
+    //     })
+    // },1000);
+
+    // Promise.prototype.then();
+    // promise 可以采用链式写法
+
+
+
+
+
+
+
+
+
 
 
 });
