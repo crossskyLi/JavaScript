@@ -3427,18 +3427,194 @@ $(function () {
     // console.log(map.has('title'));
     // console.log(map.get('title'));
     // 等价于
-    let map = new Map();
-    const items = [
-        ['name','名字'],
-        [ 'title','author']
-    ];
-    items.forEach(([key,value])=> map.set(key,value));
-    console.log(map);
-    console.log(map.size);
-    console.log(map.has('name'));
-    console.log(map.get('name'));
-    console.log(map.has('title'));
-    console.log(map.get('title'));
+    // let map = new Map();
+    // const items = [
+    //     ['name','名字'],
+    //     [ 'title','author']
+    // ];
+    // items.forEach(([key,value])=> map.set(key,value));
+    // console.log(map);
+    // console.log(map.size);
+    // console.log(map.has('name'));
+    // console.log(map.get('name'));
+    // console.log(map.has('title'));
+    // console.log(map.get('title'));
+
+    // const set = new Set([
+    //     ['foo',1],
+    //     ['bar',1]
+    // ]);
+    // const m1 = new Map(set);
+    // let foo = m1.get('foo');
+    // console.log(foo)
+    // const m2 = new Map([['baz',3],['a',123]]);
+    // console.log(m2);
+    // const m3 = new Map(m2);
+    // console.log(m3.get('baz'));
+
+    // 对同一个键多次赋值，后面的值将覆盖前面的值。
+    // const map = new Map();
+    // map.set('a',123).set('a',321);
+    // console.log(map.get('a'))
+
+    // 读取未知的键,返回 undefined
+    // let unName = new Map().get('12312');
+    // console.groupCollapsed(unName)
+
+    // 只有对同一个对象的引用,map结构才视为同一个键,
+    // const map = new Map();
+    // map.set(['a'],123);
+    // console.log(map);
+    // console.log(map.get(['a']));//undefined 内存地址不一样,get无法读取该键
+    // console.log(map.get('a'))
+
+    //同值,但引用地址不同,map结构中视为两个不同的键
+    // const map = new Map();
+    // const arr = ['1'];
+    // const arr1 = ['1'];
+    // map.set(arr, 123).set(arr1, 321);
+    // console.log(map)
+    // console.log(map.get(arr))
+    // console.log(map.get(arr1))
+    // arr 和 arr1 被视为两个不同的键
+
+    // let map = new Map();
+    // //map 中 -0和+0是一个键
+    // map.set(-0,123);
+    // console.log(map.get(+0));
+    // console.log(map.get(-0));
+    // console.log(map.get(0));
+    // //true 和字符串 'true'不同
+    // map.set(true,1);
+    // map.set('true',2);
+    // console.log(map.get('true'));
+    // console.log(map.get(true));
+    //
+    // // undefined和null也是不同的键
+    // // NaN 在map结构中视为同一个键
+    // map.set(NaN,5444);
+    // map.set(NaN,321);
+    // console.log(map.get(NaN))
+
+    //与set一样都有 属性和操作方法
+    // 1 size属性  map.size
+    // 2 set(key ,value)
+    // 3 get(key)
+    // 4 has(key)
+    // 5 delete(key)
+    // 6 clear
+
+    // 遍历的方法
+    // 1 keys() :返回键名 遍历器
+    // 2 values() : 返回键值 遍历器
+    // 3 entries() : 返回所有成员的遍历器
+    // 4 forEach() : 遍历Map的所有成员,回调
+
+    // 结合数组的map和 filter 方法
+    // const map = new Map().set(1, '1').set(2, '2').set(3, '3');
+    // const map1 = new Map(
+    //     [...map].filter(([k,v])=> k <2)
+    // );
+    // console.log(map1.get(1))
+    // console.log(map1.get(2))
+    // const map2 = new Map(
+    //     [...map].map(([k,v]) => [k,v * v])
+    // );
+    // console.log(map2)
+
+    // forEach
+    // map.forEach((value,key,map)=>{
+    //     console.log(value,key,map)
+    // })
+
+    // forEach 接受第二个参数,用来绑定this
+    // const reporter = {
+    //     report: function (value, key) {
+    //         console.log(value, key)
+    //     }
+    // };
+    // map.forEach(function (value, key) {
+    //     this.report(key, value)
+    // }, reporter)
+
+    // 数据结构转换
+    // 1 map转为数组
+    // const map = new Map().set(true, 6).set({foo: 3}, ['2']);
+    // let arrResult = [];
+    //
+    // function forEachAll(arr) {
+    //     console.log(arr instanceof Array)
+    //     if (arr instanceof Array) {
+    //         arr.forEach(function (value) {
+    //             if(value instanceof Array){
+    //                 forEachAll(value);
+    //                 return;
+    //             }
+    //             arrResult.push(value);
+    //         })
+    //     } else {
+    //         return arrResult
+    //     }
+    // }
+    //
+    // let result = forEachAll([...map]);
+    // console.log(result, arrResult);
+
+    // 2 数组转为Map
+    // 将数组传入Map构造函数,转为map
+    // let result = new Map([
+    //     ['23',4],
+    //     ['22',{1:1234}]
+    // ]);
+    // console.log(result)
+
+    //map 转为对象
+    // function strMapToObj(strMap) {
+    //     let obj = Object.create(null);
+    //     for (let [key, value] of strMap) {
+    //         obj[key] = value;
+    //     }
+    //     return obj;
+    // }
+    //
+    // const map = new Map()
+    //     .set('123', 123)
+    //     .set('321', 321);
+    // let resultObj = strMapToObj(map);
+    // console.log(resultObj);
+    // let arr = [];
+    // // object key 做下标, 转数组
+    // Object.entries(resultObj).forEach(([key,value]) => {
+    //     arr[key] = value
+    // });
+    // console.log('===', arr) // [empty × 123, 123, empty × 197, 321]
+
+    // 对象 转为Map
+    function objToStrMap(obj) {
+        let strMap = new Map();
+        for (let key of Object.keys(obj)){
+            strMap.set(key,obj[key])
+        }
+        return strMap;
+    }
+    let result = objToStrMap({1:22,2:'34'});
+    console.log(result)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
 
 
