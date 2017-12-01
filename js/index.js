@@ -4091,7 +4091,44 @@ $(function () {
     //
     // console.log('one');
 
-    
+    // promise.reject
+    // promise.reject(reason)方法也会返回一个新的Promise 实例,
+    // 该实例的状态为rejected
+    // const p = Promise.reject('出错');
+    //等同于
+    // const p1 = new Promise((resolve, reject) => reject());
+
+    // p.then(null,function (err) {
+    //     console.error(err)
+    // });
+
+    // reject 回调函数会立即执行
+    // 注意,Promise.reject()方法的参数,会原封不动的作为reject的理由
+    // 变成后续方法的参数,这一点与promise.resolve方法不一致
+    // const thenable = {
+    //     then(resolve,reject){
+    //         reject('出错')
+    //     }
+    // };
+    // Promise.reject(thenable).catch(err => {
+    //     console.log(err === thenable)
+    //     console.log(err , thenable)
+    // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
