@@ -4074,10 +4074,22 @@ $(function () {
     //     console.log(123)
     // });
 
-    // 注意,立即 resolve Promise对象 //7.
+    // 注意,立即 resolve Promise对象 ,
+    // 是在本轮'事件循环' 结束时,
+    // 而不是在下一轮'事件循环'的开始时
 
-
-
+    // setTimeout(fn, 0)在下一轮“事件循环”开始时执行，
+    // Promise.resolve()在本轮“事件循环”结束时执行，
+    // console.log('one')则是立即执行
+    // setTimeout(function () {
+    //     console.log('three');
+    // }, 0);
+    //
+    // Promise.resolve().then(function () {
+    //     console.log('two');
+    // });
+    //
+    // console.log('one');
 
 
 
