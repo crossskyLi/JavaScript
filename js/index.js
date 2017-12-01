@@ -3801,16 +3801,280 @@ $(function () {
     // Promise.prototype.then();
     // promise 可以采用链式写法
 
-    let promise = new Promise(function (resolve, reject) {
-        return resolve(1);
-    });
-    promise.then(function (success) {
-        console.log(success)
-    }).then(function (success) {
-        console.log(success)
-    }).then(function (err) {
-        console.log('第三次调用')
-    })
+    // let promise = new Promise(function (resolve, reject) {
+    //     return resolve(1);
+    // });
+    // promise.then(function (success) {
+    //     console.log(success)
+    // }).then(function (success) {
+    //     console.log(success)
+    // }).then(function (err) {
+    //     console.log('第三次调用')
+    // })
+
+    //不要在then方法里面定义 Reject 状态的回调函数
+    // （即then的第二个参数），
+    // 总是使用catch方法。
+
+    // let promise = new Promise(function (resolve, reject) {
+    //     reject('错误')
+    // });
+    // promise.then(function (success) {
+    //     console.log(success)
+    // }).catch(function (err) {
+    //     console.log(err)
+    // });
+
+
+    //“Promise 会吃掉错误”
+    // const asyncThing = function () {
+    //     return new Promise(function (resolve, reject) {
+    //         resolve(x+2)
+    //     })
+    // };
+    // asyncThing().then(function () {
+    //     console.log('正常')
+    // });
+    // setTimeout(()=>console.log('不被阻塞'),1500);
+
+    // Promise 对象后面要跟catch方法，这样可以处理 Promise 内部发生的错误。
+    // catch方法返回的还是一个 Promise 对象，因此后面还可以接着调用then方法。
+
+    // const asyncThing = function () {
+    //     return new Promise(function (resolve, reject) {
+    //         resolve(x + 2);
+    //     })
+    // };
+    // asyncThing()
+    //     .catch(function (err) {
+    //         console.log(err)
+    //     })
+    //     .then(function (success) {
+    //         console.log(success)
+    //     });
+
+    // Promise.all();
+    // Promise.all 方法用于将多个Promise实例,包装成一个新的Promise实例
+    // const promiseAll = new Promise.all([p1,p2,p3])
+
+    // promise.all 方法接受一个数组作为参数,p1 p2 p3都是Promise实例,
+    // 如果不是,就会先调用Promise.resolve方法,将参数转为Promise实例,
+    // 再进一步处理,( promise.all 方法的参数可以不是数组,但必须具有Iterator接口
+    // 且放回的每个成员都是promise实例)
+
+    // promiseAll的状态由p1 p2 p3决定,分成两种情况。
+    // 1 只有p1,p2,p3 的状态都变成fulfilled,p的状态才会变成fulfilled
+    // 此时p1,p2,p3 的返回值组成一个数组,传递给p的回调函数
+    // 2 只要其中有一个被 rejected ,p的状态就变成rejected,
+    //  此时第一个被reject的实例的返回值,会被传递给p的回调函数
+
+    // 调用 Ajax 操作例子
+    // const getJson = function (url) {
+    //     const promise = new Promise(function (resolve, reject) {
+    //         const handler = function () {
+    //             if (this.readyState !== 4){
+    //                 return '不成功'
+    //             }
+    //             if(this.status === 200){
+    //                 console.log(this.response);
+    //                 if(this.response.errcode){
+    //                     //虽然不成功,但不影响其他请求的执行
+    //                     reject(new Error(this.response.errmsg));
+    //                 }
+    //                 resolve(this.response);
+    //             } else{
+    //                 reject(new Error(this.statusText))
+    //             }
+    //         };
+    //         const client = new XMLHttpRequest();
+    //         client.open('GET',url);
+    //         client.onreadystatechange = handler;
+    //         client.responseType = 'json';
+    //         client.setRequestHeader('Accept','application/json');
+    //         client.send();
+    //     });
+    //     return promise;
+    // };
+    // let url = 'http://121.199.24.124:3200/readingStatistics/week?' +
+    //     'classId=25&startDate=2017-11-23&endDate=2017-11-';
+    //
+    // // 生成一个Promise对象的数组
+    // const promises = [2,3,5,7,12].map(value => {
+    //     return getJson( url + value)
+    // });
+    // Promise.all(promises).then(function (posts) {
+    //     posts.forEach(function (val) {
+    //     })
+    // }).catch(function (err) {
+    //     //第一个返回错误,则返回
+    //     console.log(err)
+    // });
+
+    // 注意,如果作为参数的promise实例,自己定义了catch方法,
+    // 那么一旦它被rejected,并不会出发 Promise.all 的catch方法
+    // function connectDatabase() {
+    //     //...doSomeRequest
+    // }
+    // function findAllBooks() {
+    //     // ... handle book
+    // }
+    // function getCurrentUser() {
+    //     // ... get user
+    // }
+    // function pickResult() {
+    //     console.log(arguments)
+    //     //handle result
+    // }
+    // function promiseAllErrHandle(err) {
+    //     console.error(err)
+    // }
+    // const databasePromise = connectDatabase();
+    // const booksPromise = databasePromise.then(
+    //     findAllBooks
+    // );
+    // const userPromise = databasePromise.then(
+    //     getCurrentUser
+    // );
+    //
+    // Promise.all([booksPromise,userPromise]).then(
+    //     ([book,user]) => pickResult(book,user)
+    // ).catch(
+    //     promiseAllErrHandle
+    // );
+
+    // const p1 = new Promise((resolve, reject) => {
+    //     resolve('p1 hello')
+    // })
+    //     .then(result => {
+    //         console.log(result);
+    //         return result
+    //     })
+    //     .catch(err => {
+    //         console.log(err);
+    //     });
+    //
+    // const p2 = new Promise((resolve, reject) => {
+    //     throw new Error('报错');
+    // }).then(
+    //     result => console.log(result)
+    // ).catch(
+    //     err => console.log(err)
+    // );
+    //
+    // Promise.all([p1, p2])
+    //     .then(result => console.log(result))// 第二个结果会是undefined
+    //     .catch(err => console.log('all', err));
+
+    // promise.race() //race 赛跑比赛的意思
+    // Promise.race 方法同样是将多个Promise实例,包装成一个Promise 实例
+    // const p = Promise.race([p1,p2,p3]);
+    // 只要有一个实例率先改变状态,p的状态就会改变,
+    // 那个率先改变的promise实例的返回值
+    // 就传递给p的回调函数
+
+    // promise.race 方法的参数和promise.all方法一样,
+    // 如果不是promise实例,就会先调用Promise.resolve 方法
+    // 将参数转为Promise 实例,再进一步处理
+
+    // 实例,在指定时间内没有获得结果,就将Promise 的状态变为 reject
+    // 否则边位resolve
+    // const getJson = function (url) {
+    //     const promise = new Promise(function (resolve, reject) {
+    //         const handler = function () {
+    //             if (this.readyState !== 4) {
+    //                 return '不成功'
+    //             }
+    //             if (this.status === 200) {
+    //                 // console.log(this.response);
+    //                 // if (this.response.errcode) {
+    //                 //     //虽然不成功,但不影响其他请求的执行
+    //                 //     reject(new Error(this.response.errmsg));
+    //                 // }
+    //                 resolve(this.response);
+    //             } else {
+    //                 reject(new Error(this.statusText))
+    //             }
+    //         };
+    //         const client = new XMLHttpRequest();
+    //         client.open('GET', url);
+    //         client.onreadystatechange = handler;
+    //         client.responseType = 'json';
+    //         client.setRequestHeader('Accept', 'application/json');
+    //         client.send();
+    //     });
+    //     return promise;
+    // };
+    // let url = 'http://121.199.24.124:3200/readingStatistics/week?' +
+    //     'classId=25&startDate=2017-11-23&endDate=2017-11-30';
+    //
+    // const p = Promise.race([
+    //     getJson(url),
+    //     new Promise(function (resolve, reject) {
+    //         // 当请求超过五秒抛出错误
+    //         setTimeout(() => reject(new Error('request timeout')), 5000)
+    //     })
+    // ]);
+    // p.then(response =>{
+    //     console.log('race',response)
+    // });
+    // p.catch(err => {
+    //     //接收错误
+    //     console.error(err)
+    // });
+
+    // Promise.resolve()
+    // 将现有对象转为Promise对象
+    // let url = 'http://121.199.24.124:3200/readingStatistics/week?' +
+    //     'classId=25&startDate=2017-11-23&endDate=2017-11-30';
+    // const promise = Promise.resolve($.ajax(url))
+    // promise.then(
+    //     result =>{
+    //         console.log(result)
+    //     }
+    // );
+    // // 以上代码将jquery生成的deferred对象 转为一个新的promise对象
+    // // 等同于以下写法
+    // Promise.resolve('foo1').then(result => {
+    //     console.log(result)
+    // });
+    // new Promise(resolve => {resolve('foo2')}).then(
+    //     result => console.log(result)
+    // );
+
+    // 1 参数是一个promise 实例
+    // 如果参数是一个promise实例,
+    // 那么promise.resolve将不做任何修改
+    // ,原封不动放回这个实例
+
+    // 2 参数是一个thenable对象,
+    // thenable 是指具有then方法的对象
+    // let thenable = {
+    //     then:function (resolve, reject) {
+    //         resolve('thenable')
+    //     }
+    // };
+    // Promise.resolve(thenable).then(result => {
+    //     console.log(result)
+    // });
+
+    // 3 参数不是具有then方法的对象,或者根本不是对象
+    // 如果参数是一个原始值,或者是一个不具有then方法的对象
+    // 则 Promise.resolve() 方法返回一个新的 Promise 对象,状态为resolved
+    // const p = Promise.resolve('hello');
+    // p.then(result => {
+    //    console.log(result)
+    // });
+
+    // 4 不带任何参数
+    // Promise.resolve 方法允许调用时候不带任何参数,
+    // 直接返回一个resolved 状态 的promise 对象
+    // 希望得到一个Promise 对象,比较方便的方法就是直接调用Promise.resolve方法
+    // const p = Promise.resolve();
+    // p.then(()=>{
+    //     console.log(123)
+    // });
+
+    // 注意,立即 resolve Promise对象 //7.
 
 
 
@@ -3819,6 +4083,35 @@ $(function () {
 
 
 
+
+
+
+
+
+    function timeCount() {
+        let nowTime = new Date();
+        let yearTime = new Date('2018-02-15').setHours(0);
+        //毫秒
+        let mileSecond = parseInt((yearTime - nowTime) % 1000 / 100);
+        let mileSecondStrArr = ((mileSecond) / 10).toString().split('.');
+        let mileSecondStr = mileSecondStrArr[1] ? '.' + mileSecondStrArr[1] : '.0';
+        //秒
+        let second = Math.floor((yearTime - nowTime) / 1000);
+        let secondStr = (second % 60) > 0 ? (second % 60) + mileSecondStr + '秒' : '0秒';
+        //分
+        let min = Math.floor(second / 60);
+        let minStr = (min % 60) > 0 ? (min % 60) + '分' : '';
+        //时
+        let hour = Math.floor(min / 60);
+        let hourStr = (hour % 24) > 0 ? (hour % 24) + '时' : '';
+        //天
+        let day = Math.floor(hour / 24);
+        let dayStr = day > 0 ? day + '天' : '';
+        let timeCountStr = dayStr + hourStr + minStr + secondStr;
+        $('.time-count').html(timeCountStr)
+    }
+
+    // setInterval(timeCount, 100);
 
 
 });
