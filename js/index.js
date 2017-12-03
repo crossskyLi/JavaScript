@@ -4115,6 +4115,56 @@ $(function () {
     //     console.log(err , thenable)
     // });
 
+    // 两个有用的附加方法
+    // done()
+
+    // Promise 对象的回调链,不管以then或catch 方法结尾,
+    // 要是最后一个方法抛出错误,都有可能无法捕捉到
+    // (因为promise 内部的错误不会冒泡到全局)
+    // 可以提供一个done 方法,总是处于回调链的尾端
+    // 保证抛出任何可能出现的错误
+    // asyncFunc().then(f1).catch(r1).then(f2).done()
+
+    // 实现done 方法代码
+
+    Promise.prototype.done = function (onFulfilled, onRejected) {
+        this.then(onFulfilled, onRejected).catch(function (reason) {
+            setTimeout(() => {
+                throw reason
+            }, 0)
+        })
+    };
+
+    // finally()
+    // finally 方法用于指定不管Promise对象最后状态如何都会执行的操作
+    // 它与done方法的最大区别,它接受一个普通的回调函数作为参数,
+    // 该函数不管怎样都必须执行。
+    // 服务器使用promise 处理请求,然后使用 finally方法关掉服务器.例子如下
+    sever.listen(3300)
+        .then(function () {
+            //run test
+        })
+        .finally(sever.stop);
+    // 实现代码,不管前面的 Promise 是fulfilled还是rejected，
+    // 都会执行回调函数callback
+    Promise.prototype.finally = function (callback) {
+        let p = this.constructor;
+        return this.then(
+            value => p.resolve(callback())
+                .then(
+                    () => value
+                ),
+            reason => p.reject(callback())
+                .then(
+                    () => {
+                        throw reason
+                    }
+                )
+        );
+    };
+    
+
+
 
 
 
@@ -4156,7 +4206,7 @@ $(function () {
         $('.time-count').html(timeCountStr)
     }
 
-    setInterval(timeCount, 100);
+    // setInterval(timeCount, 100);
 
 
 });
