@@ -4286,9 +4286,9 @@ $(function () {
 
     // 简写以上代码,统一使用 promise.catch捕获所有同步和异步的错误
 
-    Promise.try(database.users.get({id: userId}))
-        .then()
-        .catch();
+    // Promise.try(database.users.get({id: userId}))
+    //     .then()
+    //     .catch();
 
 
     // function timeCount() {
