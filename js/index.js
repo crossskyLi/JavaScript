@@ -4156,7 +4156,7 @@ $(function () {
         $('.time-count').html(timeCountStr)
     }
 
-    // setInterval(timeCount, 100);
+    setInterval(timeCount, 100);
 
 
 });
