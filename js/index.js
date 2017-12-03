@@ -4127,84 +4127,192 @@ $(function () {
 
     // 实现done 方法代码
 
-    Promise.prototype.done = function (onFulfilled, onRejected) {
-        this.then(onFulfilled, onRejected).catch(function (reason) {
-            setTimeout(() => {
-                throw reason
-            }, 0)
-        })
-    };
+    // Promise.prototype.done = function (onFulfilled, onRejected) {
+    //     this.then(onFulfilled, onRejected).catch(function (reason) {
+    //         setTimeout(() => {
+    //             throw reason
+    //         }, 0)
+    //     })
+    // };
 
     // finally()
     // finally 方法用于指定不管Promise对象最后状态如何都会执行的操作
     // 它与done方法的最大区别,它接受一个普通的回调函数作为参数,
     // 该函数不管怎样都必须执行。
     // 服务器使用promise 处理请求,然后使用 finally方法关掉服务器.例子如下
-    sever.listen(3300)
-        .then(function () {
-            //run test
-        })
-        .finally(sever.stop);
+    // sever.listen(3300)
+    //     .then(function () {
+    //         //run test
+    //     })
+    //     .finally(sever.stop);
     // 实现代码,不管前面的 Promise 是fulfilled还是rejected，
     // 都会执行回调函数callback
-    Promise.prototype.finally = function (callback) {
-        let p = this.constructor;
-        return this.then(
-            value => p.resolve(callback())
-                .then(
-                    () => value
-                ),
-            reason => p.reject(callback())
-                .then(
-                    () => {
-                        throw reason
-                    }
-                )
-        );
-    };
-    
+    // Promise.prototype.finally = function (callback) {
+    //     let p = this.constructor;
+    //     return this.then(
+    //         value => p.resolve(callback())
+    //             .then(
+    //                 () => value
+    //             ),
+    //         reason => p.reject(callback())
+    //             .then(
+    //                 () => {
+    //                     throw reason
+    //                 }
+    //             )
+    //     );
+    // };
+
+    // promise 应用 图片预加载
+    // const preloadImage = function (path) {
+    //     return new Promise(function (resolve, reject) {
+    //         const image = new Image();
+    //         image.onload = resolve;
+    //         image.onerror = reject;
+    //         image.src = path;
+    //     });
+    // };
+
+    // Generator 函数与Promise 的结合
+    // 使用 Generator 函数管理流程,遇到异步操作的时候,经常返回一个promise对象
+    // 代码的 Generator 函数g之中，
+    // 有一个异步操作getFoo，
+    // 它返回的就是一个Promise对象。
+    // 函数run用来处理这个Promise对象，
+    // 并调用下一个next方法。
+    // function getFoo() {
+    //     // console.log('f00')
+    //     return new Promise(function (resolve, reject) {
+    //         resolve('foo')
+    //     })
+    // }
+    //
+    // const g = function* () {
+    //     try {
+    //         const foo = yield getFoo();
+    //         console.log('执行后',foo)
+    //     } catch (e) {
+    //         console.error(e)
+    //     }
+    // };
+    // function run(generator) {
+    //     const it = generator();
+    //     function go(result) {
+    //         console.log('开始?',result)
+    //         if (result.done){
+    //             console.log('结束',result);
+    //             return result.value
+    //         }
+    //         return result.value.then(function (value) {
+    //             console.log('异步then',value);
+    //             return go(it.next(value));
+    //         },function (err) {
+    //             return go(it.throw(err))
+    //         })
+    //     }
+    //     go(it.next());
+    // }
+    // run (g);
+
+    // 11 Promise.try()
+    // 出现情况如下: 不知道或不想区分,函数f是同步函数还是异步函数
+    // 但是想用promise来处理它,这样就可以不管f是否包含异步操作
+    // 都用then 方法指定下一步流程,用catch 方法处理 f 抛出的错误
+    // promise.resolve().then(f) // 这个写法有一个缺点,如果f是一个同步函数
+    // 那么它会在本轮事件循环的末尾执行
+    // const f = ()=>console.log('now');
+    // Promise.resolve().then(f);
+    // console.log('next');
+    // next
+    // now
+    // 函数f是同步的,但是用promise 包装之后,就变成异步执行了.
+    // 需要有种方法,让同步函数同步执行,异步函数就异步执行,并有统一的api
+    // 两种写法, 第一种使用async 函数写
+    // const f = () => console.log('now');
+    // (async() => f())();
+    // console.log('next')
+
+    // 立即执行匿名函数,会立即执行async函数,如果f 是同步的
+    // 就会得到同步的结果,如果f 是异步的,就可以用then 指定下一步,写法:
+    // (async() => f())()
+    //     .then(function () {
+    //
+    //     })
+    // 注意,async() => f() 会吃掉f() 抛出的错误,所以如果想捕获错误
+    // 要使用promise.catch 方法,
+    // (async() =>f())()
+    //     .then()
+    //     .catch()
+
+    // 第二种写法 使用new Promise()
+    // 立即执行匿名函数,执行 new Promise(),这种情况下,同步函数也是同步执行的,
+
+    // const f = () => console.log('now');
+    // (
+    //     () => new Promise(
+    //         resolve => resolve(f())
+    //     )
+    // )();
+    // console.log('next')
+
+    // promise.try()
+    // const f = () => console.log('now');
+    // Promise.try(f);
+    // console.log('next');
+
+    // promise 库bluebird q 和when 提供了这个方法
+    //
+    // function getUserName(userId) {
+    //     return database.users.get({id: userId})
+    //         .then(function (user) {
+    //             return user.name
+    //         })
+    // }
+
+    // database.users.get() 返回一个promise 对象,如果抛出异步错误
+    // 可以用catch方法捕获,可以如下,
+    // database.users.get({id: userId})
+    //     .then()
+    //     .catch()
+    // 但database.user.get() 可能还抛出同步错误,( 比如数据库连接错误)
+    // 这个时候就不得不用try...catch 去捕获
+    // try {
+    //     database.users.get({id:userId})
+    //         .then()
+    //         .catch()
+    // } catch (e) {
+    //
+    // }
+
+    // 简写以上代码,统一使用 promise.catch捕获所有同步和异步的错误
+
+    Promise.try(database.users.get({id: userId}))
+        .then()
+        .catch();
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    function timeCount() {
-        let nowTime = new Date();
-        let yearTime = new Date('2018-02-15').setHours(0);
-        //毫秒
-        let mileSecond = parseInt((yearTime - nowTime) % 1000 / 100);
-        let mileSecondStrArr = ((mileSecond) / 10).toString().split('.');
-        let mileSecondStr = mileSecondStrArr[1] ? '.' + mileSecondStrArr[1] : '.0';
-        //秒
-        let second = Math.floor((yearTime - nowTime) / 1000);
-        let secondStr = (second % 60) > 0 ? (second % 60) + mileSecondStr + '秒' : '0秒';
-        //分
-        let min = Math.floor(second / 60);
-        let minStr = (min % 60) > 0 ? (min % 60) + '分' : '';
-        //时
-        let hour = Math.floor(min / 60);
-        let hourStr = (hour % 24) > 0 ? (hour % 24) + '时' : '';
-        //天
-        let day = Math.floor(hour / 24);
-        let dayStr = day > 0 ? day + '天' : '';
-        let timeCountStr = dayStr + hourStr + minStr + secondStr;
-        $('.time-count').html(timeCountStr)
-    }
+    // function timeCount() {
+    //     let nowTime = new Date();
+    //     let yearTime = new Date('2018-02-15').setHours(0);
+    //     //毫秒
+    //     let mileSecond = parseInt((yearTime - nowTime) % 1000 / 100);
+    //     let mileSecondStrArr = ((mileSecond) / 10).toString().split('.');
+    //     let mileSecondStr = mileSecondStrArr[1] ? '.' + mileSecondStrArr[1] : '.0';
+    //     //秒
+    //     let second = Math.floor((yearTime - nowTime) / 1000);
+    //     let secondStr = (second % 60) > 0 ? (second % 60) + mileSecondStr + '秒' : '0秒';
+    //     //分
+    //     let min = Math.floor(second / 60);
+    //     let minStr = (min % 60) > 0 ? (min % 60) + '分' : '';
+    //     //时
+    //     let hour = Math.floor(min / 60);
+    //     let hourStr = (hour % 24) > 0 ? (hour % 24) + '时' : '';
+    //     //天
+    //     let day = Math.floor(hour / 24);
+    //     let dayStr = day > 0 ? day + '天' : '';
+    //     let timeCountStr = dayStr + hourStr + minStr + secondStr;
+    //     $('.time-count').html(timeCountStr)
+    // }
 
     // setInterval(timeCount, 100);
 
