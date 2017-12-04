@@ -4578,23 +4578,79 @@ $(function () {
     //     console.log(i)
     // });
 
-    let arr = ['a','132'];
-    let result = ['result',...arr];
-    result.forEach(function (i) {
-        console.log(i)
-    })
+    // let arr = ['a','132'];
+    // let result = ['result',...arr];
+    // result.forEach(function (i) {
+    //     console.log(i)
+    // })
+
+    // 只要数据结构部署了Iterator接口的数据结构,
+    // 就可以对它使用扩展运算符,将其转为数组
+    // let arr = [...iterable];
+
+    // 3 yield*
+    // yield* 后面跟的是一个可遍历的结构,
+    // 它会调用该结构的遍历器接口
+    // let generator = function* () {
+    //     yield 1;
+    //     yield * [4,1,21];
+    //     yield 334;
+    // };
+    // let iterator = generator();
+    // console.log(iterator.next());
+    // console.log(iterator.next());
+    // console.log(iterator.next());
+    // console.log(iterator.next());
+    // console.log(iterator.next());
+
+    // 4 其他场合
+    // 由于数组的遍历会调用遍历器接口
+    // 任何接受数组作为参数的场合,其实都调用遍历器接口
+    // 例子:
+    // for...of
+    // Array.from()
+    // Map(),Set(),WeakMap(),WeakSet() (比如new Map(['a',1],['b',2]))
+    // Promise.all()
+    // Promise.race();
+
+    // ---------------------------------------------
+    // 字符串的iterator 接口
+    // 字符串是一个类似数组的对象 ,也原生具有iterator 接口
+
+    // let str = '2请4哦';
+    // console.log(typeof str[Symbol.iterator]);// function
+    // let iterator = str[Symbol.iterator]();
+    // console.log(iterator.next());
+    // console.log(iterator.next());
+    // console.log(iterator.next());
+    // console.log(iterator.next());
+    // console.log(iterator.next());
+
+    // 可以覆盖原生的Symbol.iterator 方法,达到修改遍历器行为的目的
+    // let str = new String('hi');
+    // console.log([...str]);
+    // str[Symbol.iterator] = function () {
+    //     return{
+    //         next:function () {
+    //             if(this._first){
+    //                 this._first = false;
+    //                 return {value:'bye',done:false};
+    //             }else{
+    //                 return {done:true};
+    //             }
+    //         },
+    //         _first: true
+    //     };
+    // };
+    // console.log([...str]);
+    // console.log(str);
+    // 字符串 str 的Symbol.iterator方法被修改了，
+    // 所以扩展运算符（...）返回的值变成了bye，而字符串本身还是hi。
 
 
-
-
-
-
-
-
-
-
-
-
+    // ----------------------------------------------------------
+    // 5 Iterator 接口与Generator函数
+    // Symbol.iterator 方法的最简单实现
 
 
     function timeCount() {
