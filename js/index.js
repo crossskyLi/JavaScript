@@ -4290,29 +4290,134 @@ $(function () {
     //     .then()
     //     .catch();
 
+    //------------------------------------------------------------------
+    /*
+    * Iterator 和for...of 循环
+    *
+    * */
+    // iterator(遍历器)的概念
+    //Iterator 的遍历过程是这样的。
 
-    // function timeCount() {
-    //     let nowTime = new Date();
-    //     let yearTime = new Date('2018-02-15').setHours(0);
-    //     //毫秒
-    //     let mileSecond = parseInt((yearTime - nowTime) % 1000 / 100);
-    //     let mileSecondStrArr = ((mileSecond) / 10).toString().split('.');
-    //     let mileSecondStr = mileSecondStrArr[1] ? '.' + mileSecondStrArr[1] : '.0';
-    //     //秒
-    //     let second = Math.floor((yearTime - nowTime) / 1000);
-    //     let secondStr = (second % 60) > 0 ? (second % 60) + mileSecondStr + '秒' : '0秒';
-    //     //分
-    //     let min = Math.floor(second / 60);
-    //     let minStr = (min % 60) > 0 ? (min % 60) + '分' : '';
-    //     //时
-    //     let hour = Math.floor(min / 60);
-    //     let hourStr = (hour % 24) > 0 ? (hour % 24) + '时' : '';
-    //     //天
-    //     let day = Math.floor(hour / 24);
-    //     let dayStr = day > 0 ? day + '天' : '';
-    //     let timeCountStr = dayStr + hourStr + minStr + secondStr;
-    //     $('.time-count').html(timeCountStr)
+    // （1）创建一个指针对象，指向当前数据结构的起始位置。也就是说，
+    //      遍历器对象本质上，就是一个指针对象。
+    //
+    // （2）第一次调用指针对象的next方法，可以将指针指向数据结构的第一个成员。
+    //
+    // （3）第二次调用指针对象的next方法，指针就指向数据结构的第二个成员。
+    //
+    // （4）不断调用指针对象的next方法，直到它指向数据结构的结束位置。
+    // 每一次调用next方法，都会返回数据结构的当前成员的信息。
+    // 具体来说，就是返回一个包含value和done两个属性的对象
+    // 其中，value属性是当前成员的值，done属性是一个布尔值，表示遍历是否结束。
+
+    // let it = makeIterator(['a','nb']);
+    // let a = it.next();
+    // let b = it.next();
+    // let c = it.next();
+    // console.log(a,b,c);
+    //
+    // function makeIterator(array) {
+    //     let nextIndex = 0;
+    //     return {
+    //         next :function () {
+    //             let result = nextIndex < array.length?
+    //                 //这里的nextIndex 是会等取值完成后再++
+    //                 {value: array[nextIndex++],done:false}:
+    //                 {value:undefined,done:true};
+    //             console.log(result);
+    //             // console.log(array[nextIndex++])
+    //             return result
+    //         }
+    //     }
     // }
+
+    // 简写 makeIterator
+    // function makeIterator(array) {
+    //     var nextIndex = 0;
+    //     return {
+    //         next: function () {
+    //             return nextIndex < array.length ? {value: array[nextIndex++]} : {done: true}
+    //         }
+    //     }
+    // }
+
+    // 由于 Iterator 只是把接口规格加到数据结构之上，
+    // 所以，遍历器与它所遍历的那个数据结构，
+    // 实际上是分开的，完全可以写出没有对应数据结构的遍历器对象，
+    // 或者说用遍历器对象模拟出数据结构。
+    // 下面是一个无限运行的遍历器对象的例子。
+    //
+    // var it = idMaker();
+    // let a = it.next();
+    // let b = it.next();
+    // let c = it.next();
+    // let d = it.next();
+    // console.log(a,b,c,d);
+    //
+    // function idMaker() {
+    //     var index = 0 ;
+    //     return{
+    //         next: function () {
+    //             return {value:index++,done:false}
+    //         }
+    //     }
+    // }
+    // console.log(idMaker.constructor);
+
+    // 使用 typeScript 写法, 遍历器接口(iterable)、
+    // 指针对象(iterator)和next 方法返回值的规格描述
+
+    // interface Iterable {
+    //     [Symbol.iterator]():iterator,
+    // }
+    //
+    // interface Iterator{
+    //     next (value?:any): IterationResult,
+    // }
+    // interface IterationResult{
+    //     value:any,
+    //     done:boolean
+    // }
+
+    //---------------------------------------------------
+    // 2 默认Iterator 接口
+    // Iterator 接口的目的，就是为所有数据结构，提供了一种统一的访问机制
+    // es6 规定,默认的Iterator 接口部署在数据结构的 Symbol.iterator 属性
+    // 或者说一个数据结构只要具有Symbol.iterator 属性,就可以认为是 '可遍历的'(iterable)
+
+
+
+
+
+
+
+
+
+
+
+
+    function timeCount() {
+        let nowTime = new Date();
+        let yearTime = new Date('2018-02-15').setHours(0);
+        //毫秒
+        let mileSecond = parseInt((yearTime - nowTime) % 1000 / 100);
+        let mileSecondStrArr = ((mileSecond) / 10).toString().split('.');
+        let mileSecondStr = mileSecondStrArr[1] ? '.' + mileSecondStrArr[1] : '.0';
+        //秒
+        let second = Math.floor((yearTime - nowTime) / 1000);
+        let secondStr = (second % 60) > 0 ? (second % 60) + mileSecondStr + '秒' : '0秒';
+        //分
+        let min = Math.floor(second / 60);
+        let minStr = (min % 60) > 0 ? (min % 60) + '分' : '';
+        //时
+        let hour = Math.floor(min / 60);
+        let hourStr = (hour % 24) > 0 ? (hour % 24) + '时' : '';
+        //天
+        let day = Math.floor(hour / 24);
+        let dayStr = day > 0 ? day + '天' : '';
+        let timeCountStr = dayStr + hourStr + minStr + secondStr;
+        $('.time-count').html(timeCountStr)
+    }
 
     // setInterval(timeCount, 100);
 
