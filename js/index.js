@@ -4385,7 +4385,181 @@ $(function () {
     // es6 规定,默认的Iterator 接口部署在数据结构的 Symbol.iterator 属性
     // 或者说一个数据结构只要具有Symbol.iterator 属性,就可以认为是 '可遍历的'(iterable)
 
+    // Symbol.iterator 属性本身是一个函数,就是当前数据结构默认的遍历器生成函数
+    // 执行这个函数就会返回一个遍历器,至于属性名 Symbol.iterator ,
+    // 它是一个表达式,返回Symbol对象的iterator属性,
+    // 这是一个预定义好的,类型为 Symbol的特殊值
+    // 所以要放在方括号内
+
+    // 对象obj是可遍历的(iterable),因为具有 Symbol.iterator 属性
+    // 执行这个属性,会返回一个遍历器对象,该对象的根本特征就是具有next方法
+    // 每次调用next 方法,都会返回一个代表但钱成员的信息对象,具有value和done两个属性
+    // es6 的有些数据结构原生具备iterator接口 如数组
+    // 不需要做处理就可以被for ... of 循环遍历,
+    // 这些数据结构原生部署了Symbol.iterator 属性,
+    // 一些数据结构没有,如对象,
+    // 凡是部署了 Symbol.iterator属性的数据结构,
+    // 就称为部署了遍历器接口,调用接口就返回一个遍历器对象
+    //原生具备 Iterator 接口的数据结构如下:
+    // Array
+    // Map
+    // Set
+    // String
+    // TypedArray
+    // 函数的 arguments 对象
+    // NodeList 对象
+
+    // const obj = {
+    //     [Symbol.iterator]: function () {
+    //         return {
+    //             next: function () {
+    //                 return {
+    //                     value: 1,
+    //                     done: false
+    //                 }
+    //             }
+    //         }
+    //     }
+    // };
+
+    // 数组的Symbol.iterator属性,
+    // 变量arr 是一个数组,原生就具有遍历器接口,波数在arr的symbol.iterator属性上
+    // 调用此属性就得到遍历器对象
+
+    // let arr = ['a','b','c'];
+    // let iter = arr[Symbol.iterator]();
+    // console.log(iter.next());
+    // console.log(iter.next());
+    // console.log(iter.next());
+    // console.log(iter.next());
+
+    // 一个类部署 Iterator 接口的写法。
+    // Symbol.iterator属性对应一个函数，
+    // 执行后返回当前对象的遍历器对象。
+    // class RangeIterator {
+    //     constructor(start, stop) {
+    //         this.value = start;
+    //         this.stop = stop;
+    //     }
+    //
+    //     [Symbol.iterator]() {
+    //         return this;
+    //     }
+    //
+    //     next() {
+    //         var value = this.value;
+    //         if (value < this.stop) {
+    //             this.value++;
+    //             return {done:false,value:value}
+    //         }
+    //         return {done:true, value:undefined}
+    //     }
+    // }
+    // function range(start, stop) {
+    //     return new RangeIterator(start,stop);
+    // }
+    // for(var value of range(0,3)){
+    //     console.log(value)
+    // }
+
+    // 通过遍历器实现指针结构的例子
+    // 首先在构造函数的原型链上部署Symbol.iterator 方法,
+    // 调用该方法会返回遍历器对象iterator ,
+    // 调用该对象的next 方法,在返回一个值的同时,自动将内部指针移到下一个实例上去
+    // function Obj(value) {
+    //     this.value = value;
+    //     this.next = null;
+    // }
+    // Obj.prototype[Symbol.iterator] = function () {
+    //     var iterator = {next:next};
+    //     var current = this;
+    //     function next() {
+    //         if(current){
+    //             var value = current.value;
+    //             current = current.next;
+    //             return {done:false,value:value}
+    //         }else {
+    //             return{ done:true }
+    //         }
+    //     }
+    //     return iterator;
+    // };
+    // var one = new Obj(1);
+    // var two = new Obj(2);
+    // var three = new Obj(3);
+    // one.next = two;
+    // two.next = three;
+    // for (var i of one){
+    //     console.log(i)
+    // }
+
+    // 为对象添加iterator接口的例子
+    // let obj = {
+    //     data: ['a', 'n'],
+    //     [Symbol.iterator]() {
+    //         const self = this;
+    //         let index = 0;
+    //         return {
+    //             next() {
+    //                 if (index < this.data.length) {
+    //                     return {
+    //                         value: self.data[index++],
+    //                         done: false
+    //                     };
+    //                 } else {
+    //                     return {value: undefined, done: true};
+    //                 }
+    //             }
+    //         };
+    //     }
+    // };
+
+    // 类似数组的对象,部署iterator接口, Symbol.iterator 方法直接应用数组的iterator接口
+    // NodeList 对象是类似数组的对象，本来就具有遍历接口，可以直接遍历。
+    // 我们将它的遍历接口改成数组的Symbol.iterator属性，可以看到没有任何影响
+    // NodeList.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+    // // 或者
+    // NodeList.prototype[Symbol.iterator] = [][Symbol.iterator];
+    // [...document.querySelectorAll('div')].forEach(function (div) {
+    //     console.log(div)
+    // });
+    // 类似数组的对象调用数组的Symbol.iterator方法的例子。
+    // let iterable = {
+    //     0:'a',
+    //     1:1,
+    //     2:"22",
+    //     length:3,
+    //     [Symbol.iterator]:Array.prototype[Symbol.iterator]
+    // };
+    // for(let item of iterable){
+    //     console.log(item)
+    // }
+    // let iterable = {
+    //     a:'a',
+    //     b:'n',
+    //     length:2,
+    //     [Symbol.iterator]:Array.prototype[Symbol.iterator]
+    // };
+    // for(var i of iterable){
+    //     console.log(i)// undefined
+    // }
+
+    // 如果Symbol.iterator 方法对应 不是遍历器生成函数,解释引擎则报错
+    // let obj = {};
+    // obj[Symbol.iterator] = () =>1;
+    // console.log([...obj]) // 报错
+
     
+
+
+
+
+
+
+
+
+
+
 
 
 
