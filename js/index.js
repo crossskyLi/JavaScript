@@ -4385,7 +4385,7 @@ $(function () {
     // es6 规定,默认的Iterator 接口部署在数据结构的 Symbol.iterator 属性
     // 或者说一个数据结构只要具有Symbol.iterator 属性,就可以认为是 '可遍历的'(iterable)
 
-
+    
 
 
 
