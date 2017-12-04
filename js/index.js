@@ -4548,14 +4548,41 @@ $(function () {
     // let obj = {};
     // obj[Symbol.iterator] = () =>1;
     // console.log([...obj]) // 报错
+    // 变量obj 的Symbol.iterator 方法对应的不是遍历器生成函数,因此报错
 
-    
+    // 使用 while 循环遍历
+    // ITERABLE代表某种可遍历的数据结构，
+    // $iterator是它的遍历器对象。遍历器对象每次移动指针（next方法），
+    // 都检查一下返回值的done属性，如果遍历还没结束，
+    // 就移动遍历器对象的指针到下一步（next方法），不断循环。
+    // let $iterator = ITERABLE[Symbol.iterator]();
+    // let $result = $iterator.next();
+    // while (!$result.done){
+    //     let x = $result.value;
+    //     $result = $iterator.next();
+    // }
 
+    // 使用 iterator 接口的场合
+    // 1 解构赋值
+    // 对数组和Set 结构进行解构赋值时,会默认调用 Symbo.iterator 方法
+    // let set = new Set().add('a').add({a:'2'}).add('vvv');
+    // let [x,y] = set;
+    // console.log(x,y)
+    // let [first,...rest] = set;
+    // console.log(first,rest);
 
+    // 扩展运算符
+    // 扩展运算符(...)会调用默认的iterator 接口
+    // let str = 'asdfb';
+    // [...str].forEach(function (i) {
+    //     console.log(i)
+    // });
 
-
-
-
+    let arr = ['a','132'];
+    let result = ['result',...arr];
+    result.forEach(function (i) {
+        console.log(i)
+    })
 
 
 
