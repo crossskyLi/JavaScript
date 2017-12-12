@@ -4651,7 +4651,71 @@ $(function () {
     // ----------------------------------------------------------
     // 5 Iterator 接口与Generator函数
     // Symbol.iterator 方法的最简单实现
+    // var myIterable = {};
+    // myIterable[Symbol.iterator] = function* () {
+    //     var i = 0;
+    //     i++;
+    //     yield i+2;// 这里只是值的引用
+    //     console.log(i);//保留了上下文
+    //     i = i+2;
+    //     yield i;
+    //     i = i+3;
+    //     yield i;
+    // };
+    // let result  = [...myIterable];
+    // console.log(result);// [3,3,6]
+    //
+    // let obj = {
+    //     *[Symbol.iterator](){
+    //         yield "hello";
+    //         yield "hello123";
+    //     }
+    // };
+    // // 可以用在每一步骤返回值存放读取
+    //
+    // for(let x of obj){
+    //     console.log(x)
+    // }
 
+
+    // 6.遍历对象的return(),throw()
+    // 遍历器对象除了具有next方法,还可以具有return 方法和throw 方法。
+    // 如果写遍历器对象生成函数,那么next方法是必须部署的,return方法和
+    // throw方法是否部署是可选的
+
+    // return 方法的使用场合是,如果for ... of 循环提前退出(通常是出错)
+    // 或者有break语句/continue语句,就会调用return 方法。
+    // 如果一个对象在完成遍历前,需要清理或者释放资源,就可以部署return方法
+    function readLinesSync(file) {
+        return {
+            next() {
+                return {done: false}
+            },
+            return() {
+                file.close();
+                return {done: true}
+            }
+        }
+    }
+    // 函数readlinesSync 接受一个文件对象作为参数,返回一个遍历器对象
+    // 其中除了next 方法,还部署了return 方法,下面的三种情况,都会触发执行return方法
+    // 1
+    var fileName = ['12','123332']
+    for(let line of readLinesSync(fileName)){
+        console.log(line);
+        break;
+    }
+    // 2
+    for(let line of readLinesSync(fileName)){
+        console.log(line);
+        continue;
+    }
+    // 3
+    for(let line of readLinesSync(fileName)){
+        console.log(line);
+        throw new Error('错误')
+    }
+    //出错,写到iterator readLinesSync
 
     function timeCount() {
         let nowTime = new Date();
@@ -4676,7 +4740,7 @@ $(function () {
         $('.time-count').html(timeCountStr)
     }
 
-    setInterval(timeCount, 100);
+    // setInterval(timeCount, 100);
 
 
 });
