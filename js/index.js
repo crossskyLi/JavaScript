@@ -4697,25 +4697,61 @@ $(function () {
             }
         }
     }
+
     // 函数readlinesSync 接受一个文件对象作为参数,返回一个遍历器对象
     // 其中除了next 方法,还部署了return 方法,下面的三种情况,都会触发执行return方法
     // 1
-    var fileName = ['12','123332']
-    for(let line of readLinesSync(fileName)){
-        console.log(line);
-        break;
-    }
+    // var fileName = '123123';
+    // console.log( readLinesSync(fileName));
+    // for (let line of readLinesSync(fileName)) {
+    //     console.log(line);
+    //     break;
+    // }
     // 2
-    for(let line of readLinesSync(fileName)){
-        console.log(line);
-        continue;
-    }
+    // for(let line of readLinesSync(fileName)){
+    //     console.log(line);
+    //     continue;
+    // }
     // 3
-    for(let line of readLinesSync(fileName)){
-        console.log(line);
-        throw new Error('错误')
+    // for(let line of readLinesSync(fileName)){
+    //     console.log(line);
+    //     throw new Error('错误')
+    // }
+
+
+    // 7. for ... of 循环
+    // 数组
+    const arr = ['123','123','313'];
+    for(let str of arr){
+        console.log(str)
     }
-    //出错,写到iterator readLinesSync
+    const obj = {};
+    obj[Symbol.iterator] = arr[Symbol.iterator].bind(arr);
+    for (let str of obj){
+        console.log(str)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     function timeCount() {
         let nowTime = new Date();
