@@ -4730,6 +4730,7 @@ $(function () {
     for (let str of obj){
         console.log(str)
     }
+    console.log('测试公钥')
 
 
 
