@@ -4720,64 +4720,160 @@ $(function () {
 
 
     // 7. for ... of 循环
-    // 数组
+    // 一个数据结构只要部署了Symbol.iterator属性，
+    // 就被视为具有 iterator 接口，
+    // 就可以用for...of循环遍历它的成员。
+    // 也就是说，for...of循环内部调用的是数据结构的Symbol.iterator方法。
+    // <1>数组
     // const arr = ['123','123','313'];
     // for(let str of arr){
     //     console.log(str)
     // }
+    // 对象
     // const obj = {};
     // obj[Symbol.iterator] = arr[Symbol.iterator].bind(arr);
     // for (let str of obj){
     //     console.log(str)
     // }
-    // console.log('测试公钥');
+
+    // let arr = [3,5,4,8];
+    // arr.foo = 'hello';
+    // for(let i in arr){
+    //     console.log(i); // key:0,1,2,3,foo
+    // }
+    // console.log('----------');
+    // // for...of循环调用遍历器接口，'数组' 的遍历器接口只返回具有数字索引的属性。
+    // for(let i of arr){
+    //     console.log(i);// value: 3,5,4,8, 不返回foo的键值
+    // }
+    // <2> Set 和 Map 结构
+    // Set 和 Map结构也原色具有Iterator接口,可以直接使用for... of 循环
+    // let engines = new Set(["Gecko", "Trident", "Webkit", "Webkit"]);
+    // 遍历Set结构
+    // for (let a of engines) {
+    //     console.log(a)
+    // }
+    // Gecko
+    // Trident
+    // Webkit //重复被忽略?覆盖?
+    // let es6 = new Map();
+    // es6.set('edition', 6);
+    // es6.set('committee', 'TC39');
+    // es6.set('standard', 'ECMA-262');
+    // // 遍历 Map结构
+    // for (let [name, value] of es6) {
+    //     console.log(name + ':' + value);
+    // }
+
+    // 注意两点:
+    // <1>  遍历的顺序是按照各个成员被添加进数据结构的顺序
+    // <2>  set结构遍历的时候,返回的是一个值,
+    //      而map结构遍历的时候,返回的是数组,
+    //      该数组的两个成员分别为当前map成员的键名和键值
+
+    // let map = new Map().set('a',1).set('b',3);
+    // for(let pair of map){
+    //     console.log(pair);
+    // }
+    //
+    // for(let [key,value] of map){
+    //     console.log(key,":",value)
+    //     //  a : 1
+    //     //  b : 3
+    // }
+
+    // <3> 计算生成的数据结构
+    // 有些数据结构是在现有数据结构的基础上,计算生成的,
+    // 比如,ES6 的数组, Set 、Map都部署了以下三个方法
+    // 调用后都返回遍历器对象
+
+    // --- entries() 返回一个遍历器对象,用来遍历 [键名,键值]组成的数组
+    // 对于数组,键名就是索引值,对于Set,键名与键值相同。
+    // 对于Map结构的Iterator 接口,默认就是调用entries方法;
+
+    // --- keys() 返回一个遍历器对象,用来遍历所有的键名
+    // --- values() 返回一个遍历器对象,用来遍历所有键值
+    // 这三个方法调用后生成的遍历器对象,所遍历的都是计算生成的数据结构
+    // let arr = ['1','a','d'];
+    // for(let pair of arr.entries()){
+    //     console.log(pair)
+    // }
+
+    // <4> 类似数组的对象
+    // 类似数组的对象包括几类, for ... of 循环用于字符串, DOM NodeList对象,arguments对象例子
+
+    // // 字符串
+    // let str = 'hello';
+    // for(let i of str){
+    //     console.log(i)
+    // }
+
+    // // DOM NodeList 对象
+    // let divs = document.querySelectorAll('div');
+    //
+    // for(let div of divs){
+    //     console.log(div.classList);
+    //     div.classList.add('test');
+    //     console.log(div);
+    // }
+    // console.log(divs);
+
+    // arguments 对象
+    // function printArgs() {
+    //     for( let param of arguments){
+    //         console.log(param)
+    //     }
+    // }
+    // printArgs('12','2','23',45);
+
+    // 对于字符串来说,for...of循环有个特点,就是会正确识别 32位的utf-16字符
+    // for(let x of 'a\uD83E\uDC0A'){
+    //     console.log(x)
+    // }
+
+    // 并不是所有类似的数组的对象都具有Iterator 接口,
+    // 一个简便的解决办法,
+    // 就是使用Array.from方法将其转为数组
+
+    // let arrayLike = {length: 3, 0: 'a', 1: 'b'};
+    // // 报错
+    // for(let x of arrayLike){
+    //     console.log(x)
+    // }
+    // 正确写法
+    // let arr = Array.from(arrayLike);
+    // console.log(arr);
+    // for (let x of arr) {
+    //     console.log(x)
+    // }
+
+    // <5> 对象 ,,,,,,,写到Iterator的 对象
 
 
+    // function timeCount() {
+    //     let nowTime = new Date();
+    //     let yearTime = new Date('2018-02-15').setHours(0);
+    //     //毫秒
+    //     let mileSecond = parseInt((yearTime - nowTime) % 1000 / 100);
+    //     let mileSecondStrArr = ((mileSecond) / 10).toString().split('.');
+    //     let mileSecondStr = mileSecondStrArr[1] ? '.' + mileSecondStrArr[1] : '.0';
+    //     //秒
+    //     let second = Math.floor((yearTime - nowTime) / 1000);
+    //     let secondStr = (second % 60) > 0 ? (second % 60) + mileSecondStr + '秒' : '0秒';
+    //     //分
+    //     let min = Math.floor(second / 60);
+    //     let minStr = (min % 60) > 0 ? (min % 60) + '分' : '';
+    //     //时
+    //     let hour = Math.floor(min / 60);
+    //     let hourStr = (hour % 24) > 0 ? (hour % 24) + '时' : '';
+    //     //天
+    //     let day = Math.floor(hour / 24);
+    //     let dayStr = day > 0 ? day + '天' : '';
+    //     let timeCountStr = dayStr + hourStr + minStr + secondStr;
+    //     $('.time-count').html(timeCountStr)
+    // }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    function timeCount() {
-        let nowTime = new Date();
-        let yearTime = new Date('2018-02-15').setHours(0);
-        //毫秒
-        let mileSecond = parseInt((yearTime - nowTime) % 1000 / 100);
-        let mileSecondStrArr = ((mileSecond) / 10).toString().split('.');
-        let mileSecondStr = mileSecondStrArr[1] ? '.' + mileSecondStrArr[1] : '.0';
-        //秒
-        let second = Math.floor((yearTime - nowTime) / 1000);
-        let secondStr = (second % 60) > 0 ? (second % 60) + mileSecondStr + '秒' : '0秒';
-        //分
-        let min = Math.floor(second / 60);
-        let minStr = (min % 60) > 0 ? (min % 60) + '分' : '';
-        //时
-        let hour = Math.floor(min / 60);
-        let hourStr = (hour % 24) > 0 ? (hour % 24) + '时' : '';
-        //天
-        let day = Math.floor(hour / 24);
-        let dayStr = day > 0 ? day + '天' : '';
-        let timeCountStr = dayStr + hourStr + minStr + secondStr;
-        $('.time-count').html(timeCountStr)
-    }
-
-    setInterval(timeCount, 100);
+    // setInterval(timeCount, 100);
 
 
 });
