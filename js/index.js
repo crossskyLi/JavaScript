@@ -4686,17 +4686,17 @@ $(function () {
     // return 方法的使用场合是,如果for ... of 循环提前退出(通常是出错)
     // 或者有break语句/continue语句,就会调用return 方法。
     // 如果一个对象在完成遍历前,需要清理或者释放资源,就可以部署return方法
-    function readLinesSync(file) {
-        return {
-            next() {
-                return {done: false}
-            },
-            return() {
-                file.close();
-                return {done: true}
-            }
-        }
-    }
+    // function readLinesSync(file) {
+    //     return {
+    //         next() {
+    //             return {done: false}
+    //         },
+    //         return() {
+    //             file.close();
+    //             return {done: true}
+    //         }
+    //     }
+    // }
 
     // 函数readlinesSync 接受一个文件对象作为参数,返回一个遍历器对象
     // 其中除了next 方法,还部署了return 方法,下面的三种情况,都会触发执行return方法
@@ -4721,16 +4721,16 @@ $(function () {
 
     // 7. for ... of 循环
     // 数组
-    const arr = ['123','123','313'];
-    for(let str of arr){
-        console.log(str)
-    }
-    const obj = {};
-    obj[Symbol.iterator] = arr[Symbol.iterator].bind(arr);
-    for (let str of obj){
-        console.log(str)
-    }
-    console.log('测试公钥');
+    // const arr = ['123','123','313'];
+    // for(let str of arr){
+    //     console.log(str)
+    // }
+    // const obj = {};
+    // obj[Symbol.iterator] = arr[Symbol.iterator].bind(arr);
+    // for (let str of obj){
+    //     console.log(str)
+    // }
+    // console.log('测试公钥');
 
 
 
@@ -4777,7 +4777,7 @@ $(function () {
         $('.time-count').html(timeCountStr)
     }
 
-    // setInterval(timeCount, 100);
+    setInterval(timeCount, 100);
 
 
 });
