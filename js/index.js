@@ -4849,7 +4849,93 @@ $(function () {
 
     // <5> 对象 ,,,,,,,写到Iterator的 对象
 
+    // 临时增加一个new 和return 区别的函数
+    // 工厂模式
+    // function Person(name, age) {
+    //     var o = {};
+    //     o.name = name || '';
+    //     o.age = age || 0;
+    //     o.getName = function () {
+    //         console.log(this.name);
+    //     };
+    //     return o;
+    // }
+    // 使用了new return 还是起了作用
+    // var person = new Person('yigemingzi ', 123);
+    // var person2 = Person('yigemingzi ', 123);
+    // console.log('person', person)
+    // console.log('person2', person2)
 
+    // function Person(name, age) {
+    //     this.a = '123';
+    //     var o = {};
+    //     o.name = name || '';
+    //     o.age = age || 0;
+    //     o.getName = function () {
+    //         console.log(this.name);
+    //     };
+    //     return o;
+    // }
+    // var person = Person;
+    // var person1 = new Person;
+    // var person2 = new Person('123',2);
+    // console.log('person',person); // {name: "", age: 0, getName: ƒ}
+    // console.log('person',person()); // {name: "", age: 0, getName: ƒ}
+    // console.log('person1',person1); // {name: "123", age: 2, getName: ƒ}
+    // console.log('person2',person2); // {name: "123", age: 2, getName: ƒ}
+
+    // 如果函数返回值为常规意义上的值类型（Number、String、Boolean）时，
+    // new函数将会返回一个该函数的实例对象，
+    // 而如果函数返回一个引用类型（Object、Array、Function），
+    // 则new函数与直接调用函数产生的结果等同
+    // function testFun() {
+    //     this.name = 'test1';
+    //     return function () {
+    //         return true;
+    //     }// 返回符合类型
+    // }
+
+    // var test = new testFun();
+    // var test2 = testFun();
+    // console.log('test', test);
+    // console.log('test2', test2);
+    // // false,因为 Javascript  对于 Object 和 Function 的比较是基于引用的。
+    // console.log(test2 === test);
+
+    // function testFun() {
+    //     this.name = 'testName';
+    //     return 'return Test';// 返回非复合类型
+    // }
+    // var result = testFun();
+    // var newResult = new testFun();
+    // console.log('result',result);
+    // console.log('newResult',newResult);
+    // console.log(result === newResult);
+    // 如果函数返回值为常规意义上的的值类型,(Number,String,Boolean)时,函数会返回该实例对象,
+    // 如果函数返回一个引用对象(Object,Array,Function),则new 函数与直接调用函数产生结果等同,但引用地址不同
+
+
+    // 直接返回一个函数的话会产生闭包函数;
+    // function testFun() {
+    //     this.name = 'testName';
+    //     var i = 10;
+    //     return function () {
+    //         i++;
+    //         console.log(i);
+    //     }
+    // }
+    // var a = testFun();
+    // var b = new testFun(); //使用new 和不使用同样是会产生闭包
+    // a();
+    // a();
+    // a();
+    // b();
+    // b();
+    // b();
+    // b();
+
+
+    
     // function timeCount() {
     //     let nowTime = new Date();
     //     let yearTime = new Date('2018-02-15').setHours(0);
