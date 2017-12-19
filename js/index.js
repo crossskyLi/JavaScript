@@ -4847,7 +4847,61 @@ $(function () {
     //     console.log(x)
     // }
 
-    // <5> 对象 ,,,,,,,写到Iterator的 对象
+    // <5> 对象
+    // 对于普通对象for ... of结构是不能直接使用的,会报错
+    // 必须部署了Iterator接口后才能使用,但这样的情况可以使用for ... in 遍历键名
+    // let es6 = {
+    //     edition:6,
+    //     committee:'Tc23',
+    //     standard:'ecma-262'
+    // };
+    // for(let key in es6){
+    //     console.log(key)
+    // }
+    // for(let key of es6){// 报错, es6 is not iterable,es6[Symbol.iterator] is not a function
+    //     console.log('key',key);
+    // }
+    // let obj = {a:1,m:3};
+    // for(let key in obj){
+    //     console.log(obj[key])
+    // }
+    // // 把key变成数组,数组可以使用for...of
+    // for(let key of Object.keys(obj)){
+    //     console.log(key,obj[key])
+    // }
+    // // 使用 Generator 函数将对象重新包装一下。
+    // function* entries(obj) {
+    //     for(let key of Object.keys(obj)){
+    //         yield [key,obj[key]];
+    //     }
+    // }
+    // for(let [key,value] of entries(obj)){
+    //     console.log(key,value)
+    // }
+
+    // 与其他遍历语法比较
+    // 数组为例子 原始for循环可以跳出循环,但是写法麻烦
+    // forEach 则无法使用break 或者 return来跳出循环
+    // for...in 可以用来遍历数组的键名
+    // for ... in 有几个缺点
+    // <1>数组的键名是数组,但是 for...in 循环是以字符串作为键名'0','1',等等
+    // <2> for...in 循环不仅遍历数字键名,还会遍历手动添加的其他键,甚至包括原形链上的键
+    // <3> 某些情况下,for ...in 会以任意顺序遍历键名
+    // 总之for...in 主要是用来遍历对象的,而不是用来遍历数组的
+
+    // 而for...of有几个优点
+    // 1.有着和for...in一样的简洁语法,,但是没有for...in的以上缺点
+    // 2.不同于 forEach方法,它可以break,continue,和return 配合使用
+    // 3.提供了遍历所有数据结构的统一操作接口
+    // let fibonacci = [1,2,100]
+    // for(let n of fibonacci){
+    //     if(n>1000){
+    //         break;
+    //     }
+    //     console.log(n)
+    // }
+
+
 
     // 临时增加一个new 和return 区别的函数
     // 工厂模式
@@ -4933,6 +4987,10 @@ $(function () {
     // b();
     // b();
     // b();
+
+
+    
+
 
 
 
