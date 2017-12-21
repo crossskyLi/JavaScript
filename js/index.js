@@ -4902,7 +4902,6 @@ $(function () {
     // }
 
 
-
     // 临时增加一个new 和return 区别的函数
     // 工厂模式
     // function Person(name, age) {
@@ -4988,6 +4987,238 @@ $(function () {
     // b();
     // b();
 
+    // 设计模式,工厂模式
+    // 定义自行车的构造函数
+
+    // new 操作符理解
+    // 1.如果就一个函数，没有返回值，没有prototype成员，然后使用new,会是什么结果呢？
+    // 如果一个函数没有返回值，那么如果不使用new来创建变量，那么该变量的值为undefined.
+    // 如果用了new，那么就是Object.说明一个函数的默认的Prototype是Object.
+    // function Test1(str) {
+    //     this.a = str;
+    // }
+    // var myTest = new Test1("test1");
+    // console.log(myTest);
+    // console.log(typeof myTest);
+    // console.log(myTest.constructor);
+    // console.log('myTest.a  ',myTest.a);
+    // function Test1WithoutNew(str) {
+    //     this.a = str;
+    // }
+    // var myTestWithoutNew = Test1WithoutNew("test1");
+    // console.log(myTestWithoutNew); //undefined;
+
+    // 2.如果函数有返回值，但是返回值是基本类型。
+    // 那么new出来的myTest还是object.因为基本类型的prototype还是Object.
+    // 而如果不使用new，那么返回值就是string的值。
+    // function test1 (str) {
+    //     this.a = str;
+    //     return this.a;
+    // }
+    // let mytest = new test1('一段字符');
+    // console.log('mytest',mytest);
+    // console.log('mytest.a',mytest.a);
+    // let mytest2 = test1('第二段字符');
+    // console.log('mytest2',mytest2);
+
+    // 3.如果函数的返回值为new 出来的对象 或者符合类型,如数组,对象,函数,
+    // 那么myTest 的值根据new出来的对象的prototype而定
+    // function test1(str) {
+    //     this.a = str;
+    //     return new String(this.a);
+    // }
+    // let myTest = new test1('new test1');
+    // let myTest1NoNew = new test1('new test1');
+    // console.log(myTest);
+    // console.log('myTest.a',myTest.a);
+    // console.log(myTest.toString());
+    // console.log(myTest.a);
+    // console.log('myTestNoNew',myTest1NoNew);
+    // console.log('myTestNoNew.a',myTest1NoNew.a);
+    // console.log('------------');
+
+    // function test2(str) {
+    //     this.a = str;
+    //     return {a:this.a};
+    // }
+    // let myTest2 = new test2('new test2');
+    // let myTest2NoNew = test2('new test2');
+    // console.log('myTest2',myTest2);
+    // console.log('myTest2.a',myTest2.a);
+    // console.log('myTestNoNew',myTest2NoNew);
+    // console.log('------------');
+
+    // function test3(str) {
+    //     this.a = str;
+    //     return function () {
+    //         return this.a;
+    //     };
+    // }
+    // let myTest3 = new test3('new test3');
+    // let myTest3NoNew = test3('new test3');
+    // console.log('myTest3',myTest3);
+    // console.log('myTest3()   ',myTest3());
+    // console.log('myTest3.a',myTest3.a);
+    // console.log('myTest3NoNew',myTest3NoNew);
+    // console.log('myTest3NoNew()',myTest3NoNew());
+
+    // 4。讨论new中的this
+    // 如果给test1 的prototype中加入一个方法,getString();
+    // 那么getString 中指的就是这个新对象,能够得到在new时候,赋予该对象的属性值
+    // let test = function (str) {
+    //     this.a = str;
+    // };
+    // test.prototype.getString = function () {
+    //     return this.a;
+    // };
+    // test.prototype.constructor = function () {
+    //     this.a = 123;
+    // };
+    // let myTest = new test('一段字符串');
+    // console.log('myTest',myTest);
+    // myTest.a = '我能该变字符串吗?';
+    // console.log('myTest prototype',myTest.__proto__);
+    // console.log('myTest constructor',myTest.constructor);
+    // console.log('myTest getString',myTest.getString);
+    // console.log('myTest getString()',myTest.getString());
+
+    // 没有 new 操作符
+    // let Test2 = function(str) {
+    //     this.a = str;
+    // };
+    //
+    // Test2.prototype.getString = function () {
+    //     return this.a;
+    // };
+    //
+    // let myTest2NoNew = Test2("test2");
+    // console.log('myTest2NoNew',myTest2NoNew);//undefined
+    // console.log('Test2',Test2.prototype);
+    // console.log('Test2()',Test2());
+    // console.log('myTest2NoNew',myTest2NoNew);// 报错
+    // console.log('myTest2NoNew',myTest2NoNew.getString);// 报错
+
+    // 5. 修改了函数的prototype,
+    // 那么就会发生类似继承的功能，其实就是js的伪类实现。
+
+    // function test1(str) {
+    //     this.b = str;
+    // }
+    //
+    // test1.prototype.getTestString = function () {
+    //     return this.b;
+    // };
+    //
+    // let test2 = function (str) {
+    //     this.a = str;
+    // };
+    //
+    // test2.prototype = new test1('test 1'); //  test2 继承了 test 1
+    // console.log('test2.prototype : ',test2.prototype);
+    //
+    // test2.prototype.getString = function () {
+    //     return this.a;
+    // };
+    // // 继承了 test2 ,而test2 继承了test 1 ; 在原型链查找上,可以找到test1的属性
+    // let myTest2 = new test2('test 2');
+    // console.log('myTest2 : ',myTest2);
+    // console.log('myTest2 getTestString : ',myTest2.getTestString);
+    // console.log('myTest2 getTestString() : ',myTest2.getTestString());
+    // console.log('myTest2 getString : ',myTest2.getString);
+    // console.log('myTest2 getString :',myTest2.getString());
+    // myTest2.b = 10;
+    // console.log('myTest2 getTestString() :修改b的值',myTest2.getTestString());
+
+
+
+
+    // function BicycleShop(name) {
+    //     this.name = name;
+    //     console.log('执行这里吗?');
+    //     console.log(this);
+    //     console.log('------------');
+    //     this.method = function () {
+    //         return this.name;
+    //     }
+    // }
+    //
+    // BicycleShop.prototype = {
+    //     constructor: BicycleShop,
+    //     /*
+    //      * 买自行车这个方法
+    //      * @param {model} 自行车型号
+    //     */
+    //     sellBicycle: function (model) {
+    //         let bicycle = this.createBicycle(model);
+    //         console.log('BicycleShop bicycle',bicycle);
+    //         // 执行A业务逻辑
+    //         bicycle.A();
+    //
+    //         // 执行B业务逻辑
+    //         bicycle.B();
+    //
+    //         return bicycle;
+    //     },
+    //     createBicycle: function (model) {
+    //         throw new Error("父类是抽象类不能直接调用，需要子类重写该方法");
+    //     }
+    // };
+    //
+    // // 实现原型继承
+    // function extend(Sub, Sup) {
+    //     //Sub表示子类，Sup表示超类
+    //     // 首先定义一个空函数
+    //     let F = function () {
+    //         console.log('F console',this)
+    //     };
+    //
+    //     // 设置空函数的原型为父类的原型
+    //     F.prototype = Sup.prototype;
+    //     console.log('F',F);
+    //     console.log('F.prototype',F.prototype);
+    //     console.log('------------');
+    //     // 实例化空函数，并把超类原型引用传递给子类
+    //     Sub.prototype = new F();
+    //     console.log('Sub.prototype',Sub.prototype);
+    //
+    //     // 重置子类原型的构造器为子类自身
+    //     Sub.prototype.constructor = Sub;
+    //     console.log('Sub.prototype.constructor',Sub.prototype.constructor);
+    //     // 在子类中保存超类的原型,避免子类与超类耦合
+    //     Sub.sup = Sup.prototype;
+    //     console.log('Sub.sup ',Sub.sup );
+    //     if (Sup.prototype.constructor === Object.prototype.constructor) {
+    //         // 检测超类原型的构造器是否为原型自身
+    //         Sup.prototype.constructor = Sup;
+    //     }
+    // }
+    //
+    // function BicycleChild(name) {
+    //     this.name = name;
+    //     console.log('BicycleChild',this);
+    //     // 继承构造函数父类中的属性和方法
+    //     BicycleShop.call(this, name);
+    // }
+    // // 子类继承父类原型方法
+    // extend(BicycleChild, BicycleShop);
+    // // BicycleChild 子类重写父类的方法
+    // BicycleChild.prototype.createBicycle = function () {
+    //     console.log('重写方法',this);
+    //     let A = function () {
+    //         console.log("执行A业务操作");
+    //     };
+    //     let B = function () {
+    //         console.log("执行B业务操作");
+    //     };
+    //     return {
+    //         A: A,
+    //         B: B
+    //     }
+    // };
+    // //实例化后
+    // let childClass = new BicycleChild("龙恩");
+    // console.log('childClass',childClass);
+
     // Generator 函数的语法
     // 一种异步编程解决方案,
     // 语法上可以把它理解成.Generator函数是一个状态机
@@ -5001,9 +5232,6 @@ $(function () {
     // 1.function 关键字与函数名字之间有一个星号;
     // 2.函数体内部使用yield 表达式,定义不同的内部状态
     // yield 在英语里的意思就是产出的意思
-
-
-
 
 
     // function timeCount() {
