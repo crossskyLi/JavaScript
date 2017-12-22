@@ -4902,7 +4902,6 @@ $(function () {
     // }
 
 
-
     // 临时增加一个new 和return 区别的函数
     // 工厂模式
     // function Person(name, age) {
@@ -5002,6 +5001,126 @@ $(function () {
     // 2.函数体内部使用yield 表达式,定义不同的内部状态
     // yield 在英语里的意思就是产出的意思
 
+    // function* myGenerator() {
+    //     let i = 10;
+    //     i++;
+    //     console.log('func inside',i);
+    //     yield 'hello'+i;
+    //     i = i+'hello';
+    //     // return '123'; 如果提前return,那么后面的都不会被遍历
+    //     yield 'world'+i;
+    //     i = i.substr(2);
+    //     return 'end'+i
+    // }
+    // console.log('11111')
+    // let result = myGenerator();
+    // console.log('22222');
+    // console.log(result);
+    // console.log('3333');
+    // console.log('1',result.next());
+    // console.log('44444');
+    // console.log('2',result.next());
+    // console.log('3',result.next());
+    // console.log('4',result.next());
+
+    // 在调用Generator函数的调用方法和普通函数一样,
+    // 也是在函数名字后面加一对圆括号,不同的是,调用后,函数并不执行
+    // 返回的也不是函数的运行结构,而是一个指向内部状态的指针对象
+    // 也就是遍历器对象 (Iterator Object)
+
+    // 下一步必须调用遍历器对象的next方法,使得指针移向下一个状态。
+    // 也就是说每次调用next方法,内部指针就从函数头部或上一次停下来的地方开始执行
+    // 知道遇到下一个yield表达式(或者return 语句)为止。
+    // Generator 函数是分段执行的,yield 表达式是暂停执行的标记
+    // 而next方法可以恢复执行
+
+    // 调用Generator 函数,返回一个遍历器对象,代表Generator函数的内部指针
+    // 以后每次调用遍历器对象的next方法,就会返回一个有着value 和done两个属性的对象
+    // value 属性表示当前的内部状态的值,是yield 表达式后面那个表达式的值
+    // done 属性是一个布尔值,表示是否遍历结束
+    // ES6没有规定,function 关键字与函数名之间的星号是写在哪个位置。
+    // 一般写法为 function* foo(){//...}
+
+    // ----- yield 表达式 -----
+    // 由于Generator 函数返回的遍历器对象,
+    // 只有调用next方法才会遍历下一个内部状态,就提供了一种可以暂停执行的函数
+    // yield 表达式就是暂停的标志
+
+    // 遍历器对象的next 方法运行逻辑如下
+    // (1) 遇到yield 表达式,就暂停执行后面的操作,
+    //     并将紧跟在yield 后面的表达式的值,作为返回对象的value属性值
+    // (2) 下一次调用next 方法时, 再继续往下执行,直到遇到下一个yield表达式
+    // (3) 如果没有在遇到新的yield 表达式,就一直运行到函数结束,
+    //     直到return语句为止,并将return 语句后面的表达式的值,作为返回的对象的value属性值
+    // (4) 如果该函数没有return 语句,则返回的对象的value属性为undefined
+
+    // 注意 yield 表达式后面的表达式,只有当调用next 方法,内部指针指向该语句时才会执行
+    // 因此等于为javascript提供了手动的'惰性求值'(lazy Evaluation)的语法功能
+    // function* gener() {
+    //     yield 456+12;
+    // }
+    // let pointer= gener();
+    // console.log(pointer);
+    // let result = pointer.next();
+    // console.log(result)
+
+    // yield 表达式与return 语句有相似之处,也有区别
+    // ,相似之处在于都返回紧跟在语句后面的那个表达式的值。
+    // 区别在于每次遇到yield ,函数暂停执行,下一次再从该位置继续向后执行
+    // 而return 语句不具备位置记忆的功能。一个函数里面只能执行一次,或者说一个return语句
+    // 但是yield 表达式可以执行多次,正常函数只能返回一个值,因为只执行一次return
+    // Generator函数可以返回一系列的值,因为可以有任意多个yield,
+    // 从另一个角度看,也可以说Generator 生成了一系列的值,
+    // 英语中，generator 这个词是“生成器”的意思
+
+    // Generator函数可以不用yield 表达式,就会变成一个暂缓执行的函数
+    // let i = 10;
+    // function* foo() {
+    //     console.log('执行',i);
+    // }
+    //
+    // let result = foo();
+    // console.log(i);
+    // i++;
+    // result.next();
+
+    // 注意: yield 表达式只能用在Generator函数里面,其他地方会报错
+    // (function () {
+    //     yield 1;
+    // })(); // 报错 SyntaxError: Unexpected number
+
+    // let arr = [1, [[2, 3], 4], [5, 6]];
+    // let flat = function* (a) {
+    //     a.forEach(function (item) {//Uncaught SyntaxError: Unexpected identifier
+    //         // 这里会产生语法错误,因为forEach方法的参数是一个普通函数
+    //         // 在里面使用了yield表达式,修改方法是改为for循环
+    //         if (typeof item !== 'number') {
+    //             yield* flat(item)
+    //         }else {
+    //             yield item;
+    //         }
+    //     })
+    // };
+    // for(let f of flat(arr)){
+    //     console.log(f)
+    // }
+
+
+    // let arr = [1, [[2, 3], 4], [5, 6]];
+    // let flat = function* (a) {
+    //     let length = a.length;
+    //     for (let i = 0; i < length; i++) {
+    //         let item = a[i];
+    //         if (typeof item !== 'number') {
+    //             yield* flat(item);
+    //         }else{
+    //             yield item;
+    //         }
+    //     }
+    // };
+    // for (let f of flat(arr)) {
+    //     console.log(f)
+    // }
 
 
 
