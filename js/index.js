@@ -5130,8 +5130,6 @@ $(function () {
     // console.log('myTest2 getTestString() :修改b的值',myTest2.getTestString());
 
 
-
-
     // function BicycleShop(name) {
     //     this.name = name;
     //     console.log('执行这里吗?');
@@ -5353,6 +5351,81 @@ $(function () {
     // for (let f of flat(arr)) {
     //     console.log(f)
     // }
+
+    // yield 表达式如果用在另一个表达式中,必须放在圆括号里面
+    // function* demo() {
+    //     // console.log('hello'+yield);// Uncaught SyntaxError: Unexpected identifier
+    //     // console.log('hello'+yield 12);// Uncaught SyntaxError: Unexpected identifier
+    //     console.log('hello '+ (yield) );
+    //     console.log('hello '+ (yield 123) );
+    // }
+    // let result = demo();
+    // let data = result.next();
+    // console.log('1',data);
+    // data = result.next();
+    // console.log('2',data);
+    // data = result.next();
+    // console.log('3',data);
+
+    // yield 表达式用作函数参数 或者 放在赋值表达式的右边,可以不加括号
+    // function foo(a, b) {
+    //     console.log('foo',a,b)
+    // }
+    // function* demo() {
+    //     foo(yield 'a',yield 'b');
+    //     let input = yield 123;
+    //     console.log(input)
+    // }
+    // let result = demo();
+    // let data = result.next();
+    // console.log('1',data);
+    // data = result.next();
+    // console.log('2',data);
+    // data = result.next();
+    // console.log('3',data);
+    // data = result.next();
+    // console.log('4',data);
+
+    // 与 Iterator 接口的关系
+    // 任意一个对象的 Symbol.iterator 方法,等于该对象的遍历器生成函数
+    // 调用该函数会返回该对象的一个遍历器对象
+
+    // 由于 Generator函数就是遍历器生成函数,
+    // 因此可以把 Generator 赋值给对象的 Symbol.iterator 属性
+    // 从而使得该对象具有 Iterator 接口
+
+    // let myIterable = {};
+    // myIterable[Symbol.iterator] = function* (arr) {
+    //     yield 1;
+    //     yield 2;
+    //     yield 3;
+    // };
+    // let result = [...myIterable];
+    // console.log(result);
+
+    // Generator 函数赋值给Symbol.iterator属性，
+    // 从而使得 myIterable 对象具有了 Iterator 接口，可以被...运算符遍历了。
+
+    // Generator 函数执行后,返回一个遍历器对象,该对象本身也具有 Symbol.iterator 属性
+
+    // gen 是一个Generator函数,调用它会生成一个遍历器对象,
+    // 它的Symbol.iterator 属性也是一个遍历器对象生成函数,执行后返回它自己
+    function* gen() {
+        console.log(456);
+        yield 456;
+    }
+    let result = gen();
+    let gS = result[Symbol.iterator]();
+    let gSNext = gS.next();// (1)
+    let resultNext = result.next(); // (2)
+    // (1)和(2) 位置互换,会导致 gSnext 和resultNext 互换结果
+
+    console.log(gS === result);
+    console.log('gS',gS);
+    console.log('result',result);
+    console.log('gSNext',gSNext);
+    console.log('resultNext',resultNext);
+
 
     // function timeCount() {
     //     let nowTime = new Date();
