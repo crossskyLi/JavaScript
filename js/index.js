@@ -5410,21 +5410,72 @@ $(function () {
 
     // gen 是一个Generator函数,调用它会生成一个遍历器对象,
     // 它的Symbol.iterator 属性也是一个遍历器对象生成函数,执行后返回它自己
-    function* gen() {
-        console.log(456);
-        yield 456;
-    }
-    let result = gen();
-    let gS = result[Symbol.iterator]();
-    let gSNext = gS.next();// (1)
-    let resultNext = result.next(); // (2)
-    // (1)和(2) 位置互换,会导致 gSnext 和resultNext 互换结果
+    // function* gen() {
+    //     console.log(456);
+    //     yield 456;
+    // }
+    // let result = gen();
+    // let gS = result[Symbol.iterator]();
+    // let gSNext = gS.next();// (1)
+    // let resultNext = result.next(); // (2)
+    // // (1)和(2) 位置互换,会导致 gSnext 和resultNext 互换结果
+    //
+    // console.log(gS === result);
+    // console.log('gS',gS);
+    // console.log('result',result);
+    // console.log('gSNext',gSNext);
+    // console.log('resultNext',resultNext);
 
-    console.log(gS === result);
-    console.log('gS',gS);
-    console.log('result',result);
-    console.log('gSNext',gSNext);
-    console.log('resultNext',resultNext);
+    // 2. next 方法的参数
+    // yield 表达式本身没有返回值,或者说总是返回undefined。
+    // next方法可以带一个参数,该参数就会被当作上一个yield表达式的值
+    // function* f() {
+    //     for (let i = 0; true; i++) {
+    //         console.log('++++',i);
+    //         let reset = yield i;
+    //         // console.log('----',i);
+    //         if (reset) {
+    //             i = -10;
+    //         }
+    //     }
+    // }
+    // 这里的i会因为保存上下文的原因保留
+    // yield一直返回的都是undefined,直到next方法传入true
+    // i会被置为-10;这时候i的值被重写
+
+
+    // let gen = f();
+    // let result = gen.next();
+    // console.log('result', result);// 0
+    // result = gen.next();
+    // console.log('result', result); // 1
+    // result = gen.next();
+    // console.log('result', result); // 2
+    // result = gen.next(true);
+    // console.log('result', result); // -9
+    // result = gen.next();
+    // console.log('result', result) // -8
+
+    // Generator函数从暂停状态到恢复运行
+    // 它的上下文状态(context)是不变的,通过next方法的参数
+    // 就有办法在Generator函数开始运行后,继续向函数体内部注入值
+    // 也就可以在Generator函数运行的不同阶段,从外部向内部注入不同的值
+    // 从而调整函数行为
+
+    function* foo(x) {
+        // let yieldResult = (yield (x + 1));
+        // console.log('yieldResult',yieldResult)
+        let y = 2 * (yield (x + 1));
+        let z = yield (y / 3);
+        return (x + y + z);
+    }
+    let a = foo(5);
+    let result = a.next();
+    console.log('is 6',result);
+    result = a.next(12);
+    console.log('is y',result);
+    result = a.next(14);
+    console.log('id 8',result);
 
 
     // function timeCount() {
