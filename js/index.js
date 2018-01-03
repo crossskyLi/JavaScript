@@ -5702,7 +5702,213 @@ $(function () {
     //     console.log('外部捕获',e)
     // }
 
-    
+    // 如果Generator函数内部和外部都没有部署try...catch代码块
+    // 程序会报错,导致中断执行
+    // let gen = function* gen() {
+    //     yield console.log('hello');
+    //     yield console.log('11123');
+    // };
+    // let g = gen();
+    // g.next();
+    // g.throw();
+    // hello
+    // Uncaught undefined
+
+    // throw 方法被捕获后,会附带执行下一条yield表达式
+    // 即会附带执行一次next 方法
+    // 在Generator函数内部部署try...catch代码块,
+    // 遍历器的throw方法抛出的错误
+    // 就不会影响下一次遍历
+    // let gen = function* gen() {
+    //     try {
+    //         yield console.log('a')
+    //     } catch (e){
+    //         console.log(e)
+    //     }
+    //     yield console.log('b');
+    //     yield console.log('c');
+    // };
+    // let g = gen();
+    // let result = g.next(); // a
+    // console.log('result',result);
+    // console.log('---');
+    // result = g.throw(new Error('抛出错误'));
+    // console.log('result',result);
+    // console.log('---');
+    // result = g.next();
+    // console.log('result',result);
+    // console.log('---');
+
+    // throw 命令与g.throw 方法无关,互不影响
+    // let gen = function* gen() {
+    //     yield console.log('hello');
+    //     yield console.log('world');
+    // };
+    // let g = gen();
+    // g.next(); // hello
+    // try {
+    //     throw new Error('外部err')
+    // } catch (e) {
+    //     console.error(e);
+    //     g.next();//world
+    // }
+
+    // Generator函数体外抛出的错误,可以在函数体内捕获,
+    // Generator函数体内抛出的错误,也可以被函数体外的catch捕获
+    // function* foo() {
+    //     let x = yield 3;
+    //     let y = x.toUpperCase();// 报错?
+    //     yield y;
+    // }
+    //
+    // let it = foo();
+    // let result = it.next();
+    // console.log(result);//{value: 3, done: false}
+    // try {
+    //     it.next(44) // 传入44 作为上一次yield的结果
+    // } catch (e) {
+    //     console.error('函数外部error',e)
+    // }
+
+    // 一旦Generator执行过程中抛出错误,且没有被内部捕获,
+    // 就不会再继续执行,此后再调用next方法
+    // 只会放回value为undefined,done属性为true的对象
+    // 引擎认为这个Generator已经运行结束了
+    // function* g() {
+    //     yield 1;
+    //     console.log(' generator throw err');
+    //     throw new Error(' generator err');
+    //     yield 2;
+    //     yield 3;
+    //     yield 4;
+    // }
+    // 代码一共运行三次,第二次运行的时候抛出错误
+    // 第三次运行的时候generator函数就结束了,不在继续执行
+    // function log(generator) {
+    //     let v;
+    //     console.log('starting generator');
+    //     try {
+    //         v = generator.next();
+    //         console.log('first', v);
+    //     } catch (e) {
+    //         console.error('first', e)
+    //     }
+    //     try {
+    //         v = generator.next();
+    //         console.log('second', v);
+    //     } catch (e) {
+    //         console.error('second', e)
+    //     }
+    //     try {
+    //         v = generator.next();
+    //         console.log('third', v);
+    //     } catch (e) {
+    //         console.error('third', e)
+    //     }
+    //     try {
+    //         v = generator.next();
+    //         console.log('four', v);
+    //     } catch (e) {
+    //         console.error('four', e)
+    //     }
+    // }
+
+    // log(g());
+
+    // 5.Generator.prototype.return()
+    // Generator 函数返回的遍历器对象,可以有一个return的方法,
+    // 可以返回给定的值,并且终结遍历generator函数
+    // function* gen() {
+    //     yield 1;
+    //     yield 5;
+    //     yield 7;
+    // }
+    //
+    // let g = gen();
+    // let result = g.return('传个指定的值 1');
+    // console.log('1', result)
+    // result = g.return(result);
+    // console.log('2', result);
+    // result = g.next();
+    // console.log('3', result);
+
+    // 遍历器g调用return方法后,
+    // 返回值的value属性就是return方法的参数
+    // 并且 generator函数的遍历就终止了,返回值的done属性为true
+    // 再调用next方法,done属性总是返回true
+    // 再调用return 方法,传入参数,则返回参数值,done为true
+    // 不传值则value属性为undefined
+    // function* gen() {
+    //     yield 1;
+    //     yield 5;
+    //     yield 7;
+    // }
+    //
+    // let g = gen();
+    // let result= g.next(); // done false value 1
+    // console.log(result);
+    // result = g.return();
+    // console.log(result); // done true
+    // result = g.next();
+    // console.log(result); // done true
+
+    // 如果generator函数内部有try ... finally代码块
+    // 那么return 方法会推迟到finally代码块执行完再执行
+    // function* numbers() {
+    //     yield 1;
+    //     try {
+    //         yield 2;
+    //         yield 3;
+    //     } catch (e) {
+    //         console.log(e)
+    //     } finally {
+    //         yield 4;
+    //         yield 5;
+    //     }
+    //     yield 6;
+    // }
+    //
+    // let g = numbers();
+    // let result= g.next();
+    // console.log(result); // 1
+    // result= g.next();
+    // console.log(result);  // 2
+    //
+    // let returnResult= g.return(12);
+    // console.log('returnResult',returnResult); // 4
+    // // 调用return后会直接执行finally,等finally代码块执行完后再执行return方法
+    // result= g.next();
+    // console.log(result);
+    // result= g.next();
+    // console.log(result);
+
+
+    //  next() throw() return()的共同点
+    // 它们的作用都是让generator回复执行,并且使用不同的语句替换yield表达式
+    // next() 是将yield表达式替换成一个值
+    // next(1) 相当于将yield表达式替换成一个值1。
+    // 如果next方法没有传入参数,那么就替换为undefined
+    // const g = function* (x, y) {
+    //     let result = yield x+y;
+    //     return result;
+    // };
+    // const gen = g(1,2);
+    // console.log(gen);
+    // let result = gen.next();
+    // console.log(result);
+    // result = gen.next(1);
+    // console.log(result);
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5727,7 +5933,7 @@ $(function () {
     //     let day = Math.floor(hour / 24);
     //     let dayStr = day > 0 ? day + '天' : '';
     //     let timeCountStr = dayStr + hourStr + minStr + secondStr;
-    //     $('.time-count').html(timeCountStr)
+    //     $('.time-count').text(timeCountStr)
     // }
     //
     // setInterval(timeCount, 100);
