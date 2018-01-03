@@ -31,6 +31,22 @@
             font-size: 30px;
             font-weight: 400;
         }
+
+        .justify{
+            display:-webkit-box;
+            display:-webkit-flex;
+            display:-ms-flexbox;
+            display:flex;
+            -webkit-box-pack:justify;
+            -webkit-justify-content:space-between;
+            -ms-flex-pack:justify;
+            justify-content:space-between;
+            width: 200px;
+            text-indent: 2em;
+            border: 1px solid #cccccc;
+            margin: 0 auto;
+        }
+        /*.justify> span { display: inline-block !* Opera *!; padding-left: 100%; }*/
     </style>
 </head>
 <body>
@@ -40,6 +56,9 @@
 <image src=''></image>
 <div>
     倒计时:<span class="time-count"></span>
+</div>
+<div class="justify">
+    文字两端对齐文字两端对齐文字两端对齐文字两端对齐文字两端对齐
 </div>
 
 </body>

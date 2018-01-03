@@ -5462,20 +5462,249 @@ $(function () {
     // 也就可以在Generator函数运行的不同阶段,从外部向内部注入不同的值
     // 从而调整函数行为
 
-    function* foo(x) {
-        // let yieldResult = (yield (x + 1));
-        // console.log('yieldResult',yieldResult)
-        let y = 2 * (yield (x + 1));
-        let z = yield (y / 3);
-        return (x + y + z);
-    }
-    let a = foo(5);
-    let result = a.next();
-    console.log('is 6',result);
-    result = a.next(12);
-    console.log('is y',result);
-    result = a.next(14);
-    console.log('id 8',result);
+    // function* foo(x) {
+    //     // let yieldResult = (yield (x + 1));
+    //     // console.log('yieldResult',yieldResult)
+    //     let y = 2 * (yield (x + 1));// 第一次返回,但yield结果是undefined
+    //     // 这里如果 没传值,那么就是undefined/3,传值就是12/3
+    //     let z = yield (y / 3);//
+    //
+    //     return (x + y + z);
+    // }
+    // let a = foo(5);
+    // let result = a.next();
+    // console.log('is 6',result);
+    // result = a.next(12); // 这里接受的值不是x而是作为上一个yield的返回值
+    // console.log('is y',result);
+    // result = a.next(14);
+    // console.log('id 8',result);
+
+    // function* dataConsumer() {
+    //     console.log('start');
+    //     console.log(`1.${yield 'abc'}`); // 会先执行yield操作,返回结果,下次next再执行console
+    //     console.log(`2.${yield}`);
+    //     return 'someStr'
+    // }
+    // let genObj = dataConsumer();
+    // let result = genObj.next();
+    // console.log(result);
+    // console.log('----------');
+    // result = genObj.next('a');
+    // console.log(result);
+    // console.log('----------');
+    // result = genObj.next('abc');
+    // console.log(result);
+
+    // 想第一次调用next方法的时候,就输入值,那么可以在Generator函数外面再包一层
+    // function wrapper(generatorFunction) {
+    //     return function (...args) {
+    //         let generatorObject = generatorFunction(...args);
+    //         generatorObject.next();
+    //         return generatorObject;
+    //     }
+    // }
+    // const wrapped = wrapper(function *() {
+    //     console.log(`first input : ${yield}`);
+    //     return 'done'
+    // });
+    // let result = wrapped().next('hello!');
+    // console.log('result',result )
+
+    // 3. for ... of循环
+
+    // for ... of 可以自动遍历Generator函数时生成的iterator对象
+    // 而且此时不再需要调用next方法
+    // function* foo() {
+    //     yield 1;
+    //     yield 2;
+    //     yield 3;
+    //     // yield false;
+    //     yield 4;
+    //     yield 10;
+    //     return false;
+    // }
+    //一旦next方法的返回对象的done属性为true，for...of循环就会中止，
+    // 且不包含该返回对象，
+    // 所以上面代码的return语句返回的6，不包括在for...of循环之中。
+
+    // for (let v of foo()) {
+    //     if ( v > 3 ) {
+    //         console.log('return ?',v);
+    //         break;
+    //     }
+    //     console.log(v);
+    // }
+
+    // generator 函数配合for...of实现斐波那契数列
+    // function* fibonacci() {
+    //     let [prev, curr] = [0, 1];
+    //
+    //     for (; ;) { // 无限循环
+    //         [prev, curr] = [curr, prev + curr];
+    //         console.log('上一个值prev', prev);
+    //         console.log('计算后一个值curr', (prev / curr));
+    //         yield curr;
+    //     }
+    // }
+    //
+    // let fibonacciResult = fibonacci();
+    // for (let n of fibonacciResult) {
+    //     console.log('结果', n);
+    //     console.log('-----------');
+    //     if (n >= 1000) {
+    //         break;
+    //     }
+    // }
+
+    // function getFibonacciN(An) {
+    //     let denominatorCalculate = 1 / An;
+    //     let power = Math.pow(denominatorCalculate, 4);
+    //     return (power / 5);
+    // }
+    //
+    // function makeFibonacci(n) {
+    //     let sqrtFive = Math.sqrt(5);
+    //     console.log('sqrtFive', sqrtFive);
+    //     let halfSqrtFive = sqrtFive / 2;
+    //     console.log('halfSqrtFive', halfSqrtFive);
+    //     let firstCalculate = n * (1 + halfSqrtFive);
+    //     console.log('firstCalculate', firstCalculate);
+    //     let secondCalculate = n * (1 - halfSqrtFive);
+    //     console.log('secondCalculate', secondCalculate);
+    //     let notSqrtDenominator = firstCalculate - secondCalculate;
+    //     console.log('notSqrtDenominator', notSqrtDenominator);
+    //     let denominator = Math.sqrt(notSqrtDenominator);
+    //     console.log('denominator', denominator);
+    //     return (1 / denominator)
+    // }
+    //
+    // let An = getFibonacciN(1);
+    // let result = makeFibonacci(An);
+    // console.log('结果', result);
+
+
+    // 利用for ... of循环,可以写出遍历任意对象(object)的方法.
+    // 原生的javascript对象没有遍历接口,无法使用for...of循环,
+    // 通过Generator函数为它加上这个接口,便可以遍历
+    // function* objectEntries(obj) {
+    //     let propKeys = Reflect.ownKeys(obj);
+    //     for(let propKey of propKeys){
+    //         yield [propKey,obj[propKey]];
+    //     }
+    // }
+    // let jane = {first:'Jane',last:'Doe'};
+    // for (let [key,value] of objectEntries(jane)){
+    //     console.log(`${key}:${value}`);
+    // }
+
+    // 将Generator函数加到对象的Symbol.iterator属性上
+    // function* objEntries() {
+    //     let propKeys = Object.keys(this);
+    //     for(let propKey of propKeys){
+    //         yield [propKey,this[propKey]]
+    //     }
+    // }
+    // let jane = {first :'123',last:'213'};
+    // jane[Symbol.iterator] = objEntries;
+    //
+    // for(let [key ,value] of jane){
+    //     console.log(key,value);
+    //     let template = `${key}`;
+    //     console.log('template',typeof template,template);
+    //     console.log(typeof key,typeof value);
+    // }
+
+    // 扩展运算符(...)、解构赋值和Array.from方法内部调用都是遍历器接口
+    // ,这个意味着它们都可以将Generator函数返回的Iterator对象作为参数
+
+    // function* number() {
+    //     yield 1;
+    //     yield 3;
+    //     yield 7;
+    //     return 5;
+    //     yield 9;
+    // }
+    // // 扩展运算符
+    // let result = [...number()];
+    // console.log('...result',result);
+    // // 解构赋值
+    // let [x,y] = number();
+    // console.log('x,y',x,y);
+    // // Array.from
+    // let ArrayFrom = Array.from(number());
+    // console.log('ArrayFrom',ArrayFrom)
+    // // for...of
+    // for (let n of number()){
+    //     console.log(n)
+    // }
+
+    // 4.Generator.prototype.throw()
+    // Generator 函数返回的遍历器对象,都有一个throw方法,可以在函数体外抛出错误
+    // 然后在Generator函数体内捕获
+    // let g = function* () {
+    //     try {
+    //         yield 45;
+    //         yield 456;
+    //     } catch (e) {
+    //         console.error('内部捕获', e);
+    //     }
+    // };
+    // let i = g();
+    // i.next();
+    // try {
+    //     // 第一次抛出错误会被Generator函数体内捕获
+    //     // 第二次抛出错误,由于Generator函数内部的catch语句已经执行过了
+    //     // 就不会再捕捉这个错误所以这个错误就被抛出Generator函数体
+    //     // 被函数体外的catch捕获
+    //     i.throw('第一个错误');
+    //     i.throw('第二个错误');
+    // } catch (e) {
+    //     console.error('这是在外部捕获的错误',e);
+    // }
+
+    // throw方法可以接受一个参数,该参数会被catch语句接收,最好是抛出Error对象的实例
+    // let g = function* () {
+    //     try {
+    //         yield 45;
+    //         yield 456;
+    //     } catch (e) {
+    //         console.error('内部捕获', e);
+    //     }
+    // };
+    // let i = g();
+    // i.next();
+    // i.throw(new Error('给个错误给你'))
+
+    // 注意,不要混淆遍历器对象的throw方法和全局的throw命令
+    // 上面代码错误,是用遍历器对象的throw方法抛出的,而不是throw命令抛出的
+    // 全局的throw只能被函数体外的catch语句捕获
+    // let g = function* () {
+    //     while (true) {
+    //         try {
+    //             yield ;
+    //         } catch (e) {
+    //             if(e !== 'a'){
+    //                 throw e;
+    //             }
+    //             console.log('内部捕获',e)
+    //         }
+    //     }
+    // }
+    // let i = g();
+    // i.next();
+    // try{
+    //     // throw new Error('a');// 这里不会,如果这里先执行,后面就不再执行
+    //     i.throw('a'); // 这里会被捕获到函数体内
+    //     // i.throw('b');
+    //     throw new Error('a');// 这里不会,如果这里后执行,前面会抛出错误到函数体内
+    //     throw new Error('b')
+    // }catch(e){
+    //     console.log('外部捕获',e)
+    // }
+
+    
+
+
 
 
     // function timeCount() {
@@ -5500,7 +5729,7 @@ $(function () {
     //     let timeCountStr = dayStr + hourStr + minStr + secondStr;
     //     $('.time-count').html(timeCountStr)
     // }
-
+    //
     // setInterval(timeCount, 100);
 
 
