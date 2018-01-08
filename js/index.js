@@ -5889,20 +5889,109 @@ $(function () {
     // next(1) 相当于将yield表达式替换成一个值1。
     // 如果next方法没有传入参数,那么就替换为undefined
     // const g = function* (x, y) {
-    //     let result = yield x+y;
+    //     let result = yield x + y;
     //     return result;
     // };
-    // const gen = g(1,2);
+    // const gen = g(1, 2);
     // console.log(gen);
+    // let result = gen.next();// Object {value: 3, done: false}
+    // console.log(result);
+    // result = gen.next(5); // Object {value: 1, done: true}
+    // console.log(result);
+    // 相当于将 let result = yield x + y;
+    // 替换为let result = 5;
+
+    // throw() 是将yield 表达式替换成一个throw 语句
+    // gen.throw(new Error('错误'))
+
+    // return() 是将yield 表达式替换为一个return 语句
+    // let result = gen.return(2);
+    // console.log('result',result);
+    //
+    // console.log(gen.next(456))
+
+    // 7. yield* 表达式
+    // 如果在generator 函数内部,调用另一个Generator函数,默认情况下是没有效果的
+
+    // function* foo() {
+    //     console.log('不会进来');
+    //     yield 'a';
+    //     yield 'b';
+    // }
+    //
+    // function* bar() {
+    //     yield 'x';
+    //     foo();
+    //     yield 1;
+    // }
+    //
+    // for (let it of bar()) {
+    //     console.log(it);
+    // }
+
+    // yield* 表达式,用来在一个 Generator函数里面执行另一个Generator函数
+    // function* foo() {
+    //     yield '1';
+    //     yield '2';
+    // }
+    //
+    // function* bar() {
+    //     yield 'a';
+    //     yield *foo();
+    //     yield 'b';
+    // }
+    // for(let it of bar()){
+    //     console.log(it)
+    // }
+    // // 等同于
+    // function* bar() {
+    //     yield 'a';
+    //     for(let it of foo()){
+    //         yield it
+    //     }
+    //     yield 'b'
+    // }
+
+    // function* inner() {
+    //     yield 'hello!';
+    // }
+    // function* outer() {
+    //     yield 'open';
+    //     yield inner();
+    //     yield 'close';
+    // }
+    // let gen = outer();
     // let result = gen.next();
-    // console.log(result);
-    // result = gen.next(1);
-    // console.log(result);
+    // console.log('result1',result);
+    // // result = gen.next(); // value 是一个遍历器对象
+    // result = gen.next().value.next();
+    // console.log('result1',result);
+    // result = gen.next();
+    // console.log('result1',result);
+    //
+    //
+    // console.log('-------------');
+    //
+    // function* outer2() {
+    //     yield 'open2';
+    //     yield *inner(); // 直接遍历返回的遍历器
+    //     yield 'close2'
+    // }
+    // let gen2 = outer2();
+    // result = gen2.next();
+    // console.log('result2',result);
+    // result = gen2.next();
+    // console.log('result2',result);
+    // result = gen2.next();
+    // console.log('result2',result);
 
+    // 在yield表达式后面加上星号，表明它返回的是一个遍历器对象。这被称为yield*表达式。
 
-
-
-
+    // 写到delegatedIterator 
+    let delegatedIterator = (function *() {
+        yield 'hello';
+        yield 'bye'
+    })()
 
 
 
