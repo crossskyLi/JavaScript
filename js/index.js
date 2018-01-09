@@ -5987,21 +5987,342 @@ $(function () {
 
     // 在yield表达式后面加上星号，表明它返回的是一个遍历器对象。这被称为yield*表达式。
 
-    // 写到delegatedIterator 
-    let delegatedIterator = (function *() {
-        yield 'hello';
-        yield 'bye'
-    })()
+    // 写到delegatedIterator
+    // let delegatedIterator = (
+    //     function* () {
+    //         yield 'hello';
+    //         yield 'bye'
+    //     }()
+    // );
+    //
+    // let delegatingIterator = (
+    //     function* () {
+    //         yield 'Greetings';
+    //         yield* delegatedIterator;
+    //         yield '结束'
+    //     }()
+    // );
+    // for (let value of delegatingIterator) {
+    //     console.log(value)
+    // }
+    // delegatingIterator 是代理者,delegatedIterator 是被代理者
+    // 由于yield* delegatedIterator语句得到的值,是一个遍历器,所以要用星号表示
+    // 运行结果就是使用一个遍历器,遍历了多个Generator函数,递归的效果
 
+    // yield*后面的Generator函数(没有return语句时),
+    // 等同于在Generator函数内部部署了一个for...of 循环
+    //
+    // function* concat(iter1, iter2) {
+    //     yield* iter1;
+    //     yield* iter2;
+    // }
+    //
+    // // 等同于
+    // function* concat(iter1, iter2) {
+    //     for (let value of iter1) {
+    //         yield value;
+    //     }
+    //     for (let value of iter2) {
+    //         yield value;
+    //     }
+    // }
 
+    // yield* 后面的Generator函数(没有return语句时候)
+    // ,不过是for...of的简写形式
+    // 在有return语句的时候则需要用
+    // let value = yield* iterator 的形式获取return语句的值
 
+    // 如果yield*后面跟着一个数组,
+    // 由于数组原生就支持遍历器,因此会遍历数组成员
 
+    // 这里的yield命令如果不加 * 返回的会是整个数组,
+    // 加了 * 表示返回的是数组的遍历器对象。
+    // function* gen() {
+    //     yield * ['1','2',415]
+    // }
+    // for(let result of gen()){
+    //     console.log(result);
+    // }
 
+    // 任何数据结构,只要有iterator接口,就可以被 yield* 遍历
+    // let read = (function* () {
+    //     yield 'hello';
+    //     yield* 'hello world'
+    // })();
+    // for (let result of read) {
+    //     console.log('遍历字符串',result)
+    // }
 
+    // 如果被代理的Generator函数有return 语句,
+    // 那么就可以向代理它的Generator函数返回数据
+    // function* foo() {
+    //     yield 2;
+    //     yield 3;
+    //     return 'foo result';
+    // }
+    // function* bar() {
+    //     yield 1;
+    //     let v = yield *foo();
+    //     yield* v;
+    //     yield 4;
+    // }
+    // let result = bar();
+    // for(let value of result){
+    //     console.log(value);
+    // }
 
+    // function* genFuncWidthReturn() {
+    //     yield 'a';
+    //     yield 'v';
+    //     return 'result'
+    // }
+    //
+    // function* logReturn(genObj) {
+    //     let result = yield* genObj;
+    //     console.log('被代理的返回值',result)
+    // }
+    // let result = [...logReturn(genFuncWidthReturn())];
+    // console.log('扩展运算符解构的值', result )
+    //
 
+    // yield* 命令可以很方便的取出嵌套数组的所有成员
+    // function* itertree(tree) {
+    //     if (Array.isArray(tree)) {
+    //         for (let i = 0; i < tree.length; i++) {
+    //             yield* itertree(tree[i])
+    //         }
+    //     } else {
+    //         yield tree;
+    //     }
+    // }
+    //
+    // const tree = ['a', ['b', 'c', ['b', 'c']], ['d', 'e']];
+    // let resultArr = [];
+    // for (let x of itertree(tree)) {
+    //     resultArr.push(x);
+    // }
+    // console.log('resultArr', resultArr)
 
+    // 使用yield* 语句 遍历完全二叉树
+    // 二叉树的构造函数
+    // 三个参数分别是左树,当前节点,和右树
+    // function Tree(left, label, right) {
+    //     this.left = left;
+    //     this.label = label;
+    //     this.right = right;
+    //     console.log(this);
+    // }
+    //
+    // // 中序 (in order)遍历函数
+    // // 由于返回的是一个遍历器,所以要用Generator函数
+    // // 函数体内采用递归算法,所有左树 和右树要用yield*遍历
+    // function* inorder(t) {
+    //     if (t) {
+    //         yield* inorder(t.left);
+    //         yield t.label;
+    //         yield* inorder(t.right);
+    //     }
+    // }
+    //
+    // // 生成二叉树
+    // function make(arr) {
+    //     if (arr.length === 1) {
+    //         return new Tree(null, arr[0], null)
+    //     }
+    //     return new Tree(make(arr[0]), arr[1], make(arr[2]));
+    // }
+    //
+    // let arr = [
+    //     [
+    //         [[2],'a',[1]], 'b', ['c']
+    //     ],
+    //     'd',
+    //     [
+    //         ['e'], 'f', ['g']
+    //     ]
+    // ];
+    // // let arr = [[['a']],'b'];
+    // let tree = make(arr);
+    //
+    // let result = [];
+    // for (let node of inorder(tree)) {
+    //     result.push(node)
+    // }
+    // console.log(result);
 
+    // 生成一个有十个随机数字的数组
+    function makeRandomArr() {
+        let arr = [];
+        let random = 0;
+        let fixedNum = 0;
+        for (let i = 0; i < 10; i++) {
+            random = 10*Math.random();
+            fixedNum =  parseInt(random)+1;
+            arr.push(fixedNum)
+        }
+        return arr;
+    }
+
+    // 快速排序
+    let times = 0;
+
+    function quickSort(arr) {
+        if (arr.length <= 1) {
+            return arr;
+        }
+        let pivotIndex = Math.floor(arr.length / 2);
+        let pivot = arr.splice(pivotIndex, 1)[0];
+        let left = [];
+        let right = [];
+        for (let i = 0; i < arr.length; i++) {
+            times++;
+            if (arr[i] < pivot) {
+                left.push(arr[i]);
+            } else {
+                right.push(arr[i]);
+            }
+        }
+        return quickSort(left).concat([pivot], quickSort(right));
+    }
+
+    let arr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]; // 最不理想排序数组 -- 次数19次
+    // let arr = [3, 7, 8, 5, 2, 1, 9, 5, 4];  // 定值的但无序的, 21次
+    console.time('阮-Time');
+    // let arr = makeRandomArr(); // 随机数字数组
+    let result = quickSort(arr);
+    console.log('阮-运算次数', times);
+    console.log('阮-运算结果', result);
+    console.timeEnd('阮-Time'); // 阮,时间 3-5ms
+
+    // // 我的冒泡排序
+    // function bubbleSort(arr) {
+    //     let result = arr.slice(0);
+    //     let length = result.length;
+    //     let times = 0;
+    //     for (let i = 0; i < length; i++) {
+    //         let nextLength = length - i;
+    //         let j = 1;
+    //         while (j < nextLength) {
+    //             let first = result[j - 1];
+    //             let second = result[j];
+    //             if (first > second) {
+    //                 result[j] = first;
+    //                 result[j - 1] = second;
+    //             }
+    //             times++;
+    //             j++;
+    //         }
+    //         // for (let j = 1; j < nextLength; j++) {
+    //         //     let first = result[j - 1];
+    //         //     let second = result[j];
+    //         //     times++;
+    //         //     if (first > second) {
+    //         //         result[j] = first;
+    //         //         result[j - 1] = second;
+    //         //     }
+    //         // }
+    //     }
+    //     console.log('我的排序', times);
+    //     return result
+    // }
+    //
+    // // 插入排序
+    // function insertSort(arr) {
+    //     let length = arr.length, i, j, tmp, result;
+    //     let times = 0;
+    //     result = arr.slice(0);// 设置数组副本
+    //     for (i = 1; i < length; i++) {
+    //         tmp = result[i];
+    //         j = i - 1;
+    //         while (j >= 0 && tmp < result[j]) {
+    //             result[j + 1] = result[j];
+    //             j--;
+    //             times++;
+    //         }
+    //         result[j + 1] = tmp;
+    //     }
+    //     console.log('插入排序', times);
+    //     return result;
+    // }
+    //
+    // let arr = [12, 19, 82, 71, 26, 15, 34, 23, 12, 10];
+    // let result = bubbleSort(arr);
+    // console.log(result);
+    // result = insertSort(arr);
+    // console.log(result)
+    //
+    // let arr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+    // let result = insertSort(arr);
+    // console.log(result)
+    // wiki 快速排序
+    let wikiTimes = 0;
+    function wikiQuickSort(array) {
+
+        // 交换元素位置
+        function swap(array, i, k) {
+            let temp = array[i];
+            array[i] = array[k];
+            array[k] = temp;
+        }
+
+        // 数组分区，左小右大
+        function partition(array, left, right) { // 遍历 (数组长度减一) 次
+            let storeIndex = left;
+            let pivot = array[right]; // 直接选最右边的元素为基准元素
+            for (let i = left; i < right; i++) {
+                wikiTimes++; // 运算次数计算
+                if (array[i] < pivot) {
+                    swap(array, storeIndex, i);
+                    storeIndex++; // 交换位置后，storeIndex 自增 1，代表下一个可能要交换的位置
+                }
+            }
+            swap(array, right, storeIndex); // 将基准元素放置到最后的正确位置上
+            // console.log('分区完成', storeIndex, array);
+            return storeIndex;
+        }
+
+        // 排序递归
+        function sort(array, left, right) {
+            if (left >= right) {
+                return;
+            }
+            let storeIndex = partition(array, left, right);
+            sort(array, left, storeIndex - 1);
+            sort(array, storeIndex + 1, right);
+        }
+
+        sort(array, 0, array.length - 1);
+
+        return array;
+    }
+
+    let wikiArr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]; // 45次 ,最不理想排序数组 -- 次数
+    // let wikiArr = [3, 7, 8, 5, 2, 1, 9, 5, 4]; // 随机的数字, 19次
+    console.time('wikiTime');
+    // let wikiArr = makeRandomArr(); // 随机数字数组
+    let wikiResult = wikiQuickSort(wikiArr);
+    console.log('wiki运算次数', wikiTimes);
+    console.log('wiki运算结果', wikiResult);
+    console.timeEnd('wikiTime');//wiki,时间 0-1.5ms 采用wiki
+
+    // let intervalTime = 0;
+    // console.time('test');
+    // let timer = setInterval(function () {
+    //     let arr = makeRandomArr(); // 随机数字数组
+    //     let result = quickSort(arr);
+    //
+    //     let wikiArr = makeRandomArr(); // 随机数字数组
+    //     let wikiResult = wikiQuickSort(wikiArr);
+    //     intervalTime++;
+    //     if( intervalTime > 10){
+    //         console.log('阮-运算次数', times);
+    //         console.log('阮-运算结果', result);
+    //         console.log('wiki运算次数', wikiTimes);
+    //         console.log('wiki运算结果', wikiResult);
+    //         console.timeEnd('test');
+    //         clearInterval(timer);
+    //     }
+    // },100)
     // function timeCount() {
     //     let nowTime = new Date();
     //     let yearTime = new Date('2018-02-15').setHours(0);
