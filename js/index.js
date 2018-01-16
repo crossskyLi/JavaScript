@@ -6103,14 +6103,13 @@ $(function () {
     // }
     // console.log('resultArr', resultArr)
 
-    // 使用yield* 语句 遍历完全二叉树
-    // 二叉树的构造函数
-    // 三个参数分别是左树,当前节点,和右树
+    // // 使用yield* 语句 遍历完全二叉树
+    // // 二叉树的构造函数
+    // // 三个参数分别是左树,当前节点,和右树
     // function Tree(left, label, right) {
     //     this.left = left;
     //     this.label = label;
     //     this.right = right;
-    //     console.log(this);
     // }
     //
     // // 中序 (in order)遍历函数
@@ -6143,7 +6142,7 @@ $(function () {
     // ];
     // // let arr = [[['a']],'b'];
     // let tree = make(arr);
-    //
+    // console.log('tree',tree)
     // let result = [];
     // for (let node of inorder(tree)) {
     //     result.push(node)
@@ -6151,159 +6150,159 @@ $(function () {
     // console.log(result);
 
     // 生成一个有十个随机数字的数组
-    function makeRandomArr() {
-        let arr = [];
-        let random = 0;
-        let fixedNum = 0;
-        for (let i = 0; i < 10; i++) {
-            random = 10*Math.random();
-            fixedNum =  parseInt(random)+1;
-            arr.push(fixedNum)
-        }
-        return arr;
-    }
-
-    // 快速排序
-    let times = 0;
-
-    function quickSort(arr) {
-        if (arr.length <= 1) {
-            return arr;
-        }
-        let pivotIndex = Math.floor(arr.length / 2);
-        let pivot = arr.splice(pivotIndex, 1)[0];
-        let left = [];
-        let right = [];
-        for (let i = 0; i < arr.length; i++) {
-            times++;
-            if (arr[i] < pivot) {
-                left.push(arr[i]);
-            } else {
-                right.push(arr[i]);
-            }
-        }
-        return quickSort(left).concat([pivot], quickSort(right));
-    }
-
-    let arr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]; // 最不理想排序数组 -- 次数19次
-    // let arr = [3, 7, 8, 5, 2, 1, 9, 5, 4];  // 定值的但无序的, 21次
-    console.time('阮-Time');
-    // let arr = makeRandomArr(); // 随机数字数组
-    let result = quickSort(arr);
-    console.log('阮-运算次数', times);
-    console.log('阮-运算结果', result);
-    console.timeEnd('阮-Time'); // 阮,时间 3-5ms
-
-    // // 我的冒泡排序
-    // function bubbleSort(arr) {
-    //     let result = arr.slice(0);
-    //     let length = result.length;
-    //     let times = 0;
-    //     for (let i = 0; i < length; i++) {
-    //         let nextLength = length - i;
-    //         let j = 1;
-    //         while (j < nextLength) {
-    //             let first = result[j - 1];
-    //             let second = result[j];
-    //             if (first > second) {
-    //                 result[j] = first;
-    //                 result[j - 1] = second;
+    // function makeRandomArr() {
+    //     let arr = [];
+    //     let random = 0;
+    //     let fixedNum = 0;
+    //     for (let i = 0; i < 10; i++) {
+    //         random = 10*Math.random();
+    //         fixedNum =  parseInt(random)+1;
+    //         arr.push(fixedNum)
+    //     }
+    //     return arr;
+    // }
+    //
+    // // 快速排序
+    // let times = 0;
+    //
+    // function quickSort(arr) {
+    //     if (arr.length <= 1) {
+    //         return arr;
+    //     }
+    //     let pivotIndex = Math.floor(arr.length / 2);
+    //     let pivot = arr.splice(pivotIndex, 1)[0];
+    //     let left = [];
+    //     let right = [];
+    //     for (let i = 0; i < arr.length; i++) {
+    //         times++;
+    //         if (arr[i] < pivot) {
+    //             left.push(arr[i]);
+    //         } else {
+    //             right.push(arr[i]);
+    //         }
+    //     }
+    //     return quickSort(left).concat([pivot], quickSort(right));
+    // }
+    //
+    // let arr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]; // 最不理想排序数组 -- 次数19次
+    // // let arr = [3, 7, 8, 5, 2, 1, 9, 5, 4];  // 定值的但无序的, 21次
+    // console.time('阮-Time');
+    // // let arr = makeRandomArr(); // 随机数字数组
+    // let result = quickSort(arr);
+    // console.log('阮-运算次数', times);
+    // console.log('阮-运算结果', result);
+    // console.timeEnd('阮-Time'); // 阮,时间 3-5ms
+    //
+    // // // 我的冒泡排序
+    // // function bubbleSort(arr) {
+    // //     let result = arr.slice(0);
+    // //     let length = result.length;
+    // //     let times = 0;
+    // //     for (let i = 0; i < length; i++) {
+    // //         let nextLength = length - i;
+    // //         let j = 1;
+    // //         while (j < nextLength) {
+    // //             let first = result[j - 1];
+    // //             let second = result[j];
+    // //             if (first > second) {
+    // //                 result[j] = first;
+    // //                 result[j - 1] = second;
+    // //             }
+    // //             times++;
+    // //             j++;
+    // //         }
+    // //         // for (let j = 1; j < nextLength; j++) {
+    // //         //     let first = result[j - 1];
+    // //         //     let second = result[j];
+    // //         //     times++;
+    // //         //     if (first > second) {
+    // //         //         result[j] = first;
+    // //         //         result[j - 1] = second;
+    // //         //     }
+    // //         // }
+    // //     }
+    // //     console.log('我的排序', times);
+    // //     return result
+    // // }
+    // //
+    // // // 插入排序
+    // // function insertSort(arr) {
+    // //     let length = arr.length, i, j, tmp, result;
+    // //     let times = 0;
+    // //     result = arr.slice(0);// 设置数组副本
+    // //     for (i = 1; i < length; i++) {
+    // //         tmp = result[i];
+    // //         j = i - 1;
+    // //         while (j >= 0 && tmp < result[j]) {
+    // //             result[j + 1] = result[j];
+    // //             j--;
+    // //             times++;
+    // //         }
+    // //         result[j + 1] = tmp;
+    // //     }
+    // //     console.log('插入排序', times);
+    // //     return result;
+    // // }
+    // //
+    // // let arr = [12, 19, 82, 71, 26, 15, 34, 23, 12, 10];
+    // // let result = bubbleSort(arr);
+    // // console.log(result);
+    // // result = insertSort(arr);
+    // // console.log(result)
+    // //
+    // // let arr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+    // // let result = insertSort(arr);
+    // // console.log(result)
+    // // wiki 快速排序
+    // let wikiTimes = 0;
+    // function wikiQuickSort(array) {
+    //
+    //     // 交换元素位置
+    //     function swap(array, i, k) {
+    //         let temp = array[i];
+    //         array[i] = array[k];
+    //         array[k] = temp;
+    //     }
+    //
+    //     // 数组分区，左小右大
+    //     function partition(array, left, right) { // 遍历 (数组长度减一) 次
+    //         let storeIndex = left;
+    //         let pivot = array[right]; // 直接选最右边的元素为基准元素
+    //         for (let i = left; i < right; i++) {
+    //             wikiTimes++; // 运算次数计算
+    //             if (array[i] < pivot) {
+    //                 swap(array, storeIndex, i);
+    //                 storeIndex++; // 交换位置后，storeIndex 自增 1，代表下一个可能要交换的位置
     //             }
-    //             times++;
-    //             j++;
     //         }
-    //         // for (let j = 1; j < nextLength; j++) {
-    //         //     let first = result[j - 1];
-    //         //     let second = result[j];
-    //         //     times++;
-    //         //     if (first > second) {
-    //         //         result[j] = first;
-    //         //         result[j - 1] = second;
-    //         //     }
-    //         // }
+    //         swap(array, right, storeIndex); // 将基准元素放置到最后的正确位置上
+    //         // console.log('分区完成', storeIndex, array);
+    //         return storeIndex;
     //     }
-    //     console.log('我的排序', times);
-    //     return result
+    //
+    //     // 排序递归
+    //     function sort(array, left, right) {
+    //         if (left >= right) {
+    //             return;
+    //         }
+    //         let storeIndex = partition(array, left, right);
+    //         sort(array, left, storeIndex - 1);
+    //         sort(array, storeIndex + 1, right);
+    //     }
+    //
+    //     sort(array, 0, array.length - 1);
+    //
+    //     return array;
     // }
     //
-    // // 插入排序
-    // function insertSort(arr) {
-    //     let length = arr.length, i, j, tmp, result;
-    //     let times = 0;
-    //     result = arr.slice(0);// 设置数组副本
-    //     for (i = 1; i < length; i++) {
-    //         tmp = result[i];
-    //         j = i - 1;
-    //         while (j >= 0 && tmp < result[j]) {
-    //             result[j + 1] = result[j];
-    //             j--;
-    //             times++;
-    //         }
-    //         result[j + 1] = tmp;
-    //     }
-    //     console.log('插入排序', times);
-    //     return result;
-    // }
-    //
-    // let arr = [12, 19, 82, 71, 26, 15, 34, 23, 12, 10];
-    // let result = bubbleSort(arr);
-    // console.log(result);
-    // result = insertSort(arr);
-    // console.log(result)
-    //
-    // let arr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-    // let result = insertSort(arr);
-    // console.log(result)
-    // wiki 快速排序
-    let wikiTimes = 0;
-    function wikiQuickSort(array) {
-
-        // 交换元素位置
-        function swap(array, i, k) {
-            let temp = array[i];
-            array[i] = array[k];
-            array[k] = temp;
-        }
-
-        // 数组分区，左小右大
-        function partition(array, left, right) { // 遍历 (数组长度减一) 次
-            let storeIndex = left;
-            let pivot = array[right]; // 直接选最右边的元素为基准元素
-            for (let i = left; i < right; i++) {
-                wikiTimes++; // 运算次数计算
-                if (array[i] < pivot) {
-                    swap(array, storeIndex, i);
-                    storeIndex++; // 交换位置后，storeIndex 自增 1，代表下一个可能要交换的位置
-                }
-            }
-            swap(array, right, storeIndex); // 将基准元素放置到最后的正确位置上
-            // console.log('分区完成', storeIndex, array);
-            return storeIndex;
-        }
-
-        // 排序递归
-        function sort(array, left, right) {
-            if (left >= right) {
-                return;
-            }
-            let storeIndex = partition(array, left, right);
-            sort(array, left, storeIndex - 1);
-            sort(array, storeIndex + 1, right);
-        }
-
-        sort(array, 0, array.length - 1);
-
-        return array;
-    }
-
-    let wikiArr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]; // 45次 ,最不理想排序数组 -- 次数
-    // let wikiArr = [3, 7, 8, 5, 2, 1, 9, 5, 4]; // 随机的数字, 19次
-    console.time('wikiTime');
-    // let wikiArr = makeRandomArr(); // 随机数字数组
-    let wikiResult = wikiQuickSort(wikiArr);
-    console.log('wiki运算次数', wikiTimes);
-    console.log('wiki运算结果', wikiResult);
-    console.timeEnd('wikiTime');//wiki,时间 0-1.5ms 采用wiki
+    // let wikiArr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]; // 45次 ,最不理想排序数组 -- 次数
+    // // let wikiArr = [3, 7, 8, 5, 2, 1, 9, 5, 4]; // 随机的数字, 19次
+    // console.time('wikiTime');
+    // // let wikiArr = makeRandomArr(); // 随机数字数组
+    // let wikiResult = wikiQuickSort(wikiArr);
+    // console.log('wiki运算次数', wikiTimes);
+    // console.log('wiki运算结果', wikiResult);
+    // console.timeEnd('wikiTime');//wiki,时间 0-1.5ms 采用wiki
 
     // let intervalTime = 0;
     // console.time('test');
@@ -6323,9 +6322,211 @@ $(function () {
     //         clearInterval(timer);
     //     }
     // },100)
+
+
+    // 作为对象属性的Generator函数
+    // 如果一个对象的属性是Generator函数,简写
+    // let obj = {
+    //     *myGeneratorMethod(){
+    //         yield 1
+    //     }
+    // }
+    // console.log(obj)
+    // console.log(obj.myGeneratorMethod);
+    // let result = obj.myGeneratorMethod();
+    // let next = result.next();
+    // console.log(result);
+    // console.log(next);
+    // next = result.next();
+    // console.log(next);
+
+    // 9. Generator 函数的this
+    // Generator函数总是返回一个遍历器,es6规定这个遍历器是Generator函数的实例
+    // 也继承了Generator函数的prototype对象上的方法
+    // function* g() {
+    //
+    // }
+    // g.prototype.hello= function () {
+    //     return 1;
+    // };
+    // let obj = g();
+    // console.log(obj instanceof g);
+    // let result = obj.hello();
+    // console.log(result)
+
+    // Generator函数g返回的遍历器obj,是g的实例,而且继承了g.prototype
+    // 但是如果把g作为普通的构造函数,并不会生效,因为g返回的总是遍历器对象
+    // 而是不是this对象
+    // function* g() {
+    //     this.a = 111;
+    // }
+    // let obj = g();
+    // console.log(obj.constructor)
+    // console.log(obj.a)
+
+    // Generator函数不能跟new命令一起用,会报错
+    // function* func() {
+    //     yield this.x = 1;
+    // }
+    // new func();// 报错
+    // func不是构造函数,所以报错
+    //
+
+    //让Generator函数返回一个正常的对象实例
+    // 生成一个空对象,使用call方法绑定Generator函数内部的this
+    // 函数调用后,空对象就是Generator函数的实例对象
+    // function* fun() {
+    //     this.a = 1;
+    //     yield this.b = 2;
+    //     yield this.c = 2;
+    // }
+    // let obj = {};
+    // let f = fun.call(obj);
+    // console.log(f.next());
+    // console.log(f.next());
+    // console.log(f.next());
+    // console.log(obj)
+
+    // 将obj 换成fun.prototype
+    // function* fun() {
+    //     this.a = 1;
+    //     yield this.b = 2;
+    //     yield this.c = 3;
+    // }
+    // let f = fun.call(fun.prototype);
+    // console.log(f.next())
+    // console.log(f.next())
+    // console.log(f.next())
+    // console.log(f);
+    // console.log(f.a)
+    // console.log(f.b)
+    // console.log(f.c)
+    // for(let key in f){
+    //     console.log(key,f[key])
+    // }
+
+    // 再将fun改成构造函数就可以执行new命令
+    // function* gen() {
+    //     this.a = 1
+    //     yield this.b = 2;
+    //     yield this.c = 3;
+    // }
+    // function F() {
+    //     return gen.call(gen.prototype)
+    // }
+    // let f = new F();
+    // console.log(f.next())
+    // console.log(f.next())
+    // console.log(f.next())
+    // console.log(f.next())
+    // for(let key in f){
+    //     console.log(key,f[key])
+    // }
+
+    //10 含义
+    // Generator与状态机,
+    // Generator是实现状态机的最佳结构,
+    // let ticking = true;
+    // let clock = function () {
+    //     if(ticking){
+    //         console.log('1')
+    //     }else{
+    //         console.log(2)
+    //     }
+    //     ticking =!ticking;
+    // }
+    // Generator 实现
+    // let clock = function *() {
+    //     while (true){
+    //         console.log('1');
+    //         yield ;
+    //         console.log('2');
+    //         yield ;
+    //     }
+    // };
+    // let result = clock();
+    // setInterval(function () {
+    //     result.next()
+    // },100)
+
+    // Generator 与协程
+    // 协作的线程
+    // (1) 协程与子例程的诧异
+    // 传统的 '子例程'(subroutine) 采用堆栈式 '先进后出'执行方式
+    // 只有当调用的子函数完全执行完毕,才会结束执行父函数
+    // 协程与其不同,多个线程(单线程情况下,即多个函数)
+    // 可以并行执行,但是只有一个线程处于正在运行的状态,
+    // 其他线程(或函数)都处于暂停态(suspended)
+    // 线程(或者函数)之间可以交换执行权,
+    // 也就是说一个线程可以执行到一半就暂停执行,将执行权交给另一个线程
+    // 等到稍后收回执行权的时候,在恢复执行,这种并行执行,交换执行权的线程
+    // 称之为协程
+    // 从实现上看,在内存中子例程只是用一个栈,
+    // 而协程是同时存在多个栈,但只有一个栈是在运行状态
+    // 协程是以多占用内存为代价,实现多任务并行
+
+    // (2)协程与普通线程的差异
+    // 协程适合用于多任务运行的环境,
+    // 在这个意义上,它与普通的线程很相似
+    // 都有自己的执行上下文,可以分享全局变量
+    // 不同在于,同一时间可以有多个线程处于运行状态
+    // 但是运行的协程只能有一个,
+    // 其他的线程都处于暂停状态,
+    // 普通的线程都是抢先式的,哪个线程优先得到资源
+    // 由运行环境决定,但是协程是合作式的,执行权由协程自己分配
+
+    // 由于javascript是单线程语言,只能保持一个调用栈,
+    // 引入协程以后,每个任务可以保持自己的调用栈
+    // 好处: 在抛出错误的时候,可以找到原始的调用栈
+    // 不至于像异步操作的回调函数那样,一旦出错,原始的调用栈早就结束
+
+    // Generator 函数是ES6 对协程的实现,但属于不完全实现
+    // Generator函数被成为'半协程',意思是只有Generator函数的调用者
+    // 才能将程序的执行权还给Generator函数,
+    // 如果是完全执行的协程任何函数的都可以都可以让暂停的协程继续执行
+
+    // 如果将Generator函数当作协程,
+    // 完全可以将多个需要互相协作的任务写成Generator函数
+    // 它们之间使用yield 表示式交换控制权
+
+    // Generator 与上下文,
+    // JS 代码运行时,会产生一个全局的上下文环境(context ,又称运行环境)
+    // 包含了当前所有变量和对象。
+    // 然后执行函数(或块级代码)的时候,
+    // 又会在当前上下文环境的上层,产生一个函数运行的上下文
+    // 变成当前(active)的上下文.
+    // 由此形成一个上下文环境的堆栈(context stack)
+
+    // 这个堆栈是'后进先出'的数据结构,最后产生的上下文环境首先执行完成
+    // 退出堆栈,然后再执行完成它下层的上下文,直至所有的代码执行完成,堆栈清空
+    // Generator函数不是这样,它执行产生的上下文环境,
+    // 一旦遇到yield命令,就会暂时退出堆栈,但是并不会消失
+    // 里面的所有变量和对象会冻结在当前状态
+    // 等到对它执行next命令,这个上下文环境又会重新加入调用栈
+    // 冻结的变量和对象恢复执行
+    function* gen() {
+        yield 1;
+        return 2
+    }
+    let G = gen();
+    console.log(G.next(),G.next());
+    // 第一次执行g.next(),Generator 函数gen的上下文会加入堆栈
+    // 即开始运行gen内部的代码,等遇到yield 1时候,gen 上下文退出堆栈
+    // 内部状态冻结,第二次执行g.next时候,gen上下文重新进入堆栈,
+    // 变成当前的上下文,重新恢复执行
+
+
+
+
+
+
+
+
+
+
     // function timeCount() {
     //     let nowTime = new Date();
-    //     let yearTime = new Date('2018-02-15').setHours(0);
+    //     let yearTime = new Date('2018-02-12').setHours(0);
     //     //毫秒
     //     let mileSecond = parseInt((yearTime - nowTime) % 1000 / 100);
     //     let mileSecondStrArr = ((mileSecond) / 10).toString().split('.');
