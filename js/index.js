@@ -6192,68 +6192,46 @@ $(function () {
     // console.log('阮-运算次数', times);
     // console.log('阮-运算结果', result);
     // console.timeEnd('阮-Time'); // 阮,时间 3-5ms
+
+
+    // // 我的冒泡排序
+    // function bubbleSort(arr) {
+    //     let result = arr.slice(0);
+    //     let length = result.length;
+    //     let times = 0;
+    //     for (let i = 0; i < length; i++) {
+    //         let nextLength = length - i;
+    //         let j = 1;
+    //         while (j < nextLength) {
+    //             let first = result[j - 1];
+    //             let second = result[j];
+    //             if (first > second) {
+    //                 result[j] = first;
+    //                 result[j - 1] = second;
+    //             }
+    //         }
+    //         swap(array, right, storeIndex); // 将基准元素放置到最后的正确位置上
+    //         // console.log('分区完成', storeIndex, array);
+    //         return storeIndex;
+    //     }
     //
-    // // // 我的冒泡排序
-    // // function bubbleSort(arr) {
-    // //     let result = arr.slice(0);
-    // //     let length = result.length;
-    // //     let times = 0;
-    // //     for (let i = 0; i < length; i++) {
-    // //         let nextLength = length - i;
-    // //         let j = 1;
-    // //         while (j < nextLength) {
-    // //             let first = result[j - 1];
-    // //             let second = result[j];
-    // //             if (first > second) {
-    // //                 result[j] = first;
-    // //                 result[j - 1] = second;
-    // //             }
-    // //             times++;
-    // //             j++;
-    // //         }
-    // //         // for (let j = 1; j < nextLength; j++) {
-    // //         //     let first = result[j - 1];
-    // //         //     let second = result[j];
-    // //         //     times++;
-    // //         //     if (first > second) {
-    // //         //         result[j] = first;
-    // //         //         result[j - 1] = second;
-    // //         //     }
-    // //         // }
-    // //     }
-    // //     console.log('我的排序', times);
-    // //     return result
-    // // }
-    // //
-    // // // 插入排序
-    // // function insertSort(arr) {
-    // //     let length = arr.length, i, j, tmp, result;
-    // //     let times = 0;
-    // //     result = arr.slice(0);// 设置数组副本
-    // //     for (i = 1; i < length; i++) {
-    // //         tmp = result[i];
-    // //         j = i - 1;
-    // //         while (j >= 0 && tmp < result[j]) {
-    // //             result[j + 1] = result[j];
-    // //             j--;
-    // //             times++;
-    // //         }
-    // //         result[j + 1] = tmp;
-    // //     }
-    // //     console.log('插入排序', times);
-    // //     return result;
-    // // }
-    // //
-    // // let arr = [12, 19, 82, 71, 26, 15, 34, 23, 12, 10];
-    // // let result = bubbleSort(arr);
-    // // console.log(result);
-    // // result = insertSort(arr);
-    // // console.log(result)
-    // //
-    // // let arr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-    // // let result = insertSort(arr);
-    // // console.log(result)
-    // // wiki 快速排序
+    //     // 排序递归
+    //     function sort(array, left, right) {
+    //         if (left >= right) {
+    //             return;
+    //         }
+    //         let storeIndex = partition(array, left, right);
+    //         sort(array, left, storeIndex - 1);
+    //         sort(array, storeIndex + 1, right);
+    //     }
+    //
+    //     sort(array, 0, array.length - 1);
+    //
+
+    // let arr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+    // let result = insertSort(arr);
+    // console.log(result)
+    // wiki 快速排序
     // let wikiTimes = 0;
     // function wikiQuickSort(array) {
     //
@@ -6303,6 +6281,59 @@ $(function () {
     // console.log('wiki运算次数', wikiTimes);
     // console.log('wiki运算结果', wikiResult);
     // console.timeEnd('wikiTime');//wiki,时间 0-1.5ms 采用wiki
+
+
+
+    // 寄生组合式继承
+    // es5前
+    // function object(o) {
+    //     function f() {
+    //     }
+    //     f.prototype = o;
+    //     return new f();
+    // }
+    //
+    // function inheritPrototype(subType, superType) {
+    //     let prototype = object(superType.prototype);// 创建对象
+    //     // es5 中使用 Object.create(superType.prototype)
+    //     prototype.constructor = subType;            // 增强对象
+    //     subType.prototype = prototype;              // 指定对象
+    // }
+    //
+    // function SuperType(name) {
+    //     this.name = name;
+    //     this.colors = ['red', 'blue', 'yellow'];
+    // }
+    //
+    // SuperType.prototype.sayName = function () {
+    //     alert(this.name);
+    // };
+    //
+    // function SubType(name, age) {
+    //     SuperType.call(this, name);
+    //     this.age = age;
+    // }
+    //
+    // inheritPrototype(SubType, SuperType); // 继承到SubType
+    // SubType.prototype.sayAge = function () {
+    //     alert(this.age)
+    // }
+    // let result = new SubType('名字', 11);
+    // console.log(result)
+    // console.log('result instanceof SubType', result instanceof SubType);
+    // console.log('result instanceof SuperType', result instanceof SuperType);
+    // console.log('result instanceof Object', result instanceof Object);
+    // for (let key in result) {
+    //     console.log(key,':',result[key]);
+    //     console.log(result[key] instanceof Object);
+    //     console.log(result[key] instanceof Array);
+    //     console.log(result[key] instanceof String,typeof result[key] );
+    //     console.log('-------------')
+    // }
+    //
+    // let str = new String('34234234');
+    // console.log(str.toString)
+    // console.log(str.toString())
 
     // let intervalTime = 0;
     // console.time('test');
