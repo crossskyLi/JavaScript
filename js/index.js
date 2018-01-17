@@ -6283,7 +6283,6 @@ $(function () {
     // console.timeEnd('wikiTime');//wiki,时间 0-1.5ms 采用wiki
 
 
-
     // 寄生组合式继承
     // es5前
     // function object(o) {
@@ -6535,17 +6534,192 @@ $(function () {
     // 里面的所有变量和对象会冻结在当前状态
     // 等到对它执行next命令,这个上下文环境又会重新加入调用栈
     // 冻结的变量和对象恢复执行
-    function* gen() {
-        yield 1;
-        return 2
-    }
-    let G = gen();
-    console.log(G.next(),G.next());
+
+    // function* gen() {
+    //     yield 1;
+    //     return 2
+    // }
+    // let G = gen();
+    // console.log(G.next(),G.next());
+
     // 第一次执行g.next(),Generator 函数gen的上下文会加入堆栈
     // 即开始运行gen内部的代码,等遇到yield 1时候,gen 上下文退出堆栈
     // 内部状态冻结,第二次执行g.next时候,gen上下文重新进入堆栈,
     // 变成当前的上下文,重新恢复执行
 
+    // 应用
+    // Generator 可以暂停函数执行,返回任意表达式的值
+
+    // (1) 异步操作的同步化表达
+    // Generator 函数的暂停执行的效果,意味可以把异步操作谢谢爱yield表达式里面
+    // 等到调用next方法时候,再往后执行,这实际上等于不需要写回调函数,
+    // 异步操作的后续操作可以放在yield表达式下面,反正要等到调用next方法时再执行
+    // function* loadUI() {
+    //     showLoadingScreen();
+    //     yield loadUIDataAsync();
+    //     hideLoadingScreen();
+    // }
+    //
+    // let loader = loadUI();
+    // // 加载UI
+    // loader.next();
+    // // 卸载UI
+    // loader.next();
+    // AJAX 典型的异步操作,通过Generator函数部署Ajax操作,同步表达
+    // function* main() {
+    //     let result = yield request ('http://1111.ulr');
+    //     let res = JSON.parse(result);
+    //     console.log(res)
+    // }
+    // function request(url) {
+    //     makeAjaxCall(url,function (response) {
+    //         it.next(response);
+    //     })
+    // }
+    // let it = main();
+    // it.next();
+
+
+    // 通过Generator函数逐行读取文本文件
+    // function* numbers() {
+    //     let fileInput = $('#fileInput');
+    //     let file = new FileReader();
+    //     $(fileInput).on('change',function (e) {
+    //         let fileObj = e.target.files[0];
+    //         // file.readAsText(fileObj);
+    //         file.readAsText('./numbers.txt')
+    //     });
+    //     file.onload = function () {
+    //         console.log(file.result)
+    //     };
+    //
+    //     try{
+    //         while (!file.eof){
+    //             // yield parseInt(file.readLine('./numbers.txt'),10) // 无效
+    //         }
+    //     }finally {
+    //         // file.close()
+    //     }
+    // }
+    // let result = numbers();
+    //
+    // console.log(result.next());
+    // console.log(result.next());
+
+
+    // (2) 控制流管理
+    // 如果有一个多步操作非常耗时间,采用回调函数
+    // step1(function (value) {
+    //     step2(value,function (value1) {
+    //         step3(value1,function () {
+    //
+    //         })
+    //     })
+    // })
+
+    // 使用promise改写
+    // Promise.resolve(step1)
+    //     .then(step2)
+    //     .then(step3)
+    //     .then(step4)
+    //     .then(function (value4) {
+    //         // Do something with value4
+    //     },function (error) {
+    //         // Handle any error from step1 through step4
+    //     })
+    //     .done();
+    // // Generator 函数进一步改写
+    // function* longRun(value1) {
+    //     try {
+    //         let value2 = yield step1(value1);
+    //         let value3 = yield step2(value2);
+    //         let value4 = yield step3(value3);
+    //         let value5 = yield step4(value4);
+    //         // Do something with value4
+    //     }catch (e){
+    //         console.error(e)
+    //     }
+    // }
+    //
+    // // 接着使用一个函数,次序自动执行所有步骤
+    // function scheduler(task) {
+    //     let taskObj = task.next(task.value);
+    //     // 如果Generator函数未结束,就继续调用
+    //     if(!taskObj.done){
+    //         task.value = taskObj.value;
+    //         scheduler(task)
+    //     }
+    // }
+    // scheduler(longRun(value))
+
+    // 注意,上面代码只适合同步操作,并不适合异步,所有task必须是同步的
+    // 因为这里的代码已得到返回值,就继续往下执行,没有判断异步操作何时完成
+
+    // 利用let ... of 控制流管理
+    // let steps = [step1,step2,step3];
+    // function* iterateStep(steps) {
+    //     for(let i = 0; i<steps.length;i++){
+    //         let step = steps[i];
+    //         yield step()
+    //     }
+    // }
+    // iterateStep(steps)
+
+    // 将任务分解成步骤之后,可以将项目分解成多个一次执行的任务
+    // let jobs = [job1,job2,job3,job4]
+    // function* iterateJobs(jobs) {
+    //     for(let i = 0; i<jobs.length;i++){
+    //         let job = jobs[i];
+    //         yield *iterateStep(job.steps)
+    //     }
+    // }
+
+    // 数组jobs封装了一个项目的多个任务,Generator函数
+    // iterateJobs则是一次给这些任务添加yield*命令
+    // 最后使用for...of 循环一次性依次执行所有任务的所有步骤
+    // for(let step of iterateJobs(jobs)){
+    //     console.log(step)
+    // }
+    //上面的做法只能用于所有步骤都是同步操作的情况，不能有异步操作的步骤
+
+    // for...of的本质是一个while循环,
+    // let it = iterateJobs(jobs);
+    // let res = it.next();
+    // while(!res.done){
+    //     let result = res.value;
+    //     // ...
+    //     res = it.next()
+    // }
+
+    // (3) 部署Iterator接口
+    // 利用Generator函数可以在任意对象部署Iterator接口
+    // function* iterEntries(obj) {
+    //     let keys = Object.keys(obj);
+    //     for(let i =0; i<keys.length;i++){
+    //         let key = keys[i];
+    //         yield [key,obj[key]]
+    //     }
+    // }
+    //
+    // let myObj = { foo: 3, bar: 7 };
+    // for (let [key,value] of iterEntries(myObj)){
+    //     console.log(key,value)
+    // }
+
+    // 对数组部署Iterator 接口的例子,尽管数组原生具有这个接口。
+    function *makeSimpleGenerator(arr) {
+        let nextIndex = 0;
+        while (nextIndex < arr.length){
+            yield arr[nextIndex++];
+        }
+    }
+
+    let gen = makeSimpleGenerator(['1',2])
+    console.log(gen.next().value)
+    console.log(gen.next().value)
+    console.log(gen.next().value)
+
+    // (4) 作为数据结构
 
 
 
@@ -6553,6 +6727,23 @@ $(function () {
 
 
 
+
+
+
+
+
+
+
+
+
+
+    // 上面代码中，第一次调用loadUI函数时，该函数不会执行，
+    // 仅返回一个遍历器。下一次对该遍历器调用next方法，
+    // 则会显示Loading界面（showLoadingScreen），
+    // 并且异步加载数据（loadUIDataAsynchronously）
+    // 等到数据加载完成，再一次使用next方法，
+    // 则会隐藏Loading界面。可以看到，这种写法的好处是所有Loading界面的逻辑，
+    // 都被封装在一个函数，按部就班非常清晰。
 
 
     // function timeCount() {
