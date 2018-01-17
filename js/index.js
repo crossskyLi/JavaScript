@@ -6707,27 +6707,44 @@ $(function () {
     // }
 
     // 对数组部署Iterator 接口的例子,尽管数组原生具有这个接口。
-    function *makeSimpleGenerator(arr) {
-        let nextIndex = 0;
-        while (nextIndex < arr.length){
-            yield arr[nextIndex++];
-        }
-    }
-
-    let gen = makeSimpleGenerator(['1',2])
-    console.log(gen.next().value)
-    console.log(gen.next().value)
-    console.log(gen.next().value)
+    // function *makeSimpleGenerator(arr) {
+    //     let nextIndex = 0;
+    //     while (nextIndex < arr.length){
+    //         yield arr[nextIndex++];
+    //     }
+    // }
+    //
+    // let gen = makeSimpleGenerator(['1',2])
+    // console.log(gen.next().value)
+    // console.log(gen.next().value)
+    // console.log(gen.next().value)
 
     // (4) 作为数据结构
+    // Generator 可以看作是数据结构，更确切地说，
+    // 可以看作是一个数组结构，
+    // 因为 Generator 函数可以返回一系列的值，
+    // 这意味着它可以对任意表达式，提供类似数组的接口。
 
+    // 依次返回三个函数，但是由于使用了Generator函数
+    // 可以像处理数组一样,处理三个返回的函数
+    // function* doStuff() {
+    //     yield fs.readFile.bind(null,'hello.txt');
+    //     yield fs.readFile.bind(null,'hello.txt');
+    //     yield fs.readFile.bind(null,'hello.txt');
+    // }
+    //
+    // for(let task of doStuff()){
+    //     task()  // task是一个函数，可以像回调函数那样使用它
+    // }
 
-
-
-
-
-
-
+    // ES5 写法,可以用一模一样的for...of循环处理！
+    function doStuff() {
+        return[
+            fs.readFile.bind(null,'hello.text'),
+            fs.readFile.bind(null,'hello.text'),
+            fs.readFile.bind(null,'hello.text')
+        ]
+    }
 
 
 
