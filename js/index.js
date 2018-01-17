@@ -6578,7 +6578,13 @@ $(function () {
     // }
     // let it = main();
     // it.next();
-
+    // 上面代码中，第一次调用loadUI函数时，该函数不会执行，
+    // 仅返回一个遍历器。下一次对该遍历器调用next方法，
+    // 则会显示Loading界面（showLoadingScreen），
+    // 并且异步加载数据（loadUIDataAsynchronously）
+    // 等到数据加载完成，再一次使用next方法，
+    // 则会隐藏Loading界面。可以看到，这种写法的好处是所有Loading界面的逻辑，
+    // 都被封装在一个函数，按部就班非常清晰。
 
     // 通过Generator函数逐行读取文本文件
     // function* numbers() {
@@ -6738,13 +6744,202 @@ $(function () {
     // }
 
     // ES5 写法,可以用一模一样的for...of循环处理！
-    function doStuff() {
-        return[
-            fs.readFile.bind(null,'hello.text'),
-            fs.readFile.bind(null,'hello.text'),
-            fs.readFile.bind(null,'hello.text')
-        ]
-    }
+    // function doStuff() {
+    //     return[
+    //         fs.readFile.bind(null,'hello.text'),
+    //         fs.readFile.bind(null,'hello.text'),
+    //         fs.readFile.bind(null,'hello.text')
+    //     ]
+    // }
+
+
+    // Generator 函数的异步应用
+
+    // 1.传统方法
+    // 异步编程一般有四种方法:
+    // <1>. 回调函数
+    // <2>. 事件监听
+    // <3>. 发布/订阅
+    // <4>. Promise对象
+
+    // 2.基本概念
+    // 异步,任务不是连续完成,而是执行了第一段,
+    // 转而执行其他任务,等任务准备完成
+    // 在继续执行第二段任务
+    // 如网络请求,文件读取
+
+    // 回调函数
+    // fs.readFile('/etc/passwd','utf-8',function (err, data) {
+    //     if(err){throw  err};
+    //     console.log(data)
+    // })
+    // 为什么Node约定 回调函数的第一个参数必须是错误对象err
+    // (如果没有错误,该参数就是null)
+    // 原因: 执行分成两段,第一段执行完成后,任务所在的上下文环境已经结束
+    // 在这以后抛出的错误,原来的上下文环境已经无法捕捉,只能当作参数,传入第二段
+
+    // Promise
+    // 多个回调函数嵌套会出现代码横向发展,而导致强耦合
+    // 只要有一个操作修改,它的上层回调函数和下层回调函数都有可能跟着修改
+    // 称为回调函数地狱
+
+    // Promise对象解决此问题
+
+    // 写法
+    // let readFile = require('fs-readfile-promise');
+    // readFile('filesA')
+    //     .then(function (data) {
+    //         console.log(data)
+    //     })
+    //     .then(function (data) {
+    //         return readFile('filesB')
+    //     })
+    //     .then(function (data) {
+    //         console.log(data)
+    //     })
+    //     .catch(function (err) {
+    //         console.error(err)
+    //     })
+
+    // Generator 函数
+
+    // 协程
+    // 多个线程相互协作,完成异步任务
+    // 流程如下:
+
+    // - 第一步,协程A开始执行
+    // - 第二步,协程A 执行到一半,进入暂停,执行权转移到协程B
+    // - 第三步,一段时间后,协程B交还执行权
+    // - 第四步,协程A恢复执行,结束流程
+
+    // 例子 读取文件的协程写法
+    // function* asyncJob() {
+    //     let f = yield readFile(fileA)
+    // }
+    // 遇到yield命令,就执行到此处,执行权交给其他协程,
+    // 等到执行权返回,再从暂停的地方继续往后执行,
+    // 最大优点在于,代码的写法,很像同步操作
+
+    // 协程的Generator函数实现
+    // 整个Generator函数就是一个封装的异步任务,或者说是异步任务的容器
+    // 异步操作需要暂停的地方都是用yield语句注明
+
+    // function* gen(x) {
+    //     let y = yield x+3;
+    //     return y;
+    // }
+    // let g = gen(1);
+    // console.log(g.next());
+    // console.log(g.next());
+    // 调用Generator函数,会返回一个内部指针(即遍历器)g。
+    // 执行Generator函数不会返回结果,而是返回的是指针对象
+    // 调用指针g的next 方法 会移动内部指针(即异步任务的第一段)
+    // 指向第一个遇到yield 语句
+
+    // next方法的作用是分阶段执行Generator函数,每次调用next方法,
+    // 会返回一个对象,表示当前阶段的信息,(value属性和done属性)
+    // 表示 Generator 函数是否执行完毕，即是否还有下一个阶段。
+
+    // Generator函数的数据交换和错误处理
+    // Generator函数可以暂停执行和恢复执行,这是它可以封装异步任务的根本原因
+    // 两个特性,使其可以作为异步编程的完整解决方案:
+    // <1> 函数体内外的数据交换
+    // <2> 函数体内外的错误处理机制
+
+    // next 返回值的value 属性,是Generator函数向外输出数据,
+    // next方法可以接受参数向Generator函数体内输入数据
+
+    // function* gen(x) {
+    //     let y = yield x+3;
+    //     return y;
+    // }
+    // let g = gen(1);
+    // console.log(g.next());
+    // console.log(g.next(10));
+
+    // Generator函数内部可以部署错误处理代码,
+    // 捕获函数体外抛出的错误
+    // function* gen(x) {
+    //     let y = 0;
+    //     try {
+    //        y = yield x +3;
+    //     } catch (e) {
+    //         console.error(e)
+    //     }
+    //     return y;
+    // }
+    // let g = gen(1);
+    // let result = g.next(1);
+    // console.log(result);
+    // g.throw('error');
+    // 使用指针对象的throw方法抛出的错误,
+    // 可以被函数体内的try...catch代码块捕获
+    // 出错的代码与处理错误的代码,实现了时间与空间的分离
+    // 对异步编程来说很重要
+
+    // 异步任务的封装
+
+    // 例子
+    // let fetch = require('node-fetch');
+    //
+    // function* gen() {
+    //     let url = 'https://api.github.com/users/github';
+    //     let result = yield fetch(url);
+    //     console.log(result.bio);
+    // }
+    //
+    // // 执行使用代码
+    // let g = gen();
+    // let result = gen.next();
+    // result.value
+    //     .then(function (data) {
+    //         return data.json();
+    //     })
+    //     .then(function (data) {
+    //         g.next(data)
+    //     })
+    // 首先执行Generator函数,获取遍历器对象,然后使用next方法
+    // 执行异步任务的第一阶段。
+    // 由于Fetch模块返回的value是一个Promise对象
+    // 因此要用then方法调用下一个next方法
+
+    // 虽然Generator函数将异步操作表示的很简洁
+    // 但流程管理不方便,什么时候执行第一阶段,什么时候执行第二阶段
+    //-------
+
+
+    // 4.Thunk [θʌŋk] 函数
+    // 自动执行Generator函数的一种方法
+    // 参数的求值策略
+    // let x = 1;
+    // function f(m) {
+    //     return m*2;
+    // }
+    // let result = f(x+5);
+    // console.log(result);
+    // x+2 表达式应该何时求值
+    // 一种是'传值调用',在进入函数体之前就计算x+5的值
+    // 再将这个值传给f,C语言采取此策略
+    //  f(x + 5)
+    // 传值调用时，等同于
+    //  f(6)
+
+    // 另一种是'传名调用' ,直接将表达式x+5传入函数体,
+    // 只在用到它的时候求值,Haskell语言采用此策略
+    // f(x+5);
+    // 传名调用等同于
+    // (x+5)*2
+
+    // 传值调用较为简单,但尚未用到此参数时候,会造成性能损
+    // function f(a, b) {
+    //     return b
+    // }
+    // f(3 * x * x - 2 * x - 1, x);
+
+    // 函数f的第一个参数是一个复杂的表达式，
+    // 但是函数体内根本没用到。对这个参数求值，
+    // 实际上是不必要的。因此，有一些计算机学家倾向于"传名调用"，
+    // 即只在执行时求值。
 
 
 
@@ -6754,13 +6949,6 @@ $(function () {
 
 
 
-    // 上面代码中，第一次调用loadUI函数时，该函数不会执行，
-    // 仅返回一个遍历器。下一次对该遍历器调用next方法，
-    // 则会显示Loading界面（showLoadingScreen），
-    // 并且异步加载数据（loadUIDataAsynchronously）
-    // 等到数据加载完成，再一次使用next方法，
-    // 则会隐藏Loading界面。可以看到，这种写法的好处是所有Loading界面的逻辑，
-    // 都被封装在一个函数，按部就班非常清晰。
 
 
     // function timeCount() {
