@@ -6942,13 +6942,105 @@ $(function () {
     // 即只在执行时求值。
 
     // Thunk 函数的含义
+    // 编译器的'传名调用'实现,往往是将参数放到一个临时函数中,
+    // 再将这个临时函数传入函数体内,这个临时函数就叫Thunk函数
+    //
+    // function f(m) {
+    //     return m * 2;
+    // }
+    // let x = 10;
+    // console.log(f(x+5));
+    //
+    // // 等同
+    // let thunk = function () {
+    //     return x + 5;
+    // }
+    // function f(thunk) {
+    //     return thunk()*2;
+    // }
 
+    // JavaScript 语言的Thunk函数
+    // JavaScript 语言是传值调用,在js中,Thunk函数替换的不是表达式
+    // 而是多参数函数.将其替换成一个只接受回调函数作为参数的单参数函数
 
+    // 正常版本的readFile (多参数版本)
+    // fs.readFile(fileName, callback);
+    // let Thunk = function (fileName) {
+    //     return function (fileName) {
+    //         return fs.readFile(fileName,fileName)
+    //     }
+    // };
+    // let readFileThunk = Thunk(fileName);
+    // readFileThunk(callback);
 
+    // fs模块的readFile方法是一个多参数函数,两个参数分别为文件名和回调函数
+    // 经过转换器处理,它编程一个单参数函数,只接受回调函数作为参数
+    // 这个单参数版本就是Thunk函数
 
+    //任何函数,只要参数有回调函数,就能写成Thunk函数的形式
+    // let thunk = function (fn) {
+    //     return function () {
+    //         let args = Array.prototype.slice.call(arguments);
+    //         return function (callback) {
+    //             args.push(callback);
+    //             return fn.apply(this,args)
+    //         }
+    //     }
+    // }
 
+    //ES6 版本
+    // const Thunk = function (fn) {
+    //     return function (...args) {
+    //         return function (callback) {
+    //             return fn.call(this,...args,callback)
+    //         }
+    //     }
+    // }
 
+    // 使用上面的转换器,生成fs.readFile 的Thunk函数
+    // var readFileThunk = Thunk(fs.readFile);
+    // readFileThunk(fileA)(callback)
+    //
+    // function f(a, cb) {
+    //     cb(a);
+    // }
+    // const ft = Thunk(f);
+    //
+    // ft(1)(console.log) // 1
 
+    // npm install thunkify
+    //Thunkify 模块
+    // let thunkify = require('thunkify');
+    // let fs = require('fs');
+    // let read = thunkify(fs.readFile);
+    // read('package.json')(function (err, str) {
+...
+    // })
+
+    // Thunkify 源码
+    function thunkify(fn) {
+        return function () {
+            var args = new Array(arguments.length);
+            var ctx = this;
+            for (var i = 0; i < args.length; ++i) {
+                args[i] = arguments[i];
+            }
+            return function (done) {
+                var called;
+                args.push(function () {
+                    if (called) return;
+                    called = true;
+                    done.apply(null, arguments)
+                })
+                try {
+                    fn.apply(ctx, args)
+                } catch (err) {
+                    done(err)
+                }
+            }
+        }
+    }
+    // 源码中多了一个检查机制,变量called确保回调函数只运行一次
 
 
     // function timeCount() {
