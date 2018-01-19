@@ -7014,33 +7014,289 @@ $(function () {
     // let fs = require('fs');
     // let read = thunkify(fs.readFile);
     // read('package.json')(function (err, str) {
-...
+        // ...
     // })
 
     // Thunkify 源码
-    function thunkify(fn) {
-        return function () {
-            var args = new Array(arguments.length);
-            var ctx = this;
-            for (var i = 0; i < args.length; ++i) {
-                args[i] = arguments[i];
-            }
-            return function (done) {
-                var called;
-                args.push(function () {
-                    if (called) return;
-                    called = true;
-                    done.apply(null, arguments)
-                })
-                try {
-                    fn.apply(ctx, args)
-                } catch (err) {
-                    done(err)
-                }
-            }
-        }
-    }
+    // function thunkify(fn) {
+    //     return function () {
+    //         var args = new Array(arguments.length);
+    //         var ctx = this;
+    //         for (var i = 0; i < args.length; ++i) {
+    //             args[i] = arguments[i];
+    //         }
+    //         return function (done) {
+    //             var called;
+    //             args.push(function () {
+    //                 if (called) return;
+    //                 called = true;
+    //                 done.apply(null, arguments)
+    //             })
+    //             try {
+    //                 fn.apply(ctx, args)
+    //             } catch (err) {
+    //                 done(err)
+    //             }
+    //         }
+    //     }
+    // }
+
     // 源码中多了一个检查机制,变量called确保回调函数只运行一次
+    // function f(a,b,callback){
+    //     let sum = a+b;
+    //     callback(sum);
+    //     callback(sum);
+    // }
+    // let ft = thunkify(f);
+    // let print = console.log.bind(console);
+    // ft(1,2)(print);
+
+    // Generator 函数的流程管理
+    // Thunk函数用于Generator函数自动流程管理
+
+    // function* gen() {
+    //     console.log(1);
+    //     yield 11;
+    // }
+    // let g = gen();
+    // let res = g.next();
+    // while (!res.done){
+    //     console.log(res.value);
+    //     res = g.next();
+    // }
+    // 以上代码,可以自动执行完所有步骤,但并不适合异步操作
+    //
+    // let fs = require('fs');
+    // let thunkify = require('thunkify');
+    // let readFileThunk = thunkify(fs.readFile);
+    // let gen = function *() {
+    //     let r1 = yield readFileThunk('/etc/fstab');
+    //     console.log(r1.toString());
+    //     let r2 = yield readFileThunk('/etc/shells');
+    //     console.log(r2.toString());
+    // };
+    // 上面代码中,yield命令用于将程序的执行权移出Generator函数,
+    // 需要有一种方式能够将执行权交还给Generator函数
+
+    // let g = gen();
+    // let r1 = gen.next();
+    // r1.value(function (err,data) {
+    //     if(err){throw err}
+    //     let r2 = g.next(data);
+    //     r2.value(function (err, data) {
+    //         if(err){throw err}
+    //         g.next(data)
+    //     })
+    // })
+
+    // Thunk函数的自动流程管理
+    // Thunk函数的作用在于可以自动执行Generator函数
+
+    // function run(fn) {
+    //     var gen = fn();
+    //     function next(err, data) {
+    //         var result = gen.next(data);
+    //
+    //         if(result.done){return}
+    //         result.value(next);
+    //     }
+    //     next();
+    // }
+    // function* g() {
+    //     var f1 = yield readFileThunk('fileA');
+    //     var f2 = yield readFileThunk('fileB');
+    //     // ...
+    //     var fn = yield readFileThunk('fileN');
+    // }
+    // run(g)
+    // run 函数, 是一个Generator函数的自动执行器,
+    // 内部的next函数就是Thunk 的回调函数Thunk 的回调函数
+    // next函数先将指针移到Generator函数的下一步(gen.next方法)
+    // 然后判断Generator函数是否结束,(result.done属性)
+    // 如果没有结束,就将next函数再传入Thunk函数(result.value属性)
+    // 否则直接退出
+
+    // 这里的前提是每一个异步操作都要是Thunk函数
+    // 即,跟在yield命令后面的必须是Thunk函数
+    // let g = function *() {
+    //     let f1 = yield readFileThunk('fileA');
+    //     let f2 = yield readFileThunk('fileA');
+    //     let f3 = yield readFileThunk('fileA');
+    //     //...
+    //     let fn = yield readFileThunk('fileA');
+    // }
+    // run(g)
+
+    // 5.co 模块
+    // 基本用法
+    // 用于Generator函数的自动执行
+    // let gen = function *() {
+    //     let f1 = yield readFile('/etc/fstab');
+    //     let f2 = yield readFile('/etc/shells');
+    //     console.log(f1)
+    //     console.log(f2)
+    // };
+
+    // co 模块,可以不用编写Generator函数的执行器
+    // let co = require('co');
+    // co(gen)
+    // Generator 函数只要传入co函数,就会自动执行
+    // co函数返回一个Promise对象,可以用then方法添加回调函数
+    // co(gen).then(function () {
+    //     console.log(arguments)
+    // })
+
+    // co 模块的原理
+    // Generator函数就是一个异步操作的容器,
+    // 它的自动执行需要一种机制
+    // 当异步有了结果,能够自动交回执行权
+    // 两个方法,
+    // (1) 回调函数。将异步操作包装成 Thunk 函数,在回调函数里面交回执行权
+    // (2) Promise对象,将异步操作包装成 Promise 对象,用then方法交回执行权
+    // co 模块其实就是将两种自动执行器( Thunk函数和Promise对象 ),包装成一个模块
+    // 使用co的 前提条件是,Generator函数的yield命令后面,只能是Thunk 函数,或者Promise对象
+    // 如果数组或对象的成员,全部都是Promise对象,也可以使用co
+
+    // ------------
+    // 基于 Promise对象的自动执行
+    // let fs = require('fs');
+    // let readFile = function (fileName) {
+    //     return new Promise(function (resolve, reject) {
+    //         fs.readFile(fileName,function (err, data) {
+    //             if(err){return}
+    //             resolve(data)
+    //         })
+    //     })
+    // };
+    // let gen = function *() {
+    //     let f1 = yield readFile('/etc/fstab');
+    //     let f2 = yield  readFile('/etc/shells');
+    //     console.log(f1)
+    //     console.log(f2)
+    // };
+    // let g = gen();
+    // g.next().value.then(function (data) {
+    //     g.next(data).then(function (data) {
+    //         g.next(data)
+    //     })
+    // })
+
+    // 自动执行器
+    // 只要 Generator 函数还没执行到最后一步，
+    // next函数就调用自身，以此实现自动执行。
+    // function run(gen) {
+    //     let g = gen();
+    //     function next(data) {
+    //         let result = g.next(data);
+    //         if(result.done){return result.value;}
+    //         result.value.then(function (data) {
+    //             next(data)
+    //         })
+    //     }
+    //     next();
+    // }
+
+    // co 模块源码
+    // 1. co 函数接受Generator函数作为参数,返回一个Promise对象
+
+    // 2. 在放回Promise对象里面 ,co先检查参数gen是否为Generator函数
+    //    如果是,就执行该函数,得到一个内部指针对象,如果不是就返回,
+    //    并将Promise对象的状态改为resolved
+
+    // 3. 接着co将Generator函数的内部指针对象的next方法,
+    //    包装成onFulfilled 函数,这主要是为了能够捕捉抛出的错误
+
+    function co(gen) {
+        var ctx = this;
+        return new Promise(function (resolve, reject) {
+            if(typeof gen === 'function'){ gen = gen.call(ctx)}
+            if(!gen || typeof gen.next !== 'function'){
+                return resolve(gen)
+            }
+            onFulfilled();
+            function onFulfilled(res) {
+                let ret ;
+                try {
+                    ret = gen.next(res)
+                }catch (err){
+                    next(ret)
+                }
+                next(ret)
+            }
+            function onRejected(err) {
+                var ret;
+                try {
+                    ret = gen.throw(err);
+                } catch (e) {
+                    return reject(e);
+                }
+                next(ret);
+            }
+            // next 函数
+            function next(ret) {
+                if(ret.done){return resovle(ret.value)};
+                let value = toPromise.call(ctx,ret.value);
+                if(value && isPromise(value)){
+                    return value.then(onFulfilled,onRejected);
+                }
+                return onRejected(
+                    new TypeError(
+                        'You may only yield a function, promise, generator, array, or object, '
+                        + 'but the following object was passed: "'
+                        + String(ret.value)
+                        + '"'
+                    )
+                )
+            }
+        })
+    }
+
+    // 上面代码中,next函数的内部代码,一共有四行命令
+    // 第一行,检查当前是否为Generator函数的最后一步,如果是,返回
+    // 第二行,确保每一步的返回值, 是Promise对象
+    // 第三行,使用then 方法,为返回值加上回调函数,然后通过onFulfilled函数在此调用next函数
+    // 第四行,在参数不符合要求的情况下,(参数非Thunk函数,和Promise对象),
+    // 将Promise对象状态改为rejected,从而终止执行
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // function timeCount() {
@@ -7070,4 +7326,23 @@ $(function () {
 
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
