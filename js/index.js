@@ -7014,7 +7014,7 @@ $(function () {
     // let fs = require('fs');
     // let read = thunkify(fs.readFile);
     // read('package.json')(function (err, str) {
-        // ...
+    // ...
     // })
 
     // Thunkify 源码
@@ -7206,50 +7206,50 @@ $(function () {
     // 3. 接着co将Generator函数的内部指针对象的next方法,
     //    包装成onFulfilled 函数,这主要是为了能够捕捉抛出的错误
 
-    function co(gen) {
-        var ctx = this;
-        return new Promise(function (resolve, reject) {
-            if(typeof gen === 'function'){ gen = gen.call(ctx)}
-            if(!gen || typeof gen.next !== 'function'){
-                return resolve(gen)
-            }
-            onFulfilled();
-            function onFulfilled(res) {
-                let ret ;
-                try {
-                    ret = gen.next(res)
-                }catch (err){
-                    next(ret)
-                }
-                next(ret)
-            }
-            function onRejected(err) {
-                var ret;
-                try {
-                    ret = gen.throw(err);
-                } catch (e) {
-                    return reject(e);
-                }
-                next(ret);
-            }
-            // next 函数
-            function next(ret) {
-                if(ret.done){return resovle(ret.value)};
-                let value = toPromise.call(ctx,ret.value);
-                if(value && isPromise(value)){
-                    return value.then(onFulfilled,onRejected);
-                }
-                return onRejected(
-                    new TypeError(
-                        'You may only yield a function, promise, generator, array, or object, '
-                        + 'but the following object was passed: "'
-                        + String(ret.value)
-                        + '"'
-                    )
-                )
-            }
-        })
-    }
+    // function co(gen) {
+    //     var ctx = this;
+    //     return new Promise(function (resolve, reject) {
+    //         if(typeof gen === 'function'){ gen = gen.call(ctx)}
+    //         if(!gen || typeof gen.next !== 'function'){
+    //             return resolve(gen)
+    //         }
+    //         onFulfilled();
+    //         function onFulfilled(res) {
+    //             let ret ;
+    //             try {
+    //                 ret = gen.next(res)
+    //             }catch (err){
+    //                 next(ret)
+    //             }
+    //             next(ret)
+    //         }
+    //         function onRejected(err) {
+    //             var ret;
+    //             try {
+    //                 ret = gen.throw(err);
+    //             } catch (e) {
+    //                 return reject(e);
+    //             }
+    //             next(ret);
+    //         }
+    //         // next 函数
+    //         function next(ret) {
+    //             if(ret.done){return resovle(ret.value)};
+    //             let value = toPromise.call(ctx,ret.value);
+    //             if(value && isPromise(value)){
+    //                 return value.then(onFulfilled,onRejected);
+    //             }
+    //             return onRejected(
+    //                 new TypeError(
+    //                     'You may only yield a function, promise, generator, array, or object, '
+    //                     + 'but the following object was passed: "'
+    //                     + String(ret.value)
+    //                     + '"'
+    //                 )
+    //             )
+    //         }
+    //     })
+    // }
 
     // 上面代码中,next函数的内部代码,一共有四行命令
     // 第一行,检查当前是否为Generator函数的最后一步,如果是,返回
@@ -7257,46 +7257,76 @@ $(function () {
     // 第三行,使用then 方法,为返回值加上回调函数,然后通过onFulfilled函数在此调用next函数
     // 第四行,在参数不符合要求的情况下,(参数非Thunk函数,和Promise对象),
     // 将Promise对象状态改为rejected,从而终止执行
-    
 
+    // 处理并发的异步操作
+    // co支持并发的异步操作,即允许某些操作同时进行,
+    // 等到它们全部完成,再进行下一步
+    // 要把并发的操作都放在数组或者对象里面,跟在yield语句后面
 
+    // 数组写法
+    // co(function *() {
+    //     let res = yield [
+    //         Promise.resolve(1),
+    //         Promise.resolve(2)
+    //     ];
+    //     console.log(res)
+    // }).catch(onerror)
+    //
+    // // 对象写法
+    // co(function *() {
+    //     let res = yield {
+    //         1:Promise.resolve(1),
+    //         2:Promise.resolve(2)
+    //     }
+    //     console.log(res)
+    // }).catch(onerror)
 
+    // co(function *() {
+    //     let values = [n1,n2,n3];
+    //     yield values.map(somethingAsync)
+    // })
+    // function* somethingAsync(x) {
+    //     // some async
+    //     return y;
+    // }
+    // // 允许并发三个somethingAsync异步操作,等到全部完成后进行下一步
 
+    // 实例: 处理Stream
+    // node 提供Stream模式读写数据,特点是一次只处理数据的一部分,
+    // 数据分成一块块依次处理,如'数据流',
+    // Stream模式使用EventEmitter API 会释放三个事件
 
+    // - data 事件 : 下一块数据块已经准备好了
+    // - end 事件: 整个'数据流'处理完了
+    // - error 事件 : 发生错误
 
+    // 使用 Promise.race() 函数
+    // 可以判断这三个事件之中,哪一个最先发生
+    // 只有当data时间最先发生时候,才进入下一个数据块的处理
+    // while循环,完成所有数据的读取
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // const co = require('co');
+    // const fs = require('fs')
+    //
+    // const stream = fs.createReadStream('./les_miserables.txt');
+    // let valjeanCount = 0;
+    // co(function* () {
+    //     while (true) {
+    //         const res = yield Promise.race([
+    //             new Promise(resolve => stream.once('data', resolve)),
+    //             new Promise(resolve => stream.once('end', resolve)),
+    //             new Promise((resolve, reject) => stream.once('error', resolve))
+    //         ]);
+    //         if(!res){
+    //             break;
+    //         }
+    //         stream.removeAllListeners('data');
+    //         stream.removeAllListeners('end');
+    //         stream.removeAllListeners('error');
+    //         valjeanCount += (res.toString().match(/valjean/ig )||[]).length
+    //     }
+    //     console.log('count',valjeanCount)
+    // })
 
 
     // function timeCount() {
