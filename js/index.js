@@ -7327,7 +7327,72 @@ $(function () {
     //     }
     //     console.log('count',valjeanCount)
     // })
-    
+    //---------------------------------------------------------------
+
+    //---------------------------------------------------------------
+    //------------------ async函数 ---------------
+    // 1.含义
+    // async => Generator函数的语法糖
+    //之前读取两个文件的写法
+    // const fs = require('fs');
+    //
+    // const readFile = function (fileName) {
+    //     return new Promise(function (resolve, reject) {
+    //         fs.readFile(fileName, function(error, data) {
+    //             if (error) return reject(error);
+    //             resolve(data);
+    //         });
+    //     });
+    // };
+    //
+    // const gen = function* () {
+    //     const f1 = yield readFile('/etc/fstab');
+    //     const f2 = yield readFile('/etc/shells');
+    //     console.log(f1.toString());
+    //     console.log(f2.toString());
+    // };
+
+    // 写成async函数
+    // const asyncReadFile = async function () {
+    //     const f1 = await readFile('/etc/fstab');
+    //     const f2 = await readFile('/etc/fstab');
+    //     console.log(f1.toString())
+    //     console.log(f2.toString())
+    // }
+    // async 函数就是将Generator函数的星号 * 替换成async
+    // 将yield替换成 await
+    // async 函数相较Generator函数改进,体现在以下四点
+    // (1) 内置执行器
+    // Generator函数的执行必须靠执行器,所以才会有co模块,
+    // 而async函数自带执行器, async函数的执行与普通函数一样
+    // asyncReadFile();
+    // 调用asyncReadFile 函数,然后它就自动执行,输出最后结果。
+    // 不需要调用next方法
+
+    // (2) 更好的语义
+    // async 和 await 比起星号和yield ,语义更加清楚,async表示函数有
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // function timeCount() {
     //     let nowTime = new Date();
