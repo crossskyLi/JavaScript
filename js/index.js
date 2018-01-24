@@ -7462,6 +7462,409 @@ $(function () {
     // const foo = async() => {}
 
     // 3.语法
+    // async函数的语法规则简单,但难点是错误处理机制
+
+    // 返回Promise对象
+    // async 函数返回一个Primise对象
+    // async 内部return语句返回的值,会成为then方法回调函数的参数
+    // async function f() {
+    //     return 'result ddd'
+    // }
+    // f().then(v => {
+    //     console.log('result',v)
+    // })
+
+    // async函数内部抛出错误会导致返回的Promise对象变成reject状态
+    // 抛出的错误对象会被catch方法回调函数接收到
+    // async function f() {
+    //     throw new Error('something wrong')
+    // }
+    // f().then(
+    //     v=>{
+    //         console.log(v)
+    //     },
+    //     err => {
+    //         console.log(err)
+    //         console.error(err)
+    //     }
+    // )
+
+    // Promise 对象的状态变化
+    // async 函数返回的Promise对象,
+    // 必须等到内部所有await命令后面的Promise对象执行完
+    // 才会发生状态改变,除非遇到return语句或者抛出错误
+    // 也就是说,只有async函数内部的异步操作执行完
+    // 才会执行then方法指定的回调函数
+    // eg:
+    // async function getTitle(url) {
+    //     let response = await fetch(url);
+    //     let html = await response.text();
+    //     return html.match(/<title>([\s\S]+)<title>/i)[1];
+    // }
+    //
+    // getTitle('http://tcjfdkjfkjd.io/dfdfr232').then(result => {
+    //     console.log(result)
+    // })
+    // 代码getTitle 内部有三个操作:抓取网页,取出文本,匹配页面标题
+    // 这三个操作结束,才会执行.then方法里面的内容
+
+    // await 命令
+    // 正常情况下,await 命令后面是一个Promise对象,
+    // 如果不是,会被转成一个立即resole的Promise对象
+    // async function f() {
+    //     return await `123`
+    // }
+    // f().then(result =>{
+    //     console.log(result)
+    // })
+    // 代码中,await命令的参数是字符串123
+    // 它被转成Promise对象,并且立即resolve
+    // await 命令后面的Promise对象如果变为reject状态
+    // 则reject的参数会被catch方法的回调函数接收
+    // async function f() {
+    //     await Promise.reject('wrong')
+    // }
+    // f().then(result =>{console.log(result)})
+    //     .catch(err =>{console.error(err)})
+    // 注意,上面代码中,await 语句前面没有return
+    // 但是reject方法的参数依然传入catch的回调中
+    // 这里如果在await前面加上return ,效果一样
+    // 只要await语句后面的Promise变成reject
+    // 那么整个async函数都会中断执行
+    // async function f() {
+    //     await Promise.reject('出错');// 执行到这里终止
+    //     await Promise.resolve('result');// 这里并不会执行
+    // }
+    //
+    // f().then(result => {
+    // }).catch(err => {
+    //     console.log(err)
+    // })
+
+    // 有时候希望前一个异步操作失败但是也不中断后面的异步操作
+    // 第一种办法,可以将第一个await 放在try...catch结构中,
+    // 这样子不管这个异步操作是否成功,后面的await都会执行
+    //
+    // async function f() {
+    //     try {
+    //         await Promise.reject('err');
+    //     } catch (e) {
+    //         console.error('inside',e)
+    //     }
+    //     return await Promise.resolve('result111')
+    // }
+    //
+    // f().then(result => {
+    //     console.log(result)
+    // }).catch(err => {
+    //     console.log('outside',err)
+    // })
+    //
+    // // 第二种方法, await 后面的Promise 对象再跟一个catch方法,
+    // // 处理前面可能出现的错误
+    //
+    // async function foo() {
+    //     await Promise.reject('err')
+    //         .catch(err => {
+    //             console.error('里面捕捉',err)
+    //         }); //这里会比上一个方法更快执行
+    //     return await Promise.resolve('hello world')
+    // }
+    //
+    // foo().then(result => {
+    //     console.log(result)
+    // }).catch(err => {
+    //     console.log('外面捕捉', err)
+    // })
+
+    // 错误处理
+    // 如果await后面的异步操作出错,那么等同于async函数返回的Promise对象被reject
+    // async function f() {
+    //     await new Promise((resolve, reject) => {
+    //         throw new Error('出错');
+    //     })
+    // }
+    //
+    // f()
+    //     .then(result => {
+    //         console.log(result)
+    //     })
+    //     .catch(err => {
+    //         console.error(err)
+    //     })
+    // 代码中,async函数f执行后,await 后面的Promise对象会抛出一个错误对象
+    // 导致 catch 方法的回调函数被调用,它的参数就是抛出的错误对象,
+    // 防止出错的方法,是将其放在try...catch代码块中
+    // async function f() {
+    //     try {
+    //         await new Promise((resolve, reject) => {
+    //             throw new Error('catch me')
+    //         })
+    //     } catch (err) {
+    //         console.error(err)
+    //     }
+    //     return await ('result')
+    // }
+    //
+    // f().then(result => {
+    //     console.log(result)
+    // }).catch(err => {
+    //     console.log(err)
+    // })
+
+    // 如果有多个await命令,可以统一放在try...catch结构中
+    // async function main() {
+    //     try {
+    //         const val1 = await firstStep1();
+    //         const val2 = await firstStep2(val1);
+    //         const val3 = await firstStep3(val1,val2);
+    //     }catch (err){
+    //         console.error(err)
+    //     }
+    // }
+    // main().then(result =>{
+    //     console.log(result)
+    // }).catch(err=>{
+    //     console.error(err)
+    // })
+
+    // 使用try..catch 结构,实现多次重复尝试
+    // const superagent = require('superagent');
+    // const NUM_RETRIES = 3;
+    // async function test() {
+    //     let i ;
+    //     for(i = 0; i<NUM_RETRIES; i++){
+    //         try {
+    //             await superagent.get('http://google.com');
+    //             break;
+    //         }catch (err){
+    //             console.error(err)
+    //         }
+    //     }
+    //     console.log(i)
+    // }
+    //
+    // test();
+    // 代码中await操作成功,就会使用break语句退出循环
+    // 如果失败会被catch语句捕捉,然后进入下次循环
+
+    // 使用注意点:
+    // 第一点,await命令后面的Promise对象,运行结果可能是rejected
+    // 所以最好把await命令放在try...catch代码块中
+    // async function foo() {
+    //     try {
+    //         await somePromise();
+    //     } catch (err) {
+    //         console.error(err)
+    //     }
+    // }
+
+    // 另一种写法
+    // async function foo() {
+    //     await somePromise()
+    //         .catch(err => {
+    //             console.error(err)
+    //         })
+    // }
+
+    // 第二点,多个await命令后面的异步操作,如果不存在继发关系,最好是让它们同时触发
+    //
+    // let foo = await getFoo();
+    // let bar = await getBar();
+    // 代码中,getFoo和getBar是两个独立的异步操作,互不依赖
+    // 被写成继发关系.这样子是比较耗时间,因为只有getFoo执行完,
+    // 才会执行getBar,可以让他们同时触发
+    // 写法一:
+    // let [foo, bar] = await Promise.all([getFoo(), getBar()]);
+
+    // 写法二:
+    // let fooPromise = getFoo();
+    // let barPromise = getBar();
+    // let foo = await fooPromise;
+    // let bar = await barPromise;
+    // getFoo 和getBar 都是同时触发,缩短程序执行时间
+
+    // 第三点, await命令智能用在async函数之中,如果用在普通函数,会报错
+
+    // async function dbfoo(db) {
+    //     let docs= [{},{},{}];
+    //     // 报错
+    //     docs.forEach(doc=>{
+    //         await db.post(doc);// 报错
+    //     })
+    // }
+    // 代码会报错,因为await用在普通函数之中,
+    // 但是如果将forEach方法的参数改成async函数,也会有问题
+    // function dbFun(db) {
+    //     let docs = [{},{},{}];
+    //     docs.forEach(async function (doc) {
+    //         await db.post(doc)
+    //     })
+    // }
+    // 代码可能会不正常工作,原因是这是哪个db.post 操作将是并发执行
+    // 也就是同时执行,不会继发执行,正确应该是使用for循环
+    // async function dbFuc(db) {
+    //     let docs = [{}, {}, {}];
+    //     for(let doc of docs){
+    //         await db.post(doc);
+    //     }
+    // }
+
+    // // 如果确实希望多个请求并发执行,可以使用Promise.all方法,
+    // // 当三个请求都会resolved时候,以下两种写法效果相同
+    // async function dbFunc(db) {
+    //     let docs = [{}, {}, {}];
+    //     let promises = docs.map((doc) => db.post(doc));
+    //
+    //     let results = await Promise.all(promises);
+    //     return results
+    // }
+    // // 第二种写法
+    // async function dbFunc(db) {
+    //     let docs = [{},{},{}];
+    //     let promises = docs.map((doc)=>{db.post(doc)});
+    //     let results = [];
+    //     for(let promise of promises){
+    //         results.push(promise);
+    //     }
+    //     return results
+    // }
+
+    // 目前 @std/esm 模块加载器支持顶层await,
+    // 即 await命令可以不放在async函数里面,直接使用
+    // async 函数写法
+    // const start = async () => {
+    //     const res = await fetch('google.com');
+    //     return res.next();
+    // }
+    // start().then(res => {
+    //     console.log(res)
+    // }).catch(err => {
+    //     console.log(err)
+    // })
+
+    // 顶层 await 的写法
+    // 必须使用@std/esm加载器,才会生效
+    // const res = await fetch('google.com');
+    // console.log( await res.text());
+
+    // -------
+    // 4.async函数的实现原理
+    // async 函数的实现原理,就是将Generator函数和自动执行器,包装在一个函数里
+    // async function fn(args) {
+    //     // ...
+    // }
+    // // 等同于
+    // function fn(args) {
+    //     return spawn(function *() {
+    //         //...
+    //     })
+    // }
+
+    // 所有的async函数都可以协程上面的第二种形式,
+    // 其中spawn函数就是自动执行器
+    // spawn函数的实现
+    // function spawn(genF) {
+    //     return new Promise((resolve,reject)=>{
+    //         const gen = genF();
+    //         function step(nextF) {
+    //             let next ;
+    //             try{
+    //                 next = nextF();
+    //             }catch(err){
+    //                 return reject(err)
+    //             }
+    //             if(next.done){
+    //                 return resolve(next.value)
+    //             }
+    //             Promise.resolve(next.value).then(
+    //                 result =>{
+    //                     step(function () {
+    //                         return gen.next(result);
+    //                     })
+    //                 },
+    //                 err =>{
+    //                     step(function () {
+    //                         return gen.throw(err);
+    //                     })
+    //                 }
+    //             )
+    //         }
+    //         step(function () {
+    //             return gen.next(undefined);
+    //         })
+    //     })
+    // }
+
+    //---------
+    // 5. 与其他的异步处理方法的比较
+    // async 函数与Promise、Generator函数的比较
+    // 假设某个DOM袁术上面部署一系列动画
+    // 前一个动画结束,才能开始下一个
+    // 如果当中有一个动画出错,就不再往下执行,返回上一个成功执行的动画的返回值
+
+    // Promise写法
+    // function chainAnimationsPromise(elem, animations) {
+    //     // 变量ret用来保存上一个动画的返回值
+    //     let ret = null;
+    //     // 新建一个空的Promise
+    //     let p = Promise.resolve();
+    //     for (let anim of animations) {
+    //         p = p.then(val => {
+    //             ret = val;
+    //             return anim(elem);
+    //         })
+    //     }
+    //     // 返回一个部署了错误机制的Promise
+    //     return p.catch(err => {
+    //             // 忽略错误继续执行
+    //             console.error(err)
+    //         }).then(function () {
+    //         return ret
+    //     })
+    // }
+    // promise 体现为,操作本身的语义不能被容易的看出来
+
+    // Generator函数写法
+    // function chainAnimationsGenerator(elem, animations) {
+    //     return spawn(function *() {
+    //         let ret = null;
+    //         try {
+    //             for(let anim of animations){
+    //                 ret = yield anim(elem)
+    //             }
+    //         }catch(e){
+    //             // 忽略错误继续执行
+    //             console.error(e)
+    //         }
+    //         return ret
+    //     })
+    // }
+    // 代码中使用Generator函数遍历每个动画,语义清晰
+    // 用户定义的操作全部都出现在spawn函数的内部,
+    // 这样写问题在,必须要有一个任务运行器,自动执行Generator函数
+    // spawn函数就是自动执行器,它返回一个Promise对象,
+    // 而且必须保证yield 语句后面的表达式,必须返回一个Promise
+
+    // async函数写法
+    async function chainAnimationsAsync(elem,animations) {
+        let ret = null;
+        try {
+            for(let anim of animations){
+                ret = await anim(elem)
+            }
+        }catch(err){
+            // 忽略错误,继续执行
+            console.error(err)
+        }
+    }
+    // Async函数是实现最简洁,符合语义,将Generator写法中的自动执行器,
+    // 改在语言层面提供,不暴露给用户,代码量少,如果使用Generator写法,
+    // 自动执行器需要用户自己提供
+
+
+
+
 
 
 
