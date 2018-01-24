@@ -7370,15 +7370,98 @@ $(function () {
     // 不需要调用next方法
 
     // (2) 更好的语义
-    // async 和 await 比起星号和yield ,语义更加清楚,async表示函数有
+    // async 和 await 比起星号和yield ,语义更加清楚,
+    // async表示函数有异步操作,await表示紧跟在后面的表达式需要等待结果
 
+    // (3) 更广的适用性
+    // co 模块约定,yield命令后面只能是 Thunk 函数,或Promise对象,
+    // 而async函数的await命令后面,可以是Promise对象和原始类型的值
+    // ( 数值,字符串和布尔值,但这时候等同于同步操作 )
 
+    // (4) async 函数的返回值是Promise对象,
+    // 这比Generator函数的返回值是Iterator对象方便多了
+    // 可以用then方法执行下一步操作
+    // async函数完全可以看成多个异步操作,包装成一个Promise对象
+    // 而 await 命令就是内部then命令的语法糖
 
+    //-----------------------
+    // 2. 基本用法
+    // async函数返回一个Promise对象,可以使用then方法,添加回调函数
+    // 当函数执行时候,一旦遇到await就会先返回,等到异步操作完成
+    // 再接着执行函数体内后面的语句
+    // eg:
+    // async function getStockPriceByName(name) {
+    //     const symbol = await getStockPriceByName(name);
+    //     const stockPrice = await getStockPrice(symbol);
+    //     return stockPrice;
+    // }
+    // getStockPriceByName('goog').then(result => {
+    //     console.log(result)
+    // })
 
+    // 指定多少毫秒后输出一个值
+    // function asyncTimeout(ms) {
+    //     return new Promise(resolve=>{
+    //         setTimeout(resolve,ms)
+    //     })
+    // }
+    // async function asyncPrint(value, ms) {
+    //     await asyncTimeout(ms);
+    //     console.log(value)
+    // }
+    // asyncPrint('1231',3000)
 
+    // 由于async函数返回的是Promise对象
+    // 可以作为await命令的参数,上面的例子也可以写成下面的形式
+    // async function timeoutAsync(ms) {
+    //     await new Promise((resolve)=>{
+    //         setTimeout(resolve,ms);
+    //     })
+    // }
+    // async function asyncPrint(value, ms) {
+    //     await timeoutAsync(ms);
+    //     console.log(value)
+    // }
+    //
+    // asyncPrint('hello world',1800)
 
+    // // async 函数有多种使用形式
+    // // (1)函数声明
+    // async function foo() {
+    //
+    // }
+    //
+    // // 函数表达式
+    // const foo = async function () {
+    //
+    // };
+    // // 对象方法
+    // let obj = {
+    //     async foo() {
+    //     }
+    // };
+    // obj.foo().then(
+    //     //....
+    // )
+    // // Class 的方法
+    // class Storage{
+    //     constructor(){
+    //         this.cachePromise = caches.open('avatars')
+    //     }
+    //     async getAvatar(name){
+    //         const cache = await this.cachePromise;
+    //         return cache.match(`/avatars/${name}.jpg`);
+    //     }
+    // }
+    // const storage = new Storage();
+    // storage.getAvatar('jake').then(
+    //     //...
+    // );
+    //
+    // // 箭头函数
+    // const foo = async() => {}
 
-
+    // 3.语法
 
 
 
