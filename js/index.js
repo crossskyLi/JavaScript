@@ -7847,37 +7847,150 @@ $(function () {
     // 而且必须保证yield 语句后面的表达式,必须返回一个Promise
 
     // async函数写法
-    async function chainAnimationsAsync(elem,animations) {
+    async function chainAnimationsAsync(elem, animations) {
         let ret = null;
         try {
-            for(let anim of animations){
+            for (let anim of animations) {
                 ret = await anim(elem)
             }
-        }catch(err){
+        } catch (err) {
             // 忽略错误,继续执行
             console.error(err)
         }
+        return ret;
     }
+
     // Async函数是实现最简洁,符合语义,将Generator写法中的自动执行器,
-    // 改在语言层面提供,不暴露给用户,代码量少,如果使用Generator写法,
-    // 自动执行器需要用户自己提供
+    // 改在语言层面提供,不暴露给用户,代码量少,
+    // 如果使用Generator写法,自动执行器需要用户自己提供
 
+    // -------------------
+    // 6.实例: 按顺序完成异步操作
+    // 一组异步操作,按顺序完成
+    // 比如依次远程读取一组URL,然后案遭读取的顺序输出结果
+    // Promise的写法
+    // function logInOrder(urls) {
+    //     // 远程读取所有URL
+    //     const textPromises = urls.map(url => {
+    //         return fetch(url).then(res => res.text());
+    //     });
+    //     textPromises.reduce((chain, textPromise) => {
+    //         return chain
+    //             .then(() => textPromise)
+    //             .then(text => console.log(text));
+    //     }, Promise.resolve());
+    // }
+    // 代码使用fetch 方法,同时远程读取一组URL,
+    // 每个fetch操作都放回一个Promise对象,放入textPromises数组
+    // 然后,reduce方法一次处理每个Promise对象,
+    // 然后使用then,将所有Promise对象连起来,可以依次输出结果
 
+    // async函数实现
+    // async function logInOrder(urls) {
+    //     for (const url of urls){
+    //         const res = await fetch(url);
+    //         console.log(await res.text());
+    //     }
+    // }
+    // 代码简化,但所有的远程操作都是继发,只有前一个URL返回结果,
+    // 才会去读取下一个URL,效率差,浪费时间,做一个并发发出远程请求
+    // async function logInOrder(urls) {
+    //     // 并发读取远程URL
+    //     const textPromises= urls.map(async url =>{
+    //         const res = await fetch(url);
+    //         return res.text();
+    //     });
+    //     // 按次序输出
+    //     for(const textPromise of textPromises){
+    //         console.log(await textPromise)
+    //     }
+    // }
+    // 代码中,虽然map方法的参数的是async函数,但它是并发执行的
+    // 因为只有async函数内部是继发执行,外部不受影响,
+    // 后面的 for...of 循环内部使用了await,因此事项了按顺序输出
 
+    // 7. 异步遍历器
+    // Iterator 接口是一种数据遍历的协议,只要调用遍历器对象的next方法
+    // 就会得到一个对象,表示当前遍历指针所在的那个位置的信息。
+    // next方法返回的对象的结构是{value,done},
+    // 其中value表示当前数据的值,done 是一个布尔值,表示遍历是否结束
 
+    // 这里隐含一个规定,next 方法必须是同步,只要调用,就必须立刻返回值
+    // 一旦执行next方法,就必须同步地得到value和done这两个属性
+    // 如果遍历指针正好指向同步操作,就没问题
+    // 但对于异步操作,就不合适。
+    // 解决方法: Generator函数里面的异步操作,放回一个Thunk函数或者Promise对象
+    // 即value属性是一个Thunk函数或者Promise对象,等待以后返回真正的值
+    // 而done属性则还是同步产生的
+    // 有一个提案，为异步操作提供原生的遍历器接口
+    // 即value和done这两个属性都是异步产生，这称为”异步遍历器“（Async Iterator）。
 
+    // 异步遍历的接口
+    // 异步遍历器的最大语法特点就是调用遍历器的next方法,返回的是一个Promise对象
+    // asyncIterator
+    //     .next()
+    //     .then(
+    //         ({value,done})=>{}
+    //     )
+    // 代码中,asyncIterator 是一个异步遍历器,
+    // 调用next方法以后,返回一个Promise对象
+    // 因此可以使用then方法指定,这个Promise对象的状态边位resolve以后的回调函数
+    // 回调函数的参数,则是一个具有value和done 两个属性的对象
+    // 这个跟同步遍历器是一样的
+    // 一个对象的同步遍历器的接口,部署在Symbol.iterator属性上面
+    // 同样的,对象的异步遍历器的接口,部署在Symbol.asyncIterator 属性上面
+    // 不管是什么样的对象,只要它的Symbol.asyncIterator属性有值
+    // 就表示应该对其进行异步遍历
+    // 异步遍历器例子
+    // const asyncIterable = createAsyncIterable(['a', 'b']);
+    // const asyncIterator = asyncIterable[Symbol.asyncIterator]();
+    // asyncIterator.next()
+    //     .then(iterResult1 => {
+    //         console.log(iterResult1); // { value: 'a', done: false }
+    //         return asyncIterator.next();
+    //     })
+    //     .then(iterResult2 =>{
+    //         console.log(iterResult2);
+    //         return asyncIterator.next();// { value: 'b', done: false }
+    //     })
+    //     .then(iterResult3 => {
+    //         console.log(iterResult3); // { value: undefined, done: true }
+    //     });
+    // 代码中,异步遍历器其实返回了两次值,
+    // 第一次调用的时候,返回一个Promise对象,
+    // 等到Promise对象resolve了,再返回一个表示当前数据成员信息的对象
+    // 这就是说,异步遍历器与同步遍历器的最终行为是一致的,
+    // 只是会先返回Promise对象,作为中介
 
+    // 由于异步遍历器的next方法,返回的是一个Promise对象,
+    // 因此把它放在await命令后面
+    // async function f() {
+    //     const asyncIterable = createAsyncIterable(['a','b']);
+    //     const asyncIterator = asyncIterable[Symbol.asyncIterator]();
+    //
+    //     console.log(await asyncIterator.next());
+    //     // { value: 'a', done: false }
+    //     console.log(await asyncIterator.next());
+    //     // { value: 'b', done: false }
+    //     console.log(await asyncIterator.next());
+    //     // { value: undefined, done: true }
+    // }
+    // 代码中,next方法用await处理以后,就不必使用then方法了
+    // 注意,异步遍历器的next方法是可以连续调用的,
+    // 不必等到上一步产生的Promise对象 resolve 以后再调用,
+    // 这种情况下,next 方法会累积起来,自动按照每一步的顺序执行下去
+    // 下面例子,把所有的next方法都放在Promise.all方法里面
+    // const asyncGenObj = createAsyncIrerable(['a','b']);
+    // const [{value:v1},{value:v2}] = await Promise.all([
+    //     asyncGenObj.next(),asyncGenObj.next()
+    // ]);
+    // console.log(v1,v2);
 
-
-
-
-
-
-
-
-
-
-
+    // 另一种用法是一次性调用所有的next方法,然后await最后一步操作
+    // const writer = openFile('someFile.txt');
+    // writer.next ('hello');
+    // writer.next ('world');
+    // await writer.return();
 
 
     // function timeCount() {
