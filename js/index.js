@@ -7847,18 +7847,18 @@ $(function () {
     // 而且必须保证yield 语句后面的表达式,必须返回一个Promise
 
     // async函数写法
-    async function chainAnimationsAsync(elem, animations) {
-        let ret = null;
-        try {
-            for (let anim of animations) {
-                ret = await anim(elem)
-            }
-        } catch (err) {
-            // 忽略错误,继续执行
-            console.error(err)
-        }
-        return ret;
-    }
+    // async function chainAnimationsAsync(elem, animations) {
+    //     let ret = null;
+    //     try {
+    //         for (let anim of animations) {
+    //             ret = await anim(elem)
+    //         }
+    //     } catch (err) {
+    //         // 忽略错误,继续执行
+    //         console.error(err)
+    //     }
+    //     return ret;
+    // }
 
     // Async函数是实现最简洁,符合语义,将Generator写法中的自动执行器,
     // 改在语言层面提供,不暴露给用户,代码量少,
@@ -7991,6 +7991,132 @@ $(function () {
     // writer.next ('hello');
     // writer.next ('world');
     // await writer.return();
+
+    // ------
+    // for await...of
+    // for ... of 用于遍历同步的Iterator接口,
+    // 新引入的for await...of 循环,用于遍历异步的Iterator接口
+    // async function f() {
+    //     for await (const x of createAsyncIterable(['a','b'])){
+    //         console.log(x)
+    //     }
+    // }
+
+    // createAsyncIterable()返回一个异步遍历器,
+    // for ... of 循环自动调用这个遍历器的next方法
+    // 会得到一个Promise对象,await 用来处理这个Promise对象,
+    // 一旦resolve ,就把得到的值(x) 传入for...of 的循环体
+    // for await...of 循环的用途,是部署asyncIterable操作的异步接口
+    // 可以直接放入这个循环
+    // let body = '';
+    // async function f() {
+    //     for await (const data of req){
+    //         body += data;
+    //     }
+    //     const parsed = JSON.parse(body);
+    //     console.log('parsed',parsed)
+    // }
+    // 代码中,req是一个asyncIterable 对象,用来异步读取数据
+    // for await...of 循环后,代码就变简洁
+
+    // 如果next方法返回的Promise对象被reject,for await...of 就会报错,
+    // 要用 try... catch 捕捉
+    // async function foo() {
+    //     try{
+    //         for await(const x of createRejectingIterable()){
+    //             console.log(x)
+    //         }
+    //     }catch (e){
+    //         console.error(e)
+    //     }
+    // }
+    //注意,for await...of 循环也可以用于同步遍历器
+    // (async function () {
+    //     for await (const x of ['a','b']){
+    //         console.log(x)
+    //     }
+    // })()
+
+    // 异步Generator函数
+    // 就像Generator函数返回一个同步遍历器对象一样,
+    // 异步Generator函数的作用,是返回一个异步遍历器对象
+    // 在语法上,异步Generator函数就是async函数与Generator函数的结合
+    // async function* gen() {
+    //     yield 'hello'
+    // }
+    // const genObj = gen();
+    // genObj.next().then(x =>{
+    //     console.log(x)
+    // })
+    // 代码中,gen 是一个异步Generator函数,执行后返回一个异步Iterator对象
+    // 对该对象调用next方法,返回一个Promise对象
+    // 异步遍历器的设计目的之一,就是Generator 函数处理同步操作和异步操作的时候,
+    // 可以使用同一套接口
+
+    // // 同步Generator函数
+    // function* map(iterable, func) {
+    //     const iter = iterable[Symbol.iterator]();
+    //     while (true){
+    //         const {value,done } = iter.next();
+    //         if (done){break;}
+    //         yield func(value)
+    //     }
+    // }
+    // // 异步Generator函数
+    // async function* map(iterable, func) {
+    //     const iter = iterable[Symbol.iterator]();
+    //     while(true){
+    //         const {value,done} = await iter.next();
+    //         if(done){break}
+    //         yield func(value)
+    //     }
+    // }
+    // 代码中,可以看到有了异步遍历器以后,
+    // 同步Generator函数和异步Generator函数的写法基本一致
+
+    // 另一个异步Generator函数的例子
+    // async function* readLines(path) {
+    //     let file = await fileOpen(path);
+    //     try {
+    //         while(!file.EOF){
+    //             yield await file.readLine();
+    //         }
+    //     }catch (e){}finally {
+    //         await  file.close();
+    //     }
+    // }
+
+    // 异步操作前面使用await关键字标明,即await后面的操作.
+    // 应该返回Promise对象,
+    // 凡是使用yield关键字的地方,就是next方法的停下来的地方
+    // 它后面的表达式的值(即 await file.readLine()的值)
+    // 会作为next()返回对象的value属性,这一点和同步Generator函数相同
+
+    // 异步Generator函数内部,能够同时使用await和yield命令,
+    //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // function timeCount() {
