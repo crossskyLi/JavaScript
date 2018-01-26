@@ -8227,95 +8227,131 @@ $(function () {
     // a
     // b
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // async 结束
+    //----------------------------------------------------------------
+
+    // Class
+    // 基本语法
+
+    // 1. 简介
+    // 传统 ,生成实例对象的传统方法是通过构造函数
+    // function Point(x, y) {
+    //     this.x = x ;
+    //     this.y = y;
+    // }
+    // Point.prototype.toString = function () {
+    //     return '('+this.x +','+this.y + ')';
+    // };
+    // let p = new Point(1,3);
+    // console.log(p);
+    // console.log(p.toString())
+
+    // es6 引入 Class (类) 概念,作为对象的模版,通过 class 关键字,可以定义类
+    // es6 改写上面代码
+    // class Point {
+    //     constructor(x,y){
+    //         this.x = x;
+    //         this.y = y;
+    //     }
+    //     toString(){
+    //         return '('+this.x +','+this.y + ')';
+    //     }
+    // }
+    // let result = new Point(1,2);
+    // console.log(result,result.toString())
+
+    // 代码中定义了一个'类',可以看到里面有一个constructor 方法,
+    // 这就是构造方法,而this 关键字则代表实例对象
+    // es5 的构造函数Point ,对应ES6的point 类的构造方法
+
+    // Point类除了构造方法,还定义了一个toString方法.
+    // 注意,定义'类'的方法的时候,前面不需要加上function关键字
+    // 直接把函数定义放进去就可以,另外,方法之间不需要都好分隔,加了会报错
+
+    // es6 的类,完全可以看作构造函数的另一种写法
+    // class Point {
+    //
+    // }
+
+    // console.log(typeof Point); // 'function'
+    // console.log(Point === Point.prototype.constructor) // true
+    // 代码表明,类的数据类型就是函数,类本身就指向构造函数
+    // 使用的时候直接对类使用new命令,跟构造函数无异
+    // class Bar {
+    //     doStuff(){
+    //         console.log('stuff');
+    //     }
+    // }
+    // let b = new Bar();
+    // b.doStuff();
+
+    // 构造函数的prototype属性,在ES6 的类上面继续存在,
+    // 事实上,类的所有方法都定义在类的prototype属性上
+    // class Point{
+    //     constructor(){}
+    //     doSomething(){}
+    //     doElse(){}
+    // }
+    // // 等同于
+    // Point.prototype = {
+    //     constructor(){},
+    //     doSomething(){},
+    //     doElse(){}
+    // }
+
+    // 在类的实例上面调用方法,其实就是调用原型上的方法
+    // class B {}
+    // let b = new B();
+    // console.log(b.constructor === B.prototype.constructor); // true
+    // B.doSomeThing = function (value) {
+    //     console.log(value);
+    // };
+    // console.log(b.doSomeThing); // undefined
+    // console.log(B.doSomeThing); // 方法
+    // B.doSomeThing(1112)
+
+    // class B {}
+    // B.prototype.doSomeThing = function (value) {
+    //     console.log(value);
+    // };
+    // let b = new B();
+    // console.log(b.constructor === B.prototype.constructor); // true
+    //
+    // console.log(b.doSomeThing); // 方法
+    // console.log(B.prototype.doSomeThing); // 方法
+    // console.log(B.prototype.doSomeThing === b.doSomeThing); // true
+    // B.prototype.doSomeThing(1112)
+
+    // 由于类的方法都是定义在prototype对象上,所以类的新方法,可以添加在prototype上
+    // Object.assign 方法可以很方便的一次向类添加多个方法
+
+    // class Point {
+    //     constructor(){
+    //         this.a = 1;
+    //     }
+    // }
+    // Object.assign(Point.prototype,{
+    //     toString(){
+    //         return this.a.toString() +'   a 字符串'
+    //     }
+    // });
+    // let a = new Point();
+    // console.log(a);
+    // console.log(a.toString())
+
+    // prototype 对象的constructor 属性,直接指向类本身,与es5行为一致
+    // class Point {
+    //     constructor(){}
+    //     toString(){}
+    // }
+    // console.log('Point.prototype',Point.prototype);// {constructor: ƒ, toString: ƒ}
+    // let keys = Object.keys(Point.prototype);
+    // console.log('keys',keys);  // []
+    // let propertyName = Object.getOwnPropertyNames(Point.prototype);
+    // console.log('propertyName',propertyName) // ["constructor","toString"]
+    //
+    // 代码中,toString 方法是Point类内部定义的方法,是不可枚举的
+    // 这一点与es5的行为不一致
 
 
 
