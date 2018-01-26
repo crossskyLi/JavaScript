@@ -8352,6 +8352,34 @@ $(function () {
     //
     // 代码中,toString 方法是Point类内部定义的方法,是不可枚举的
     // 这一点与es5的行为不一致
+    // let Point = function (x, y) {
+    //     this.x = x ;
+    //     this.y = y ;
+    // };
+    // Point.prototype.toString = function () {
+    //     console.log(this)
+    // };
+    // let keys = Object.keys(Point.prototype);
+    // console.log('keys',keys);//["toString"]  toString 可枚举
+    // let propertyNames = Object.getOwnPropertyNames(Point.prototype);
+    // console.log('propertyNames',propertyNames) //["constructor", "toString"]
+
+    //2. 严格模式
+    // 类和模块内部,默认是严格模式,不需要使用 use strict 指定运行模式,
+    // 只要代码写在类或者模块之中,就只有严格模式可用
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
