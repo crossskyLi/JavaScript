@@ -8093,7 +8093,222 @@ $(function () {
     // 会作为next()返回对象的value属性,这一点和同步Generator函数相同
 
     // 异步Generator函数内部,能够同时使用await和yield命令,
-    //
+    // await 命令用于将外部操作产生的值输入函数内部,
+    // yield命令用于将函数内部的值输出
+    // 上面代码定义的异步Generator函数的用法如下
+    // (async function () {
+    //     for await (const line of readLines(filePath)){
+    //         console.log(line)
+    //     }
+    // })()
+
+    // 异步 Generator函数可以与for await...of 循环结合起来使用
+    // async function* prefixLines(asyncIterable) {
+    //     for await (const line of asyncIterable){
+    //         yield '>' +line
+    //     }
+    // }
+
+    // 异步 Generator函数的返回值是一个异步Irerator ,
+    // 即每次调用他的next 方法,会返回一个Promise对象,
+    // 也就是说,跟在yield命令后面的,应该是一个Promise对象
+    // async function* asynGenerator() {
+    //     console.log('start');
+    //     const result = await doSomethingAsync();// (A)
+    //     yield 'result ' +result ;// (B)
+    //     console.log('done')
+    // }
+    // const ag = asynGenerator()
+    // ag.next().then(({value,done})=>{
+    //     console.log(value,done)
+    // })
+    // 代码中,ag 是 asyncGenerator 函数返回的异步Iterator 对象,
+    // 调用ag.next() 以后,asyncGenerator 函数内部执行顺序如下:
+    // 1. 打印出 start
+    // 2. await 命令返回一个promise对象,但是程序不会停在这里,
+    //    继续往下执行。
+    // 3. 程序在B处 暂停执行,yeild 命令立刻返回一个Promise对象,
+    //    该对象就是ag.next() 的返回值
+    // 4. A处await 命令后面的那个Promise对象resolved,产生的值放入result变量
+    // 5. B处的Promise对象resolved.then方法指定的回调函数开始执行.
+    //    该函数的参数是一个对象,value的值是表达式 'result '+result 的值
+    //    done属性的值是false
+
+    // A 和 B 两行的作用类似于下面代码
+    // return new Promise((resolve,reject)=>{
+    //     doSomethingAsync().then(result =>{
+    //         resolve({value:'result :'+result,done:false})
+    //     })
+    // })
+
+    // 如果异步Generator函数抛出错误,会被Promise对象reject,
+    // 然后抛出的错误被catch 方法捕获
+    // async function* asyncGenerator() {
+    //     throw new Error('something wrong')
+    // }
+    // asyncGenerator().next().catch(err=>console.log(err))
+
+    // 注意,普通的async函数返回的是一个Promise对象,
+    // 而异步Generator函数返回的是一个异步Iterator对象,
+    // 可以这样理解,async函数和异步Generator函数,是封装异步操作的两种方法
+    // 都用来达到同个目的
+    // 区别: 前者自带执行器,后者通过for await ... of 执行,或者自己编写执行器
+    // 异步Generator函数执行器
+    // async function takeAsync(asyncIterable, count = infinity) {
+    //     const result = [];
+    //     const iterator = asyncIterable[Symbol.asyncIterator]();
+    //     while(result.length < count){
+    //         const {value,done} = await iterator.next();
+    //         if (done){
+    //             break;
+    //         }
+    //         result.push(value);
+    //     }
+    //     return result;
+    // }
+    // 代码中,异步 Generator函数产生的异步遍历器,会通过while循环自动执行
+    // 每当 await iterator.next() 完成.就会进入下一轮循环,一旦done属性为true
+    // 就会跳出循环,异步遍历器结束
+
+    // 另一个自动执行器的实例
+    // async function f() {
+    //     async function* gen() {
+    //         yield 'a';
+    //         yield 'b';
+    //         yield 'c';
+    //     }
+    //     return await takeAsync(gen())
+    // }
+    // f().then(function (result) {
+    //     console.log(result)
+    // })
+
+    // 异步Generator函数出现后,JS 就有四种函数形式:
+    // 普通函数,async函数,Generator函数和异步Generator函数
+    // 注意区分每种函数的不同之处,基本上,如果是按顺序执行的异步操作
+    // (比如读取文件,然后写入新内容,存入硬盘),可以使用async函数
+    // 如果是一系列产生相同数据结构的异步操作,(比如一行一行读取文件)
+    // 可以使用异步Generator函数
+    // 异步Generator函数可以通过next方法的参数,接收外部传入的数据
+    // const writer = openFile('somefile.txt');
+    // writer.next('hello');
+    // writer.next('world');
+    // await writer.return();
+    // 代码中,openFile 是一个异步Generator函数,next方法的参数,
+    // 向该函数内部的操作传入数据,每次next方法都是同步执行,
+    // 最后await 命令用于等待整个写入操作结束
+    // 最后,同步的数据结构,也可以使用异步Generator函数
+    // async function* createAsyncIterable(asyncIterable) {
+    //     for(const elem of syncIterable){
+    //         yield elem;
+    //     }
+    // }
+    // 代码中,由于没有异步操作,所以没有使用await关键字
+    // ----------
+
+    // yield* 语句
+    // yield*语句也可以跟一个异步遍历器
+    // async function* gen() {
+    //     yield 'a';
+    //     yield 'b';
+    //     return 2;
+    // }
+    // async function* gen2() {
+    //     // result 最终会等于2
+    //     const result = yield *gen();
+    // }
+    // // 代码中,gen2函数里面的result变量,最后值是2
+    // // 与同步Generator函数一样,for await...of 循环会展开yield*
+    // (async function () {
+    //     for await (const x of gen2()){
+    //         console.log(x)
+    //     }
+    // })()
+    // a
+    // b
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
