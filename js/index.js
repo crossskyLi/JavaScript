@@ -8498,6 +8498,226 @@ $(function () {
     // 使用实例的__proto__可以修改原型,必须相当谨慎,不推荐使用,
     // 这会改变'类'的原始定义,影响到所有的实例
 
+    // 5. Class表达式
+    // 与函数一样,类可以使用表达式的形式定义
+    // const MyClass = class Me {
+    //     getClassName(){
+    //         return Me.name
+    //     }
+    //     getThis(){
+    //         return this
+    //     }
+    // };
+    // let result = new MyClass();
+    // console.log(result );
+    // console.log(result.getClassName());// Me
+    // console.log(result.getThis()); //Me{}
+    // 类的名字是MyClass 而不是Me
+    // Me 只在Class的内部代码可以用,指代当前类
+    // let inst = new MyClass();
+    // console.log(Me.name);// ReferenceError: Me is not defined
+    // console.log(Me)// ReferenceError: Me is not defined
+    // 代码表示,Me 只在Class 内部有定义
+
+    // 如果类的内部没有用到,可以省略Me,也就是可以写成如下
+    const MyClass = class {
+        //...
+    }
+    // 采用Class 表达式,可以写出立即执行的Class
+    // let person = new class{
+    //     constructor(name){
+    //         this.name = name;
+    //     }
+    //     sayName(){
+    //         console.log(this.name)
+    //     }
+    // }('一个名');
+    // person.sayName();// person 是一个立即执行的类的实例
+
+    // 不存在变量提升
+    // 类不存在变量提升(hoist),与ES5不同
+    // let result = new Foo();// ReferenceError
+    // class Foo{};
+    // 代码中,foo类使用在前面,定义在后面,这样会报错,
+    // 因为es6不会把类的声明提升到代码头部,这种规定的原因与下文提到的继承有关
+    // 必须子类在父类之后定义
+    // {
+    //     let Foo = class {};
+    //     class Bar extends Foo{};
+    //     console.log(Bar)
+    // }
+    // 代码不会报错,因为Bar继承Foo的时候,Foo已经有定义,
+    // 但是如果存在class的提升,上面的代码就会报错,因为class会被提升到代码头部,
+    // 而let命令是不提升的,所以导致Bar继承Foo的时候,Foo还没有定义
+
+    // 7. 私有方法和私有属性
+    // 现有的方法,
+    // 私有方法是常见需求,但是ES6没有提供,变通方法
+
+    // class Widget{
+    //     // 公有方法
+    //     foo(name){
+    //         this._bar(name)
+    //     }
+    //     // 私有方法,
+    //     _bar(name){
+    //         return this.name = name
+    //     }
+    // }
+    // 代码中,_bar方法前面的下划线,表示这只是一个限于内部使用的内部方法,
+    // 但是这种方法并不保险,类的外部仍然可以调用此方法
+
+    // 另一种方法,将私有方法移出模块,因为模块内部的所有方法都是对外可见的
+    // class Widget{
+    //     foo(name){
+    //         bar.call(this,name)
+    //     }
+    // }
+    // function bar(name) {
+    //     return this.name = name
+    // }
+    // 代码中,foo是公有方法,内部调用了bar.call(this,name);
+    // 这使得bar实际上成为了当前模块的私有方法
+
+    // 还有一种方法,利用Symbol值的唯一性
+    // 将私有方法的名字明明为一个Symbol的值
+    // const bar = Symbol('bar');
+    // const name = Symbol('name');
+    // export default class myClass{
+    //     // 公有方法
+    //     foo(baz){
+    //         this[bar](baz)
+    //     }
+    //     [bar](baz){
+    //         return this[name] = baz
+    //     }
+    // }
+    // 代码中,bar 和name 都是Symbol值,导致第三方无法获取到它们.
+    // 达到私有方法和私有属性的效果
+
+    // 私有属性提案
+    // 与私有方法一样,ES6不支持私有属性
+    // 提案:
+    // 给class加私有属性
+    // 方法是在属性名前面,使用#表示
+    // class Point {
+    //     #x ;
+    //     constructor(x = 0){
+    //         #x = +x;// 写成this.#x 也是可以的
+    //     }
+    //     get x(){
+    //         return #x;
+    //     }
+    //     set x (value){#x = +value}
+    // }
+    // 代码中,#x就表示私有属性x,在Point类之外是读取不到这个属性的,
+    // 私有属性与实例的属性可以同名（比如，#x与get x()）。
+
+    // 私有属性可以指定初始值，在构造函数执行时进行初始化。
+    // class Point{
+    //     #x  = 0;
+    //     constructor(){
+    //         #x;//0
+    //     }
+    // }
+
+    // 之所以要引入一个新的前缀表示私有属性,而没有采用private关键字,
+    // 是因为Javascript是一门动态语言,使用独立的符号似乎是唯一可靠的方法,
+    // 能够准确的区分一种属性是否为私有属性,
+    // 另外Ruby语言使用@表示私有属性,ES6没有用这个符号而使用#,是因为@已经留给了Decorator
+    // 该提案之规定了私有属性的写法,但是,很自然它可以用来写私有方法
+    // class Foo{
+    //     #a ;
+    //     #b;
+    //     #sum(){
+    //         return #b+#a
+    //     }
+    //     printSum (){
+    //         console.log(#sum())
+    //     }
+    //     constructor(a,b){
+    //         #a = a;
+    //         #b = b;
+    //     }
+    // }
+    // 代码中 #sum 就是一个私有方法
+
+    // 另外私有属性也可以设置getter 和 setter方法
+    // class Counter{
+    //     #xValue = 0;
+    //     get #x(){
+    //         return #xValue
+    //     }
+    //     set #x (value){
+    //         this.#xValue = value;
+    //     }
+    //     constructor(){
+    //         super();
+    //     }
+    // }
+    // 代码中,#x 是一个私有属性,它的读写都通过get #x(); 和set #x()来完成
+
+    // 8.this的指向
+    // 类的方法内部如果含有this,它默认执行类的实例,但是,必须十分小心,
+    // 一旦单独使用,很可能报错
+    // class Logger{
+    //     printName(name = 'here'){
+    //         this.print (`hello ${name}`)
+    //     }
+    //     print(text){
+    //         console.log(text)
+    //     }
+    // }
+    // const logger = new Logger();
+    // console.log(logger)
+    // const {printName } = logger;
+    // console.log(printName)
+    // printName()// TypeError: Cannot read property 'print' of undefined
+    // 代码中printName方法中的this,默认执行logger类的实例
+    // 但是如果将这个方法提取出来单独使用,this会指向该方法运行时所在的环境
+    // 因为找不到print方法而导致报错
+    // 一个比较简单的方法是,在构造方法中绑定this,这样就不会找不到print方法
+    // class Logger {
+    //     constructor(){
+    //         this.printName = this.printName.bind(this);
+    //     }
+    // }
+    // 另一种解决方法是使用箭头函数
+    // class Logger {
+    //     constructor() {
+    //         this.printName = (name = 'here') => {
+    //             this.print(`hello ${name}`)
+    //         }
+    //     }
+    // }
+
+    // 还有一种方法是使用Proxy ,获取方法的时候,自动绑定this
+    // function selfish(target) {
+    //     const cache = new WeakMap();
+    //     const handler = {
+    //         get(target,key){
+    //             const value = Reflect.get(target,key);
+    //             if(typeof value !== 'function'){
+    //                 return value;
+    //             }
+    //             if(!cache.has(value)){
+    //                 cache.set(value,value.bind(target))
+    //             }
+    //             return cache.get(value)
+    //         }
+    //     };
+    //     const proxy = new Proxy(target,handler);
+    //     return proxy;
+    // }
+    // const logger = selfish(new Logger())
+
+    // 9.name 属性,由于本质上,ES6的类只是ES5的构造函数的一层包装
+    // 所以函数的许多特性都被Class继承,包括name 属性
+    // class Point {
+    // };
+    // console.log(Point.name)
+    // name 属性总是返回紧跟在class 关键字后面的类名
+    
 
     // function timeCount() {
     //     let nowTime = new Date();
