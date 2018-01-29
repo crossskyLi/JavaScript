@@ -8364,38 +8364,139 @@ $(function () {
     // let propertyNames = Object.getOwnPropertyNames(Point.prototype);
     // console.log('propertyNames',propertyNames) //["constructor", "toString"]
 
-    //2. 严格模式
+    // 2. 严格模式
     // 类和模块内部,默认是严格模式,不需要使用 use strict 指定运行模式,
     // 只要代码写在类或者模块之中,就只有严格模式可用
 
+    // 3. constructor方法
+    // constructor 方法是类的默认方法,通过new命令生成对象实例时,自动调用该方法。
+    // 一个类必须有constructor方法,如果没有显式定义,一个空的constructor方法会被默认添加
+    // class Point {}
+    // console.log(Point);
+    // // 等同于
+    // class Point{
+    //     constructor(){}
+    // }
+    // constructor 方法默认返回实例对象(即this),完全可以指定返回另外一个对象
+    // class Foo{
+    //     constructor(){
+    //         return Object.create(null)
+    //     }
+    //     getStr(){
+    //         console.log(111)
+    //     }
+    // }
+    // let result = new Foo();
+    // console.log(result instanceof Foo);
+    // console.log(result);
+    // console.log(result.prototype.getStr); // 报错
+    // result.prototype.getStr();// 报错
+    // 代码中,constuctor函数返回一个全新对象,结果导致实例对象不是Foo类的实例
 
+    // 类必须使用new调用,否则报错,这是它与普通构造函数的主要区别
+    // 后者不用new  也可以执行
+    // class Foo{
+    //     constructor(){
+    //         return this;
+    //     }
+    // }
+    // Foo();// 报错,Class constructor Foo cannot be invoked without 'new'
+    // TypeError: Class constructor Foo cannot be invoked without 'new'
 
+    // 4.类的实例对象
+    // 生成类的实例对象的写法,与ES5完全一样,也是使用new命令.
+    // class Point{
+    //     constructor(value){
+    //         this.value = value;
+    //     }
+    // }
+    // // let point = Point(1.1,1);// 报错
+    // let point = new Point(1)
+    // console.log(point)
 
+    // 与ES5一样,实例的属性除非显示定义在其本身( 即定义在this对象上),
+    // 否则都是定义在原型上
+    // 定义类
+    // class Point {
+    //     constructor(x,y){
+    //         this.x = x;
+    //         this.y = y;
+    //     }
+    //     toString(){
+    //         return this.x.toString()+this.y.toString();
+    //     }
+    // }
+    // let point = new Point(1,5);
+    // let str = point.toString();
+    // console.log(str);
+    // console.log(point);
+    // let hasOwnProperty = point.hasOwnProperty('x');
+    // console.log('x',hasOwnProperty);
+    // hasOwnProperty = point.hasOwnProperty('y');
+    // console.log('y',hasOwnProperty);
+    // hasOwnProperty = point.hasOwnProperty('toString');
+    // console.log('toString',hasOwnProperty);
+    // hasOwnProperty = point.__proto__.hasOwnProperty('toString');
+    // // hasOwnProperty = point.prototype.hasOwnProperty('toString');// 报错
+    // console.log('prototype toString',hasOwnProperty)
+    // 代码中x 和y都是实例对象point自身的属性(因为定义在this变量上),
+    // 所以hasOwnProperty 方法返回true, 而toString 是原型对象的属性
+    // (因为定义在Point 类上),所以 hasOwnProperty方法返回false
+    // 这些都与ES5的行为保持一致
 
+    // 与ES5一样,类的所有实例共享一个原型对象
+    // 定义类
+    // class Point {
+    //     constructor(x,y){
+    //         this.x = x;
+    //         this.y = y;
+    //     }
+    //     toString(){
+    //         return this.x.toString()+this.y.toString();
+    //     }
+    // }
+    // let p1 = new Point(1,5);
+    // let p2 = new Point(1,3);
+    // // console.log(p1 instanceof p2);
+    // console.log(p1 instanceof Point);
+    // console.log(p2 instanceof Point);
+    // console.log(p2.__proto__ === p1.__proto__);
+    // p1 和p2 都是Point 的实例,它们的原型都是Point.prototype
+    // 所以__proto__属性是相等的
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // 这也意味可以通过实例的__proto__ 为'类'添加方法
+    //      __proto__ 并不是语言本身的特性,,要避免使用
+    //      生产环境中,可以用Object.getPrototypeOf 方法来获取对象的原型,
+    //      然后再来为原型添加方法属性
+    // 定义类
+    // class Point {
+    //     constructor(x, y) {
+    //         this.x = x;
+    //         this.y = y;
+    //     }
+    //
+    //     toString() {
+    //         return this.x.toString() + this.y.toString();
+    //     }
+    // }
+    //
+    // let p1 = new Point(1);
+    // let p2 = new Point(2);
+    // p1.__proto__.printName = function () {
+    //     return 'some str'
+    // };
+    // let result1 = p1.printName();
+    // let result2 = p2.printName();
+    // console.log(result1)
+    // console.log(result2 + 'result2 ')
+    // let p3 = new Point(123);
+    // let result3 = p3.printName();
+    // console.log(result3)
+    // 代码中在p1 的原型上添加了一个printName 方法
+    // 由于p1的原型就是p2的原型,因此p2也可以调用这个方法
+    // 而且 此后新建的实例p3也可以调用这个方法。
+    // 使用实例的__proto__可以修改原型,必须相当谨慎,不推荐使用,
+    // 这会改变'类'的原始定义,影响到所有的实例
 
 
     // function timeCount() {
