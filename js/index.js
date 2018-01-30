@@ -8520,9 +8520,9 @@ $(function () {
     // 代码表示,Me 只在Class 内部有定义
 
     // 如果类的内部没有用到,可以省略Me,也就是可以写成如下
-    const MyClass = class {
-        //...
-    }
+    // const MyClass = class {
+    //     //...
+    // }
     // 采用Class 表达式,可以写出立即执行的Class
     // let person = new class{
     //     constructor(name){
@@ -8717,7 +8717,273 @@ $(function () {
     // };
     // console.log(Point.name)
     // name 属性总是返回紧跟在class 关键字后面的类名
+
+    // 10. Class的取值函数(getter) 和存值函数(setter)
+    // 与ES5一样,在类的内部可以使用get 和set 关键字
+    // 对某个属性设置存值函数和取值函数,拦截该属性的存取行为
+    // class MyClass {
+    //     constructor() {
+    //         this.name = '1';
+    //     }
+    //
+    //     get prop() {
+    //         if(typeof this.name ==='number'){
+    //             return 3* this.name;
+    //         }
+    //        // return this.name
+    //         return this.prop// 溢出
+    //     }
+    //
+    //     set prop(value) {
+    //         this.name = value;
+    //         return 'setter' + value
+    //     }
+    // }
+    //
+    // let inst = new MyClass();
+    // // inst.prop = 123;
+    // inst.prop = '123';
+    // console.log(inst.prop)
+    // 代码中,prop属性有对应的存值函数和取值函数,因此赋值和读取行为都被自定义了
+    // 存值函数和取值函数是设置在属性的Descriptor对象上的
+
+    // class CustomHTMLElement {
+    //     constructor(element) {
+    //         this.element = element;
+    //     }
+    //
+    //     get html() {
+    //         return this.element.innerHTML
+    //     }
+    //     set html (value){
+    //         this.element.innerHTML = value;
+    //     }
+    // }
+    // let descriptor = Object.getOwnPropertyDescriptor(
+    //     CustomHTMLElement.prototype,'html'
+    // );
+    // console.log('descriptor',descriptor);
+    // console.log("get" in descriptor, "set" in descriptor )
+    // 代码中,存值函数和取值函数是定义在html属性的描述对象上面,
+    // 这与ES5完全一致
+
+    // class 的 Generator方法
+    // 如果某个方法前加上了星号 (*),就表示该方法是一个Generator函数
+    // class Foo {
+    //     constructor(...args) {
+    //         this.args = args;
+    //     }
+    //     *[Symbol.iterator](){
+    //         for(let arg of this.args){
+    //             yield arg;
+    //         }
+    //     }
+    // }
+    // let foo = new Foo('1',1123,123);
+    // for(let x of foo){
+    //     console.log(x)
+    // }
+    // 代码中,Foo类的Symbol.iterator 方法前面有一个星号,
+    // 表示该方法是一个Generator函数,
+    // Symbol.iterator 方法返回一个Foo类的默认遍历器
+    // for...of 循环会自动调用这个遍历器
+
+    // 12. class的静态方法
+    // 类相当于实例的原型,所有在类中定义的方法,都会被实例继承
+    // 如果在一个方法前面,加上 static 关键字,就表示该方法不会被实例集成
+    // 而是直接通过类来调用,这称为静态方法
+    // class Foo{
+    //     static classMethod(){
+    //         return 'some str'
+    //     }
+    // }
+    // let result =Foo.classMethod();
+    // console.log(result);
+    // let foo = new Foo();
+    // console.log(foo.classMethod())//TypeError: foo.classMethod is not a function
+    // 代码中,Foo类的classMethod 方法前面有static关键字
+    // 表明该方法是一个静态方法,可以直接在Foo类上调用(Foo.classMethod),
+    // 而不是在Foo类的实例上调用
+    // 如果在实例上调用静态方法,会抛出一个错误,表示不存在该方法
+
+    // 注意,如果静态方法包含this 关键字,这个this指的是类,而不是实例
+    // class Foo{
+    //     static bar(){
+    //         this.baz();
+    //         this.func();// 报错,not a function
+    //     }
+    //     static baz(){ // 调用此方法
+    //         console.log('123')
+    //     }
+    //     baz(){
+    //         console.log('321')
+    //     }
+    //     func(){}
+    // }
+    // Foo.bar();
+    // 代码中,静态方法bar调用了this.baz ,这里的this指的是Foo类
+    // 而不是Foo的实例,等同于调用Foo.baz
+    // 另外,静态方法可以与非静态方法重名
+
+    // 父类的静态方法,可以被子类继承
+    // class Foo{
+    //     static classMethod(){
+    //         return 'hello'
+    //     }
+    // }
+    // class Bar extends Foo{
+    //     static showMsg(){
+    //         let result = this.classMethod();
+    //         console.log(result);
+    //         return result + ' msg'
+    //     }
+    // }
+    // let result = Bar.classMethod();
+    // console.log('result',result);//result hello
+    // let barMsg = Bar.showMsg();//hello
+    // console.log('barMsg',barMsg )//hello msg
+    // 代码中,父类Foo有一个静态方法,子类Bar可以调用这个方法
+
+    // 静态方法也可以从super对象上调用
+    // class Foo{
+    //     static classMethod(){
+    //         return 'hello'
+    //     }
+    // }
+    // class Bar extends Foo{
+    //     static classMethod(){ // 子类可以使用与父类重名的静态方法名,
+    //         return super.classMethod() + ' 123' //通过super调用父类的静态方法
+    //     }
+    // }
+    // let result = Bar.classMethod();
+    // console.log(result)
+
+    // 13. class 的静态属性和实例属性
+    // 静态属性指的是class本身的属性,即class.propName,
+    // 而不是定义在实例对象(this)上的属性
+
+    // class Foo{
+    //
+    // }
+    // Foo.prop = 1;
+    // console.log('Foo.prop',Foo.prop);
+    // let result = new Foo();
+    // console.log('result',result);
+    // class Bar extends Foo{
+    //
+    // }
+    // console.log('Bar.prop',Bar.prop)
+    // 上面的写法,为Foo类定义了一个静态属性prop
+    // 目前只有这种写法可行,ES6明确规定,class内部只有静态方法,没有静态属性
+    // 以下两种写法无效
+    // class Foo{
+    //      1.
+    //     prop:2
+    //      2.
+    //     static prop:2
+    // }
+
+    // 静态属性的提案.
+    // (1)类的实例属性
+    // 类的实例属性可以用等式,写入类的定义中
+    // class MyClass {
+    //     myProp = 41;
+    //     constructor(){
+    //         console.log(this,this.myProp)
+    //     }
+    // }
+    // console.log(new MyClass())
+    // 代码中,myProp就是myClass 的实例属性,
+    // 在MyClass的实例上,可以读取这个属性
+
+    // 之前,定义实例属性,只能写在 constructor 里面
+    // class reactCounter extends React.Component{
+    //     constructor(props){
+    //         super(props);
+    //         this.state = {
+    //             count:0
+    //         }
+    //     }
+    // }
+
+    // 代码中,构造方法constructor里面,定义了this.state 属性
+    // 有了新写法后,可以不在constructor方法里面定义
+    // class ReactCounter extends React.Component{
+    //     state={
+    //         count:0
+    //     }
+    // }
+    // 写法更为清晰
+    // 为了可读性的目的,对于那些在constructor里面已经定义的实例属性
+    // 新写法允许直接列出
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // function timeCount() {
     //     let nowTime = new Date();
