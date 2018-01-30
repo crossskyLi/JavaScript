@@ -8915,7 +8915,90 @@ $(function () {
     // }
     // 写法更为清晰
     // 为了可读性的目的,对于那些在constructor里面已经定义的实例属性
-    // 新写法允许直接列出;;
+    // 新写法允许直接列出
+    // class ReactCounter extends React.Component{
+    //     state;
+    //     constructor(props){
+    //         super(props);
+    //         this.state = {
+    //             count:0
+    //         }
+    //     }
+    // }
+    // (2) 类的静态属性
+    // 类的静态属性只要在上面的实例属性写法前面,加上static关键字就可以了
+    // class MyClass{
+    //     static myStaticProp = 42;
+    //     constructor(){
+    //         console.log(MyClass.myStaticProp)
+    //     }
+    // }
+    // 同样,这个写法方便了静态属性的表达
+    // 之前写法
+    // class Foo{
+    //     // ...
+    // }
+    // Foo.prop =1;
+    //
+    // // 新写法
+    // class Foo{
+    //     static prop = 1
+    // }
+    // 代码中,之前写法的静态属性定义在类的外部,
+    // 类生成后,在生成静态属性,
+    // 这样子很容易让人忽略这个静态属性,不符合相关代码放在一起的代码组织原则
+    // 另外,新写法是显式声明(declarative),而不是赋值处理,语义更好
+
+    // 14.new.target 属性
+    // new 是从构造函数生成实例对象的命令,es6 为new命令引入一个new.target 属性
+    // 该属性一般用在构造函数中,
+    // 返回new 命令作用于那个构造函数,如果构造函数不是通过new命令调用的
+    // new.target会返回undefined ,因此这个属性可以用来确定构造函数是怎么调用的
+
+    function Person(name){
+        if(new.target !== undefined){
+            this.name = name;
+        }else{
+            throw new Error('使用new 命令生成实例')
+        }
+    }
+    // 另一种写法
+    function Person(name) {
+        if(new.target){}
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
