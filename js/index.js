@@ -8955,17 +8955,98 @@ $(function () {
     // 返回new 命令作用于那个构造函数,如果构造函数不是通过new命令调用的
     // new.target会返回undefined ,因此这个属性可以用来确定构造函数是怎么调用的
 
-    function Person(name){
-        if(new.target !== undefined){
-            this.name = name;
-        }else{
-            throw new Error('使用new 命令生成实例')
-        }
-    }
-    // 另一种写法
-    function Person(name) {
-        if(new.target){}
-    }
+    // function Person1(name){
+    //     if(new.target !== undefined){
+    //         this.name = name;
+    //     }else{
+    //         throw new Error('使用new 命令生成实例1')
+    //     }
+    // }
+    // // 另一种写法
+    // function Person2(name) {
+    //     if(new.target === Person2){
+    //         this.name = name;
+    //     }else{
+    //         throw new Error('使用new 命令生成实例2')
+    //     }
+    // }
+    // let person1 = new Person1('QWE');
+    // console.log(person1);
+    // let person2 = new Person2('12');
+    // console.log(person2);
+    // let notAPerson1 = Person1.call(person1,'123');//报错
+    // let notAPerson2 = Person2.call(person2,'123');//报错
+    // 代码确保构造函数只能通过 new 命令调用
+
+    // Class 内部调用new.target ,返回当前class
+    // class Rectangle{
+    //     constructor(length,width){
+    //         console.log(new.target === Rectangle); //true 返回当前Class
+    //         this.length = length;
+    //         this.width = width;
+    //     }
+    // }
+    // let result = new Rectangle(3,4);
+
+    // 需要注意的是,子类继承父类时,new.target会返回子类
+    // class Rectangle{
+    //     constructor(length,width){
+    //         console.log(new.target === Rectangle);// false
+    //         console.log(new.target === Square);// true
+    //     }
+    // }
+    // class Square extends Rectangle{
+    //     constructor(length){
+    //         super(length,length)
+    //     }
+    // }
+    // let result = new Square(123);
+    // console.log(result)
+    // 代码中,new.target返回子类
+    // 利用这个特点可以写出不能独立使用,必须继承后才能使用的类
+    // class Shape{
+    //     constructor(length,width){
+    //         if(new.target === Shape){
+    //             throw new Error('本类不能实例化');
+    //             return
+    //         }
+    //         this.length = length;
+    //         this.width = width;
+    //     }
+    // }
+    // class Rectangle extends Shape{
+    //     constructor(length,width){
+    //         super(length,width);
+    //         //...
+    //     }
+    // }
+    // // let x = new Shape(); //报错
+    // let y = new Rectangle(3.4,4); //Rectangle {length: 3.4, width: 4}
+    // console.log(y)
+    // 代码中 Shape 类不能被实例化,只能用于继承
+    // 注意 ,在函数外部,使用new.target 会报错
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
