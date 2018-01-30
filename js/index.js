@@ -9144,6 +9144,67 @@ $(function () {
     // 代码中,实例对象cp同时是ColorPoint 和Point 两个类的实例
     // 这与ES5 行为完全一致
 
+    // 父类的静态方法也会被子类继承
+    // class A {
+    //     static hello(){
+    //         console.log('hello world')
+    //     }
+    // }
+    // class B extends A{
+    //
+    // }
+    // B.hello();
+    // 代码中 hello() 是A类的静态方法,B 继承A ,也继承了A的静态方法
+
+
+    // 2. Object.getPrototypeOf()
+    // Object.getPrototypeOf() 方法可以用来从子类上获取父类
+    // class A {
+    //     static hello() {
+    //         console.log('hello world');
+    //     }
+    //
+    //     constructor() {
+    //         this.a = 123
+    //     }
+    // }
+    //
+    // class B extends A {
+    // }
+    //
+    // let result = Object.getPrototypeOf(B);
+    // let newB = new B();
+    // console.log(result);
+    // console.log(result === A);
+    // console.log(result.prototype.a === A.prototype.a); // true
+    // console.log(result.prototype.a) // undefined
+    // console.log(newB.a) // 123
+    // getPrototypeOf这个方法可以用来判断一个类是否继承了另一个类
+
+    // 3. super 关键字
+    // super关键字,既可以当作函数使用,也可以当作对象使用
+    // 两种情况下,它的用法不同
+
+    // 第一种,super作为函数调用,代表父类的构造函数,
+    // es6要求,子类的构造函数必须执行一次super函数
+    class A{}
+    class B extends A {
+        constructor(){
+            super()
+        }
+    }
+    // 代码中,子类B 的构造函数中super(), 代表调用父类的构造函数
+    // 这是必须的,否则javascript引擎会报错
+
+    // 注意super 虽然代表父类A 的构造函数,但是返回的是子类B的实例
+    // 即super内部的this指的是B,因此super() 在这里相当于,A.prototype.constructor.call(this)
+
+
+
+
+
+
+
 
 
 
