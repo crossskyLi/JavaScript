@@ -9382,14 +9382,35 @@ $(function () {
 
     // 代码中,super.valueOf() 表明super是一个对象,就不会报错
     // 同时由于super使得this指向B,所以super.valueOf() 返回的就是一个B的实例
+
     // 最后由于对象总是继承其他对象的,所以可以在任意一个对象中,使用super关键字
     // let obj = {
     //     toStr (){
-    //         return 'obj  '+ super.toString()
+    //         console.log(super.toString());// [object Object] 指向原型
+    //         console.log(this.toString());// 123  指向属性
+    //         return 'obj  '+ super.toString();
+    //     },
+    //     toString(){
+    //         return '123'
     //     }
     // };
     // let result = obj.toStr();
     // console.log(result);// obj: [object Object]
+
+
+
+    // 4. 类的prototype 属性和__proto__属性
+    // 大多数浏览器es5 实现,每个对象都有__proto__属性,
+    // 指向对应的构造函数的prototype属性。
+    // Class 作为构造函数的语法糖,同时有prototype属性和__proto__属性
+    // 因此同时存在两条继承链
+
+
+
+
+
+
+
 
 
 
