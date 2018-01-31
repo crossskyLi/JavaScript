@@ -9331,34 +9331,78 @@ $(function () {
 
     // super 作为对象,在静态方法中,这时super将指向父类,
     // 而不是父类的原型对象
-    class Parent {
-        static myMethod(msg){
-            console.log('static',msg)
-        }
-        myMethod(msg){
-            console.log('instance',msg)
-        }
-    }
-    class Child extends Parent{
-        static myMethod(msg){
-            super.myMethod(msg);
-        }
-        myMethod(msg){
-            super.myMethod(msg)
-        }
-    }
-    Child.myMethod('子类调用父类的静态方法');
-    let child = new Child();
-    child.myMethod('子类实例调用父类的实例方法');
+    // class Parent {
+    //     static myMethod(msg){
+    //         console.log('static',msg)
+    //     }
+    //     myMethod(msg){
+    //         console.log('instance',msg)
+    //     }
+    // }
+    // class Child extends Parent{
+    //     static myMethod(msg){
+    //         super.myMethod(msg);
+    //     }
+    //     myMethod(msg){
+    //         super.myMethod(msg)
+    //     }
+    // }
+    // Child.myMethod('子类调用父类的静态方法');
+    // let child = new Child();
+    // child.myMethod('子类实例调用父类的实例方法');
     // 代码中,super 在静态方法中,指向父类,在普通方法中指向父类的原型对象
     // 注意,使用super的时候,必须显式指定是作为函数,还是作为对象使用,否则会报错
-    // class A {}
+    // class A {
+    //     a(){
+    //         console.log('123');
+    //         return 123
+    //     }
+    // }
     // class B extends A{
     //     constructor(){
     //         super();
-    //         console.log(super);//报错 'super' keyword unexpected here
+    //         // console.log(super);//报错 'super' keyword unexpected here
+    //         console.log(super.a());
     //     }
     // }
+    // let b = new B();
+    // 代码中,console.log(super)当中super,无法看出是作为函数使用,还是作为对象使用
+    // 解析代码会报错,如果清晰表明super 的数据类型,就不会报错
+    // class A {
+    //
+    // }
+    // class B extends A{
+    //     constructor(){
+    //         super();
+    //         console.log(super.valueOf() instanceof B)
+    //     }
+    // }
+    // let b = new B();
+    // console.log(b)
+
+    // 代码中,super.valueOf() 表明super是一个对象,就不会报错
+    // 同时由于super使得this指向B,所以super.valueOf() 返回的就是一个B的实例
+    // 最后由于对象总是继承其他对象的,所以可以在任意一个对象中,使用super关键字
+    // let obj = {
+    //     toStr (){
+    //         return 'obj  '+ super.toString()
+    //     }
+    // };
+    // let result = obj.toStr();
+    // console.log(result);// obj: [object Object]
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
