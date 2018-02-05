@@ -9504,6 +9504,77 @@ $(function () {
     // 所以直接继承 Function.prototype, 但是A 调用后返回一个空对象(即Object实例)
     // 所以 A.prototype.__proto__ 指向构造函数(Object)的prototype属性
 
+    // 第三种特殊情况,子类继承null
+    // class A extends null{
+    //
+    // }
+    // console.log('A.__proto__ === Function.prototype',A.__proto__ === Function.prototype); // true
+    // console.log('A.prototype.__proto__ === undefined',A.prototype.__proto__ === undefined) ;// true
+    // 第三种情况和第二种情况非常像
+    // A 是一个普通函数,所以直接继承Function.prototype
+    // 但是A 调用后返回的对象不继承任何方法,所以它的__proto__指向Function.prototype
+    // 实质上执行下面代码
+    // class C extends null {
+    //     constructor(){
+    //         return Object.create(null);
+    //     }
+    // }
+    // let c = new C();
+    // console.log(c)//{} No properties
+
+    // 实例的 __proto 属性
+    // 子类实例的__proto__ 属性的__proto属性,指向父类实例的__proto__属性,
+    // 即子类的原型的原型,是父类的原型
+    // let p1 = new Point(2,3);
+    // let p2 = new ColorPoint(2,2,'red');
+    // console.log(p2.__proto__ === p1.__proto__);// false
+    // console.log(p2.__proto__.__proto__ === p1.__proto__); // true
+    // 代码中,ColorPoint 继承了Point ,导致前者原型的原型是后者的原型
+
+    // 因此通过子类实例的__proto__.__proto__属性,可以修改父类实例的行为
+    // p2.__proto__.__proto__.printName = function () {
+    //     console.log('123');
+    // }
+    // p1.printName();// 123
+    // 代码在ColorPoint 的实例p2上想Point类添加的方法,结果影响到了Point的实例p1。
+
+    // 5. 原生构造函数的继承
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
