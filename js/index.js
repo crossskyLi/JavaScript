@@ -9539,6 +9539,217 @@ $(function () {
     // 代码在ColorPoint 的实例p2上想Point类添加的方法,结果影响到了Point的实例p1。
 
     // 5. 原生构造函数的继承
+    // 原生构造函数是指语言内置的构造函数,通常用来生成数据结构,
+    // ECMAScript的原生构造函数有大致如下:
+    // - Boolean()
+    // - Number()
+    // - String()
+    // - Array()
+    // - Date()
+    // - Function()
+    // - RegExp()
+    // - Error()
+    // - Object()
+    // 注意,这些原生构造函数是无法继承的,比如,不能自己定义一个Array的子类
+    // function MyArray() {
+    //     Array.apply(this,arguments);
+    // }
+    // MyArray.prototype = Object.create(Array.prototype,{
+    //     constructor:{
+    //         value:MyArray,
+    //         writable:true,
+    //         configurable: true,
+    //         enumerable:true
+    //     }
+    // });
+    // // 上面代码定义一个继承Array 的MyArray类,
+    // // 但是,这个类的行为与Array完全不一致
+    // let colors = new MyArray();
+    // colors[0] = 'red';
+    // console.log(colors.length); // 0
+    // console.log(colors)
+    // colors.length = 0;
+    // console.log(colors)
+    // console.log(colors[0])
+    // 之所以会发生这种情况,是因为子类无法获得原生构造函数的内部属性
+    // 通过 Array.apply() 或者分配给原型对象都不行。
+    // 原生构造函数会忽略apply 方法传入的this
+    // 也就是说,原生构造函数的this无法绑定,导致拿不到内部属性
+
+    // es5 是先新建子类的实例对象this,再将父类的属性添加到子类上
+    // 由于父类的内部属性无法获取,导致无法继承原生的构造函数,
+    // 比如,Array 构造函数有一个内部属性[[DefineOwnProperty]],
+    // 用来定义新属性时,更新length属性,这个内部属性无法在子类获取,
+    // 导致子类的length 属性行为不正常
+
+    // 下面例子中,想让一个普通对象继承Error对象
+    // let e = {};
+    // let result = Object.getOwnPropertyNames(Error.call(e));
+    // console.log(result)// ['stack']
+    // let propertyNames = Object.getOwnPropertyNames(e);
+    // console.log(propertyNames); // []
+    // 代码中,想通过 Error.call(e)这种写法,让普通对象e具有Error对象的实例属性.
+    // 但是,Error.call()完全忽略传入的第一个参数.而是返回了一个新对象
+    // e 本身没有任何变化。
+    // 证明,Error.call(e)这种写法,无法继承原生构造函数
+
+    // ES6 允许继承原生构造函数定义子类,
+    // 因为ES6是先新建父类的实例对象this,
+    // 然后再用子类的构造函数修饰this,使得父类的所有行为都可以继承
+    // 一个继承Array 的例子
+    // class MyArray extends Array{
+    //     constructor(...args){
+    //         super(...args)
+    //     }
+    // }
+    // let arr = new MyArray();
+    // arr[0] = 1;
+    // console.log(arr.length);//1
+    // console.log(arr);//[1]
+    // console.log(arr[0]);//1
+    // arr.length = 0;
+    // console.log(arr.length);//0
+    // console.log(arr);   //[]
+    // console.log(arr[0]);// undefined
+
+    // 代码定义了一个MyArray类,继承了Array构造函数
+    // 因此可以从MyArray 生成数组的实例
+    // 这意味着,ES6可以自定义原生数据结构(比如 Array,String)的子类
+    // 这是ES5做不到的
+
+    // 上面这个例子也说明,extends 关键字不仅可以用来继承类
+    // 还可以用来继承原生的构造函数
+    // 因此可以在原生数据结构的基础上,定义自己的数据结构,
+    // 下面定义一个带版本功能的数组
+    // class VersionedArray extends Array{
+    //     constructor(){
+    //         super();
+    //         this.history = [[]]
+    //     }
+    //     commit(){
+    //         this.history.push(this.slice())
+    //     }
+    //     revert(){
+    //         this.splice(0,this.length,...this.history[this.history.length - 1 ]);
+    //     }
+    // }
+    // let x = new VersionedArray();
+    // console.log(x);
+    // debugger;
+    // x.push(1);
+    // console.log(x);
+    // debugger;
+    // x.push(12);
+    // console.log(x);
+    // console.log(x.history);
+    //
+    // x.commit();
+    // console.log(x.history);
+    //
+    // x.push(3);
+    // console.log(x);
+    // console.log(x.history);
+    // x.revert();
+    // console.log(x)
+    // 代码中,VersionedArray 会通过commit 方法,将自己的当前状态生成一个版本快照
+    // 存入history属性,revert 方法用来将数组重置为最新一次保存的版本
+    // 除此之外,VersionedArray 依然是一个普通数组,所有的原生数组方法都可以在它上面调用
+
+    // 一个自定义Error 子类的例子, 可以用来定制报错时行为
+    // class ExtendableError extends Error{
+    //     constructor(msg){
+    //         super();
+    //         this.message = msg;
+    //         this.stack = (new Error()).stack;
+    //         this.name = this.constructor.name;
+    //     }
+    // }
+    //
+    // class MyError extends ExtendableError{
+    //     constructor(m){
+    //         super(m)
+    //     }
+    // }
+    // let myError = new MyError('自定义错误');
+    // console.log(myError.message);//自定义错误
+    // console.log(myError instanceof Error);//true
+    // console.log(myError.name);//MyError
+    // console.error(myError.stack);//index.js:9677 Error at new ExtendableError (index.js:9663)...
+
+    // 注意继承Object的子类有一个行为差异
+    // class NewObj extends Object{
+    //     constructor(){
+    //         super(...arguments)
+    //     }
+    // }
+    // let o = new NewObj({attr:true});
+    // console.log(o.attr === true); //false
+    // 上面代码中,NewObj 继承了Object ,但是无法通过super方法向父类Object传参
+    // 这是因为ES6改变了Object 构造函数的行为,
+    // 一旦发现Object方法不是通过new Object() 这种形式调用的,
+    // ES6规定Object构造函数会忽略参数
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
