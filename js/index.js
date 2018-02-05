@@ -17,6 +17,11 @@ $(function () {
     //    };
     //    a[i]();
     //}
+    /**
+     *
+     *  let 和 const 命令
+     *
+     * */
     //不存在变量提升,var 提升后,没有赋值,为undefined;
     //let b = 10 ;
     //var b = 110;
@@ -153,7 +158,11 @@ $(function () {
 //console.log(a,getGlobal())
     /*---------------------------------------------------------------------*/
 
-
+    /**
+     *
+     *  变量的解构赋值
+     *
+     * */
     /*-----------------------------  变量的解构赋值  ----------------------------------------*/
     //模式匹配写法;
 
@@ -461,7 +470,11 @@ $(function () {
     //const { SourceMapConsumer, SourceNode } = require("source-map");
 
 
-    /*-------------------------  字符串的扩展  -----------------------------*/
+    /**
+     *
+     * 字符串的扩展
+     *
+     * */
     // let str = 'hello world-';
     //console.log(str.includes('he'));
     //console.log(str.includes('ac'));
@@ -476,15 +489,21 @@ $(function () {
     //var speak = `hello ${str}`;
     //console.log(speak);
 
-    /*--------------------------  正则扩展 -------------------------------*/
-
+    /**
+     *
+     * 正则扩展
+     *
+     * */
     //构造函数合法
     //var regex= new RegExp(/xyz/,'i');
     //console.log(regex.test('xyz222'));
     //console.log(regex.test('xy1z222'));
 
-    /*------------------------- 数值扩展 ---------------------------------*/
-
+    /**
+     *
+     * 数值的扩展
+     *
+     * */
     //二进制和八进制表示法
     //ES6提供了二进制和八进制数值的新写法,二进制使用0B或者0b开头,而十六进制使用0加字母O,或者小写字母o;
     //console则直接调用Number()方法,输出为十进制
@@ -530,46 +549,45 @@ $(function () {
 //总结:
 //    Number.isFinite()对于非数值一律返回false, Number.isNaN()只有对于NaN才返回true，非NaN一律返回false
 
-//    Number.isInteger()用来判断一个值是否为整数。需要注意的是，
-//    在 JavaScript 内部，整数和浮点数是同样的储存方法，所以3和3.0被视为同一个值。
-//    Number.isInteger(25) // true
-//    Number.isInteger(25.0) // true
-//    Number.isInteger(25.1) // false
-//    Number.isInteger("15") // false
-//    Number.isInteger(true) // false
-//    ES5实现判断一个数字是否为整数
-//    (function (global) {
-//        var floor = Math.floor,
-//            isFinite = global.isFinite;
-//
-//        Object.defineProperty(Number, 'isInteger', {
-//            value: function isInteger(value) {
-//                return typeof value === 'number' &&
-//                    isFinite(value) &&
-//                    floor(value) === value;
-//            },
-//            configurable: true,
-//            enumerable: false,
-//            writable: true
-//        });
-//    })(this);
+    //    Number.isInteger()用来判断一个值是否为整数。需要注意的是，
+    //    在 JavaScript 内部，整数和浮点数是同样的储存方法，所以3和3.0被视为同一个值。
+    //    Number.isInteger(25) // true
+    //    Number.isInteger(25.0) // true
+    //    Number.isInteger(25.1) // false
+    //    Number.isInteger("15") // false
+    //    Number.isInteger(true) // false
+    //    ES5实现判断一个数字是否为整数
+    //    (function (global) {
+    //        var floor = Math.floor,
+    //            isFinite = global.isFinite;
+    //
+    //        Object.defineProperty(Number, 'isInteger', {
+    //            value: function isInteger(value) {
+    //                return typeof value === 'number' &&
+    //                    isFinite(value) &&
+    //                    floor(value) === value;
+    //            },
+    //            configurable: true,
+    //            enumerable: false,
+    //            writable: true
+    //        });
+    //    })(this);
 
-//    新增常量Number.EPSILON,多用来判断两个浮点数是否相等
-//    Number.EPSILON的实质是一个可以接受的最小误差范围。
-//    console.log(0.1+0.2-0.3);
-//    console.log(Number.EPSILON * Math.pow(2, 2));
-//    console.log(0.1+0.2-0.3 < Number.EPSILON * Math.pow(2, 2));
+    //    新增常量Number.EPSILON,多用来判断两个浮点数是否相等
+    //    Number.EPSILON的实质是一个可以接受的最小误差范围。
+    //    console.log(0.1+0.2-0.3);
+    //    console.log(Number.EPSILON * Math.pow(2, 2));
+    //    console.log(0.1+0.2-0.3 < Number.EPSILON * Math.pow(2, 2));
 
+    //    安全整数和 Number.isSafeInteger()
+    //    JavaScript 能够准确表示的整数范围在-2^53到2^53之间（不含两个端点）
+    //    console.log(9007199254740993) //9007199254740992,超过1,但没办法精确
 
-//    安全整数和 Number.isSafeInteger()
-//    JavaScript 能够准确表示的整数范围在-2^53到2^53之间（不含两个端点）
-//    console.log(9007199254740993) //9007199254740992,超过1,但没办法精确
-
-//    ES6引入了Number.MAX_SAFE_INTEGER和Number.MIN_SAFE_INTEGER这两个常量
-//    Number.MAX_SAFE_INTEGER === Math.pow(2, 53) - 1  // true
-//    Number.MAX_SAFE_INTEGER === 9007199254740991  // true
-//    Number.MIN_SAFE_INTEGER === -Number.MAX_SAFE_INTEGER  // true
-//    Number.MIN_SAFE_INTEGER === -9007199254740991// true
+    //    ES6引入了Number.MAX_SAFE_INTEGER和Number.MIN_SAFE_INTEGER这两个常量
+    //    Number.MAX_SAFE_INTEGER === Math.pow(2, 53) - 1  // true
+    //    Number.MAX_SAFE_INTEGER === 9007199254740991  // true
+    //    Number.MIN_SAFE_INTEGER === -Number.MAX_SAFE_INTEGER  // true
+    //    Number.MIN_SAFE_INTEGER === -9007199254740991// true
 
 
     //Number.isSafeInteger()则是用来判断一个整数是否落在这个范围之内。
@@ -651,7 +669,7 @@ $(function () {
 //    Math.clz32(3.2) // 30
 //    Math.clz32(3.9) // 30
 
-//    对于空值或其他类型的值，Math.clz32方法会将它们先转为数值，然后再计算
+    //    对于空值或其他类型的值，Math.clz32方法会将它们先转为数值，然后再计算
     //Math.clz32() // 32
     //Math.clz32(NaN) // 32
     //Math.clz32(Infinity) // 32
@@ -749,12 +767,12 @@ $(function () {
     //        return Math.log(x) / Math.LN2;
     //    };
 
-//    Math.sinh(x) 返回x的双曲正弦（hyperbolic sine）
-//Math.cosh(x) 返回x的双曲余弦（hyperbolic cosine）
-//Math.tanh(x) 返回x的双曲正切（hyperbolic tangent）
-//Math.asinh(x) 返回x的反双曲正弦（inverse hyperbolic sine）
-//Math.acosh(x) 返回x的反双曲余弦（inverse hyperbolic cosine）
-//Math.atanh(x) 返回x的反双曲正切（inverse hyperbolic tangent）
+    //    Math.sinh(x) 返回x的双曲正弦（hyperbolic sine）
+    //Math.cosh(x) 返回x的双曲余弦（hyperbolic cosine）
+    //Math.tanh(x) 返回x的双曲正切（hyperbolic tangent）
+    //Math.asinh(x) 返回x的反双曲正弦（inverse hyperbolic sine）
+    //Math.acosh(x) 返回x的反双曲余弦（inverse hyperbolic cosine）
+    //Math.atanh(x) 返回x的反双曲正切（inverse hyperbolic tangent）
 
     //Math.signbit()
     //Math.sign()用来判断一个值的正负，但是如果参数是-0，它会返回-0。
@@ -765,8 +783,8 @@ $(function () {
 // +0是符号位为0时的零值，-0是符号位为1时的零值。实际编程中，
 // 判断一个值是+0还是-0非常麻烦，因为它们是相等的。
 
-//指数运算符**
-//    console.log(2 ** 8)
+    //指数运算符**
+    //    console.log(2 ** 8)
 
     //指数运算符可以与等号结合，形成一个新的赋值运算符（**=）。
     //let a = 1.5;
@@ -779,23 +797,26 @@ $(function () {
 //// 3.697296376497268e+197
 
 
-    /*------------------------------- 函数的扩展 ----------------------------------------------*/
+    /**
+     *
+     * 函数的扩展
+     *
+     * */
+    ////函数可以指定默认值
+    //    function Point(x = 0, y = 0) {
+    //        this.x = 10;
+    //        this.y = y;
+    //    }
+    //
+    //    const p = new Point();
+    //    console.log(p);// { x: 0, y: 0 }
 
-////函数可以指定默认值
-//    function Point(x = 0, y = 0) {
-//        this.x = 10;
-//        this.y = y;
-//    }
-//
-//    const p = new Point();
-//    console.log(p);// { x: 0, y: 0 }
 
-
-//    参数变量是默认声明的，所以不能用let或const再次声明。
-//    function foo(x = 5) {
-//        let x = 1; // error
-//        const x = 2; // error
-//    }
+    //    参数变量是默认声明的，所以不能用let或const再次声明。
+    //    function foo(x = 5) {
+    //        let x = 1; // error
+    //        const x = 2; // error
+    //    }
 
 
     //一个容易忽略的地方是，参数默认值不是传值的，
@@ -860,20 +881,20 @@ $(function () {
     //m1(); // [0, 0]
     //m2(); // [0, 0]
 
-// x 和 y 都有值的情况
-//    m1({x: 3, y: 8}) ;// [3, 8]
-//    m2({x: 3, y: 8}); // [3, 8]
+    // x 和 y 都有值的情况
+    //    m1({x: 3, y: 8}) ;// [3, 8]
+    //    m2({x: 3, y: 8}); // [3, 8]
 
-// x 有值，y 无值的情况
-//    m1({x: 3}); // [3, 0]
-//    m2({x: 3}); // [3, undefined]
+    // x 有值，y 无值的情况
+    //    m1({x: 3}); // [3, 0]
+    //    m2({x: 3}); // [3, undefined]
 
-// x 和 y 都无值的情况
-//    m1({}) ;// [0, 0];
-//    m2({}); // [undefined, undefined]
-//
-//    m1({z: 3}); // [0, 0]
-//    m2({z: 3}); // [undefined, undefined]
+    //    x 和 y 都无值的情况
+    //    m1({}) ;// [0, 0];
+    //    m2({}); // [undefined, undefined]
+    //
+    //    m1({z: 3}); // [0, 0]
+    //    m2({z: 3}); // [undefined, undefined]
 
     //通常情况下，定义了默认值的参数，应该是函数的尾参数。
     // 因为这样比较容易看出来，到底省略了哪些参数。
@@ -899,12 +920,12 @@ $(function () {
 //    f(1, ,2) // 报错
 //    f(1, undefined, 2) // [1, 5, 2]
 
-//如果传入undefined，将触发该参数等于默认值，null则没有这个效果。
-//    function foo(x = 5, y = 6) {
-//        console.log(x, y);
-//    }
-//
-//    foo(undefined, null);//x参数对应undefined，结果触发了默认值，y参数等于null，就没有触发默认值。
+    //如果传入undefined，将触发该参数等于默认值，null则没有这个效果。
+    //    function foo(x = 5, y = 6) {
+    //        console.log(x, y);
+    //    }
+    //
+    //    foo(undefined, null);//x参数对应undefined，结果触发了默认值，y参数等于null，就没有触发默认值。
 
     //指定了默认值以后，函数的length属性，将返回没有指定默认值的参数个数。也就是说，指定了默认值后，length属性将失真。
     //(function (a) {}).length // 1
@@ -1505,7 +1526,11 @@ $(function () {
     // var result = sum(1, 10);
     // console.log(result)
 
-
+    /**
+     *
+     * 数组的扩展
+     *
+     * */
     // 扩展运算符（spread）是三个点（...）。
     // 它好比 rest 参数的逆运算，
     // 将一个数组转为用逗号分隔的参数序列。
@@ -1660,16 +1685,16 @@ $(function () {
     // console.log(nodeList instanceof Array);
     // console.log(arr instanceof Array);
 
-//     let arrayLike = {
-//         '0': 'a',
-//         '1': 'b',
-//         '2': 'c',
-//         length: 3
-//     };
-//     // 对于那些没有部署 Iterator 接口的类似数组的对象，
-//     // 扩展运算符就无法将其转为真正的数组。
-// // TypeError: Cannot spread non-iterable object.
-//     let arr = [...arrayLike];
+    //     let arrayLike = {
+    //         '0': 'a',
+    //         '1': 'b',
+    //         '2': 'c',
+    //         length: 3
+    //     };
+    //     // 对于那些没有部署 Iterator 接口的类似数组的对象，
+    //     // 扩展运算符就无法将其转为真正的数组。
+    // // TypeError: Cannot spread non-iterable object.
+    //     let arr = [...arrayLike];
 
 
     // let map = new Map([
@@ -1868,13 +1893,13 @@ $(function () {
 
     // 扩展运算符（...）也可以将某些数据结构转为数组。
 
-// // arguments对象
-//     function foo() {
-//         const args = [...arguments];
-//     }
-//
-// // NodeList对象
-//     var nodeList = [...document.querySelectorAll('div')]
+    // // arguments对象
+    //     function foo() {
+    //         const args = [...arguments];
+    //     }
+    //
+    // // NodeList对象
+    //     var nodeList = [...document.querySelectorAll('div')]
 
     //只要有length都可以部署数组接口
     // let result = Array.from({ '2':4,'3':3,length: 3 });
@@ -1978,7 +2003,7 @@ $(function () {
     //     console.log(index,elem)
     // }
 
-    //数组实力的includes()
+    //数组实例的includes()
     //Array.prototype.includes方法返回一个布尔值,表示数字是否包含给定的值
     //传递两个参数,第一个为要查找的元素,第二个为要查找的起始下标
     // let arr = [{}, NaN, 2,3,5];
@@ -2005,9 +2030,9 @@ $(function () {
     //es5方法会忽略,而es6方法不会
 
 
-    /*
-    * -----对象的扩展-----
-    * */
+    /**
+     *  对象的扩展
+     * */
 
     //属性的简洁表示法
     // const foo = 'aa';
@@ -2918,15 +2943,15 @@ $(function () {
     //     }
     // };
 
-// 会抛出错误，因为 x 属性被执行了
-//     let runtimeError = {
-//         ...a,
-//         ...{
-//             get x() {
-//                 throw new Error('throw now');
-//             }
-//         }
-//     };
+    // 会抛出错误，因为 x 属性被执行了
+    //     let runtimeError = {
+    //         ...a,
+    //         ...{
+    //             get x() {
+    //                 throw new Error('throw now');
+    //             }
+    //         }
+    //     };
 
 
     //---Null 传导运算符
@@ -2936,8 +2961,11 @@ $(function () {
     // 提案中的写法
     // const firstName = message?.body?.user?.firstName || 'default';
 
-
-    //----------symbol---------
+    /**
+     *
+     * symbol
+     *
+     * */
     // 解决 es5中对象属性名都是字符串,容易造成属性名冲突的问题
     // es6 引入新的原始数据类型 Symbol是第七种数据类型
     // 表示独一无二的值
@@ -3202,8 +3230,11 @@ $(function () {
 
     // unFinish------ symbol 做到 第七小节
 
-
-    //Set 和 Map数据结构
+    /**
+     *
+     * Set 和 Map数据结构
+     *
+     * */
     // const s = new Set();
     // console.log(s);
     // let arr = [1,4,5,4,8,7,6];
@@ -3627,12 +3658,24 @@ $(function () {
     // 忽略其他学习部分
     // unFinish
 
+    /**
+     *
+     *  12 proxy 跳过 元编程 unFinish
+     *
+     * */
 
-    //------ 12 proxy 跳过 元编程 unFinish------
-    //------ 13 Reflect 跳过 元编程 unFinish------
 
+    /**
+     *
+     * 13 Reflect 跳过 元编程 unFinish
+     *
+     * */
 
-    // Promise 对象
+    /**
+     *
+     *  Promise 对象
+     *
+     */
 
     //es6 规定,Promise对象是个构造函数,用来生成Promise实例
     // const promise = new Promise(function (resolve, reject) {
@@ -4291,10 +4334,12 @@ $(function () {
     //     .catch();
 
     //------------------------------------------------------------------
-    /*
-    * Iterator 和for...of 循环
-    *
-    * */
+    /**
+     *
+     * Iterator 和for...of 循环
+     *
+     * */
+
     // iterator(遍历器)的概念
     //Iterator 的遍历过程是这样的。
 
@@ -5217,7 +5262,12 @@ $(function () {
     // let childClass = new BicycleChild("龙恩");
     // console.log('childClass',childClass);
 
-    // Generator 函数的语法
+
+    /**
+     *
+     * Generator 函数的语法
+     *
+     * */
     // 一种异步编程解决方案,
     // 语法上可以把它理解成.Generator函数是一个状态机
     // 封装了很多内部状态
@@ -6752,8 +6802,11 @@ $(function () {
     //     ]
     // }
 
-
-    // Generator 函数的异步应用
+    /**
+     *
+     * Generator 函数的异步应用
+     *
+     * */
 
     // 1.传统方法
     // 异步编程一般有四种方法:
@@ -7330,7 +7383,11 @@ $(function () {
     //---------------------------------------------------------------
 
     //---------------------------------------------------------------
-    //------------------ async函数 ---------------
+    /**
+     *
+     * async函数
+     *
+     * */
     // 1.含义
     // async => Generator函数的语法糖
     //之前读取两个文件的写法
@@ -8230,8 +8287,11 @@ $(function () {
     // async 结束
     //----------------------------------------------------------------
 
-    // Class
-    // 基本语法
+    /**
+     *
+     * Class基本语法
+     *
+     * */
 
     // 1. 简介
     // 传统 ,生成实例对象的传统方法是通过构造函数
@@ -9028,7 +9088,11 @@ $(function () {
     //-----------------------------------------------------------------------
 
     //-----------------------------------------------------------------------
-    //------------------ Class 的继承  ---------------------
+    /**
+     *
+     * Class 的继承
+     *
+     * */
 
     // 1.简介
     // Class 可以通过extends 关键字实现继承,比ES5通过修改原形链实现继承,更加清晰方便
@@ -9398,7 +9462,6 @@ $(function () {
     // console.log(result);// obj: [object Object]
 
 
-
     // 4. 类的prototype 属性和__proto__属性
     // 大多数浏览器es5 实现,每个对象都有__proto__属性,
     // 指向对应的构造函数的prototype属性。
@@ -9724,7 +9787,322 @@ $(function () {
     // class DistributedEdit extends mix (Loggable,Serializable){
     //     //...
     // }
-    //---------------------------------------------------
+    // --------------------------------------------------
+
+    /**
+     *
+     * 21 修饰器
+     *
+     * */
+
+    // 1.类的修饰
+    // 修饰器(Decorator)函数,用来修改类的行为
+    // @testable
+    // class MyTestableClass{
+    //     //...
+    // }
+    // function testable(target) {
+    //     target.isTestable = true;
+    // }
+    // console.log(MyTestableClass.isTestable)
+    // 代码中,@testable 就是一个修饰器
+    // 修改了MyTestableClass 这个类的行为,为它加上静态属性isTestable
+    // testable 函数的参数target 是MyTestableClass 类本身
+    // 基本上修饰器的行为是下面这样
+    // @decorator
+    // class A {
+    //
+    // }
+    // 等同于
+    // class A {
+    //
+    // }
+    // A = decorator(A) || A
+
+    // 也就是说,修饰器是一个对类进行处理的函数
+    // 修饰器函数的第一个参数,就是所要修饰的目标类
+    // function testable(target){
+    //     //...
+    // }
+    // 代码中,testable函数的参数target,就是会被修饰的类
+    // 如果觉得一个参数不够用,可以在修饰器外面再封装一层
+    // function testable(isTestable) {
+    //     return function (target) {
+    //         target.isTestable = isTestable;
+    //     }
+    // }
+    // @testable(true)
+    // class MyTestableClass{}
+    // MyTestableClass.isTestable // true
+    //
+    // @testable(false)
+    // class MyClass{}
+    // MyClass.isTestable ;// false
+
+    // 代码中,修饰器testable可以接受参数,这等于可以修改修饰器的行为
+    // 注意 修饰器对类的行为的改变,是代码编译时候发生的,而不是运行时
+    // 这意味着,修饰器能在编译阶段运行代码,也就是说,修饰器本质就是编译时执行的函数
+
+    // 前面例子是为类添加一个静态属性,如果想添加实例属性,
+    // 可以通过目标类的prototype对象操作
+    // function testable(target) {
+    //     target.prototype.isTestable = true
+    // }
+    // @testable
+    // class MyClass{}
+    // let obj  = new MyClass();
+    // obj.isTestable // true
+    // 代码中,修饰器函数testable实在目标类的prototype对象上添加属性
+    // 因此可以在实例上调用
+
+    // 另一个例子
+    // // mixin.js
+    // export function mixins(...list) {
+    //     return function (target) {
+    //         Object.assign(target.prototype,...list)
+    //     }
+    // }
+    // // main.js
+    // import {mixins} from './mixins'
+    // const Foo = {
+    //     foo(){
+    //         console.log('123')
+    //     }
+    // };
+    // @mixins(Foo)
+    // class MyClass{}
+    // let obj = new MyClass();
+    // obj.foo(); // 123
+    // 代码通过修饰器mixins,把Foo类的方法添加到MyClass的实例上
+    // 可以用Object.assign() 模拟这个功能
+    // const Foo = {
+    //         foo() {
+    //             console.log('123')
+    //         }
+    //     };
+    //
+    // class MyClass {
+    //
+    // }
+    // Object.assign(MyClass.prototype,Foo)
+    // let obj = new MyClass();
+    // obj.foo(); // 123
+
+    // 实际开发中,React 与 Redux库结合使用,常常需要写成下面这样
+    // class MyReactComponent extends React.component{}
+    //
+    // export default connect(mapStateToProps,mapDispatchToProps)(MyReactComponent);
+
+    // 修饰器改写上面代码
+    // @connect(mapStateToProps,mapDispatchToProps)
+    // export default class MyReactComponent extends React.Component{}
+    // 相对来说,比较容易理解
+
+    //--------------------------------------------------------------
+    // 2. 方法的修饰
+    // 修饰器不仅可以修饰类,还可以修饰类的属性
+    // class Person{
+    //     @readonly
+    //     name(){
+    //         return `${this.first} ${this.last}`
+    //     }
+    // }
+    // 代码中,修饰器readonly用来修饰'类'的name方法
+    // 修饰器函数readonly 一共可以接受三个参数
+    // function readonly(target, name, descriptor) {
+    //     // descriptor 对象原来的值如下
+    //     // {
+    //     //     value: specifiedFunction,
+    //     //     enumerable:false,
+    //     //     configurable:true,
+    //     //     writable:true
+    //     // }
+    //     descriptor.writable = false;
+    //     return descriptor;
+    // }
+    //
+    // readonly(Person.prototype,'name',descriptor);
+    // // 类似
+    // Object.defineProperty(Person.prototype, 'name',descriptor)
+
+    // 修饰器第一个参数是类的原型对象,上例是Person.prototype
+    // 修饰器的本意是要 "修饰"类的实例,
+    // 但是这个时候实例还没生成,所以只能去修饰原型
+    // (这不同于类的修饰,那种情况target参数指的是类本身)
+    // 第二个参数是要修饰的属性名,第三个参数是该属性的描述对象
+    // 代码说明,修饰器readonly会修改属性的描述对象(descriptor)
+    // 然后被修改的描述对象再用来定义属性
+
+    // 例子,修改属性描述对象的enumerable属性,使得该属性不可遍历
+    // class Person{
+    //     @nonenumerable
+    //     get kidCount(){
+    //         return this.children.length
+    //     }
+    // }
+    // function nonenumerable(target, name, descriptor) {
+    //     descriptor.enumerable = false;
+    //     return descriptor;
+    // }
+
+    // @log 修饰器,输出日志作用
+    // class Math{
+    //     @log
+    //     add(a,b){
+    //         return a + b;
+    //     }
+    // }
+    // function log(target, name, descriptor) {
+    //     let oldValue = descriptor.value;
+    //     descriptor.value = function () {
+    //         console.log(`Calling ${name} with`,arguments);
+    //         return oldValue.apply(null,arguments)
+    //     }
+    //     return descriptor;
+    // }
+    // const math = new Math();
+    // // passed parameters should get logged now
+    // math.add(1,2);//
+    // 代码中,@log 修饰器的作用就是在执行原始的操作之前,执行一次console.log,
+    // 从而达到输出日志的目的
+    // 修饰器有注释的作用
+
+    // @testable
+    // class Person{
+    //     @readonly
+    //     @nonenumberable
+    //     name(){
+    //         return `${this.first} ${this.last}`
+    //     }
+    // }
+    // 代码中,能看出,Person类是可测试的,而name方法是只读和不可枚举的
+
+    // 使用Decorator写法的组件,
+    // @Component({
+    //     tag: 'my-component',
+    //     styleUrl: 'my-component.scss'
+    // })
+    // export class MyComponent{
+    //     @Prop() first :string;
+    //     @Prop() last :string;
+    //     @State() isVisible: boolean = true;
+    //     render(){
+    //         return (
+    //             <p>Hello,{this.first}{this.last}</p>
+    //         )
+    //     }
+    // }
+
+    // 如果同一个方法有多个修饰器,会先从外到内进入,然后由内向外执行
+    // function dec(id) {
+    //     console.log('evaluated',id);
+    //     return (target,property,descriptor)=>{
+    //         console.log('executed',id)
+    //     }
+    // }
+    // class Example{
+    //     @dec(1)
+    //     @dec(2)
+    //     method(){}
+    // }
+    // evaluated 1
+    // evaluated 2
+    // executed 2
+    // executed 1
+    // 代码中,外层修饰器@dec(1)先进入,但是内层修饰器@dec(2)先执行
+    // 除了注释,修饰器还能用来类型检查,所以对于类来说
+    // 这项功能相当有用,从长期来看,它将是JavaScript 代码静态分析的重要工具
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
