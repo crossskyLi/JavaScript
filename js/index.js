@@ -10013,84 +10013,160 @@ $(function () {
     // 除了注释,修饰器还能用来类型检查,所以对于类来说
     // 这项功能相当有用,从长期来看,它将是JavaScript 代码静态分析的重要工具
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // ------------------
+    // 3.为什么修饰器不能用于函数
+    // 修饰器只能用于类和类的方法,不能用于函数,因为存在函数提升
+    // let counter = 0;
+    // let add = function () {
+    //     counter++;
+    // };
+    // @add
+    // function foo() {
+    //
+    // }
+    // 代码中意图是执行后counter等于1 ,
+    // 但是实际结果是counter等于0
+    // 因为函数提升,使得实际执行的代码是下面这样
+    // @add
+    // function foo() {
+    //
+    // }
+    // let counter;
+    // var add;
+    // counter = 0;
+    // add = function () {
+    //     counter++;
+    // }
+
+    // 另一个例子:
+    // let readOnly = require('some-decorator');
+    // @readOnly
+    // function foo() {
+    //
+    // }
+    // 这里的代码也有问题,实际执行是下面
+    // var readOnly ;
+    // @readOnly
+    // function foo() {
+    //
+    // }
+    // readOnly = require('some-decorator');
+    // 总结:
+    // 由于存在函数提升使得修饰器不能用于函数,类是不会提升的,所以没有这方面问题
+
+    // 另外,如果一定要修饰函数,可以采用高阶函数的形式直接执行
+    // function doSomething(name){
+    //     console.log('hello'+name)
+    // }
+    // function loggingDecorator(wrapped) {
+    //     return function () {
+    //         console.log('starting');
+    //         const result = wrapped.apply(this,arguments);
+    //         console.log('Finished');
+    //         return result
+    //     }
+    // }
+    // const wrapped = loggingDecorator(doSomething);
+    // wrapped(123)
+
+    // 4. core-decorators.js
+    // 提供几个常见的修饰器,通过它可以更好理解修饰器
+    // (1) autobind
+    // autobind 修饰器是的方法中的this,绑定原始对象
+    // import {autobind} from 'core-decorators'
+    // class Person{
+    //     @autobind
+    //     getPerson(){
+    //         return this;
+    //     }
+    // }
+    // let person = new Person()
+    // let getPerson = person.getPerson();
+    // console.log(getPerson() === person); // true
+
+    // (2)@readonly
+    // import { readonly } from 'core-decorators'
+    // class Meal {
+    //     @readonly
+    //     entree = 'steak';
+    // }
+    // let dinner = new Meal();
+    // dinner.entree = 'salmon';// cannot assign to read only property 'entree' of [object Object]
+
+    // (3) override
+    // override 修饰器检查子类的方法, 是否正确覆盖了父类的同名方法,如果不正确,报错
+    // import {override} from 'core-decorator'
+    // class Parent {
+    //     speak(first,second){}
+    // }
+    // class Child extends Parent{
+    //     @override
+    //     speak(){} //  SyntaxError: Child#speak() does not properly override Parent#speak(first, second)
+    // }
+
+    // or
+    // class Child extends Parent{
+    //     @override
+    //     speaks(){}
+    //     // SyntaxError: No descriptor matching Child#speaks() was found on the prototype chain.
+    //     //
+    //     //   Did you mean "speak"?
+    // }
+
+    // (4) @deprecate(弃用) (别名@depercated)
+    // deprecate 或deprecated 修饰器在控制台显示一条警告,表示该方法将废除
+    // import {deprecate} from 'core-decorators';
+    // class Person{
+    //     @deprecate
+    //     facepalm(){}
+    //
+    //     @deprecate('We stopped facepalming')
+    //     facepalmHard(){
+    //
+    //     }
+    //
+    //     @deprecate('We stopped facepalming',{url:'some url'})
+    //     facepalmHarder(){}
+    // }
+    //
+    // let person = new Person();
+    //
+    // person.facepalm();
+    // // DEPRECATION Person#facepalm: This function will be removed in future versions.
+    //
+    // person.facepalmHard();
+    // // DEPRECATION Person#facepalmHard: We stopped facepalming
+    //
+    // person.facepalmHarder();
+    // // DEPRECATION Person#facepalmHarder: We stopped facepalming
+    // //
+    // //     See some url for more details.
+    // //
+
+    // (5) suppressWarnings
+    // suppressWarnings 修饰器抑制 deprecated修饰器导致的console.warn()调用
+    // 但是异步代码发出的调用除外
+    // import {suppressWarnings} from 'core-decorators'
+    // class Person{
+    //     @deprecated
+    //     facepalm(){}
+    //
+    //     @suppressWarnings
+    //     facepalmWithoutWarning(){
+    //         this.facepalm();
+    //     }
+    // }
+    // let person = new Person();
+    // person.facepalmWithoutWarning();
+    // no warning is logged
+
+    // 5. 使用修饰器实现自动发布事件
+    // 可以使用修饰器,使得对象的方法被调用时,自动发出一个事件
+    const postal = require('postal/lib/postal.lodash');
+
+    export default function publish(topic,channel) {
+
+    }
 
 
 
