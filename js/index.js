@@ -9802,423 +9802,423 @@ $(function () {
      *
      * */
 
-        // 1.类的修饰
-        // 修饰器(Decorator)函数,用来修改类的行为
-        // @testable
-        // class MyTestableClass{
-        //     //...
-        // }
-        // function testable(target) {
-        //     target.isTestable = true;
-        // }
-        // console.log(MyTestableClass.isTestable)
-        // 代码中,@testable 就是一个修饰器
-        // 修改了MyTestableClass 这个类的行为,为它加上静态属性isTestable
-        // testable 函数的参数target 是MyTestableClass 类本身
-        // 基本上修饰器的行为是下面这样
-        // @decorator
-        // class A {
-        //
-        // }
-        // 等同于
-        // class A {
-        //
-        // }
-        // A = decorator(A) || A
+    // 1.类的修饰
+    // 修饰器(Decorator)函数,用来修改类的行为
+    // @testable
+    // class MyTestableClass{
+    //     //...
+    // }
+    // function testable(target) {
+    //     target.isTestable = true;
+    // }
+    // console.log(MyTestableClass.isTestable)
+    // 代码中,@testable 就是一个修饰器
+    // 修改了MyTestableClass 这个类的行为,为它加上静态属性isTestable
+    // testable 函数的参数target 是MyTestableClass 类本身
+    // 基本上修饰器的行为是下面这样
+    // @decorator
+    // class A {
+    //
+    // }
+    // 等同于
+    // class A {
+    //
+    // }
+    // A = decorator(A) || A
 
-        // 也就是说,修饰器是一个对类进行处理的函数
-        // 修饰器函数的第一个参数,就是所要修饰的目标类
-        // function testable(target){
-        //     //...
-        // }
-        // 代码中,testable函数的参数target,就是会被修饰的类
-        // 如果觉得一个参数不够用,可以在修饰器外面再封装一层
-        // function testable(isTestable) {
-        //     return function (target) {
-        //         target.isTestable = isTestable;
-        //     }
-        // }
-        // @testable(true)
-        // class MyTestableClass{}
-        // MyTestableClass.isTestable // true
-        //
-        // @testable(false)
-        // class MyClass{}
-        // MyClass.isTestable ;// false
+    // 也就是说,修饰器是一个对类进行处理的函数
+    // 修饰器函数的第一个参数,就是所要修饰的目标类
+    // function testable(target){
+    //     //...
+    // }
+    // 代码中,testable函数的参数target,就是会被修饰的类
+    // 如果觉得一个参数不够用,可以在修饰器外面再封装一层
+    // function testable(isTestable) {
+    //     return function (target) {
+    //         target.isTestable = isTestable;
+    //     }
+    // }
+    // @testable(true)
+    // class MyTestableClass{}
+    // MyTestableClass.isTestable // true
+    //
+    // @testable(false)
+    // class MyClass{}
+    // MyClass.isTestable ;// false
 
-        // 代码中,修饰器testable可以接受参数,这等于可以修改修饰器的行为
-        // 注意 修饰器对类的行为的改变,是代码编译时候发生的,而不是运行时
-        // 这意味着,修饰器能在编译阶段运行代码,也就是说,修饰器本质就是编译时执行的函数
+    // 代码中,修饰器testable可以接受参数,这等于可以修改修饰器的行为
+    // 注意 修饰器对类的行为的改变,是代码编译时候发生的,而不是运行时
+    // 这意味着,修饰器能在编译阶段运行代码,也就是说,修饰器本质就是编译时执行的函数
 
-        // 前面例子是为类添加一个静态属性,如果想添加实例属性,
-        // 可以通过目标类的prototype对象操作
-        // function testable(target) {
-        //     target.prototype.isTestable = true
-        // }
-        // @testable
-        // class MyClass{}
-        // let obj  = new MyClass();
-        // obj.isTestable // true
-        // 代码中,修饰器函数testable实在目标类的prototype对象上添加属性
-        // 因此可以在实例上调用
+    // 前面例子是为类添加一个静态属性,如果想添加实例属性,
+    // 可以通过目标类的prototype对象操作
+    // function testable(target) {
+    //     target.prototype.isTestable = true
+    // }
+    // @testable
+    // class MyClass{}
+    // let obj  = new MyClass();
+    // obj.isTestable // true
+    // 代码中,修饰器函数testable实在目标类的prototype对象上添加属性
+    // 因此可以在实例上调用
 
-        // 另一个例子
-        // // mixin.js
-        // export function mixins(...list) {
-        //     return function (target) {
-        //         Object.assign(target.prototype,...list)
-        //     }
-        // }
-        // // main.js
-        // import {mixins} from './mixins'
-        // const Foo = {
-        //     foo(){
-        //         console.log('123')
-        //     }
-        // };
-        // @mixins(Foo)
-        // class MyClass{}
-        // let obj = new MyClass();
-        // obj.foo(); // 123
-        // 代码通过修饰器mixins,把Foo类的方法添加到MyClass的实例上
-        // 可以用Object.assign() 模拟这个功能
-        // const Foo = {
-        //         foo() {
-        //             console.log('123')
-        //         }
-        //     };
-        //
-        // class MyClass {
-        //
-        // }
-        // Object.assign(MyClass.prototype,Foo)
-        // let obj = new MyClass();
-        // obj.foo(); // 123
+    // 另一个例子
+    // // mixin.js
+    // export function mixins(...list) {
+    //     return function (target) {
+    //         Object.assign(target.prototype,...list)
+    //     }
+    // }
+    // // main.js
+    // import {mixins} from './mixins'
+    // const Foo = {
+    //     foo(){
+    //         console.log('123')
+    //     }
+    // };
+    // @mixins(Foo)
+    // class MyClass{}
+    // let obj = new MyClass();
+    // obj.foo(); // 123
+    // 代码通过修饰器mixins,把Foo类的方法添加到MyClass的实例上
+    // 可以用Object.assign() 模拟这个功能
+    // const Foo = {
+    //         foo() {
+    //             console.log('123')
+    //         }
+    //     };
+    //
+    // class MyClass {
+    //
+    // }
+    // Object.assign(MyClass.prototype,Foo)
+    // let obj = new MyClass();
+    // obj.foo(); // 123
 
-        // 实际开发中,React 与 Redux库结合使用,常常需要写成下面这样
-        // class MyReactComponent extends React.component{}
-        //
-        // export default connect(mapStateToProps,mapDispatchToProps)(MyReactComponent);
+    // 实际开发中,React 与 Redux库结合使用,常常需要写成下面这样
+    // class MyReactComponent extends React.component{}
+    //
+    // export default connect(mapStateToProps,mapDispatchToProps)(MyReactComponent);
 
-        // 修饰器改写上面代码
-        // @connect(mapStateToProps,mapDispatchToProps)
-        // export default class MyReactComponent extends React.Component{}
-        // 相对来说,比较容易理解
+    // 修饰器改写上面代码
+    // @connect(mapStateToProps,mapDispatchToProps)
+    // export default class MyReactComponent extends React.Component{}
+    // 相对来说,比较容易理解
 
-        //--------------------------------------------------------------
-        // 2. 方法的修饰
-        // 修饰器不仅可以修饰类,还可以修饰类的属性
-        // class Person{
-        //     @readonly
-        //     name(){
-        //         return `${this.first} ${this.last}`
-        //     }
-        // }
-        // 代码中,修饰器readonly用来修饰'类'的name方法
-        // 修饰器函数readonly 一共可以接受三个参数
-        // function readonly(target, name, descriptor) {
-        //     // descriptor 对象原来的值如下
-        //     // {
-        //     //     value: specifiedFunction,
-        //     //     enumerable:false,
-        //     //     configurable:true,
-        //     //     writable:true
-        //     // }
-        //     descriptor.writable = false;
-        //     return descriptor;
-        // }
-        //
-        // readonly(Person.prototype,'name',descriptor);
-        // // 类似
-        // Object.defineProperty(Person.prototype, 'name',descriptor)
+    //--------------------------------------------------------------
+    // 2. 方法的修饰
+    // 修饰器不仅可以修饰类,还可以修饰类的属性
+    // class Person{
+    //     @readonly
+    //     name(){
+    //         return `${this.first} ${this.last}`
+    //     }
+    // }
+    // 代码中,修饰器readonly用来修饰'类'的name方法
+    // 修饰器函数readonly 一共可以接受三个参数
+    // function readonly(target, name, descriptor) {
+    //     // descriptor 对象原来的值如下
+    //     // {
+    //     //     value: specifiedFunction,
+    //     //     enumerable:false,
+    //     //     configurable:true,
+    //     //     writable:true
+    //     // }
+    //     descriptor.writable = false;
+    //     return descriptor;
+    // }
+    //
+    // readonly(Person.prototype,'name',descriptor);
+    // // 类似
+    // Object.defineProperty(Person.prototype, 'name',descriptor)
 
-        // 修饰器第一个参数是类的原型对象,上例是Person.prototype
-        // 修饰器的本意是要 "修饰"类的实例,
-        // 但是这个时候实例还没生成,所以只能去修饰原型
-        // (这不同于类的修饰,那种情况target参数指的是类本身)
-        // 第二个参数是要修饰的属性名,第三个参数是该属性的描述对象
-        // 代码说明,修饰器readonly会修改属性的描述对象(descriptor)
-        // 然后被修改的描述对象再用来定义属性
+    // 修饰器第一个参数是类的原型对象,上例是Person.prototype
+    // 修饰器的本意是要 "修饰"类的实例,
+    // 但是这个时候实例还没生成,所以只能去修饰原型
+    // (这不同于类的修饰,那种情况target参数指的是类本身)
+    // 第二个参数是要修饰的属性名,第三个参数是该属性的描述对象
+    // 代码说明,修饰器readonly会修改属性的描述对象(descriptor)
+    // 然后被修改的描述对象再用来定义属性
 
-        // 例子,修改属性描述对象的enumerable属性,使得该属性不可遍历
-        // class Person{
-        //     @nonenumerable
-        //     get kidCount(){
-        //         return this.children.length
-        //     }
-        // }
-        // function nonenumerable(target, name, descriptor) {
-        //     descriptor.enumerable = false;
-        //     return descriptor;
-        // }
+    // 例子,修改属性描述对象的enumerable属性,使得该属性不可遍历
+    // class Person{
+    //     @nonenumerable
+    //     get kidCount(){
+    //         return this.children.length
+    //     }
+    // }
+    // function nonenumerable(target, name, descriptor) {
+    //     descriptor.enumerable = false;
+    //     return descriptor;
+    // }
 
-        // @log 修饰器,输出日志作用
-        // class Math{
-        //     @log
-        //     add(a,b){
-        //         return a + b;
-        //     }
-        // }
-        // function log(target, name, descriptor) {
-        //     let oldValue = descriptor.value;
-        //     descriptor.value = function () {
-        //         console.log(`Calling ${name} with`,arguments);
-        //         return oldValue.apply(null,arguments)
-        //     }
-        //     return descriptor;
-        // }
-        // const math = new Math();
-        // // passed parameters should get logged now
-        // math.add(1,2);//
-        // 代码中,@log 修饰器的作用就是在执行原始的操作之前,执行一次console.log,
-        // 从而达到输出日志的目的
-        // 修饰器有注释的作用
+    // @log 修饰器,输出日志作用
+    // class Math{
+    //     @log
+    //     add(a,b){
+    //         return a + b;
+    //     }
+    // }
+    // function log(target, name, descriptor) {
+    //     let oldValue = descriptor.value;
+    //     descriptor.value = function () {
+    //         console.log(`Calling ${name} with`,arguments);
+    //         return oldValue.apply(null,arguments)
+    //     }
+    //     return descriptor;
+    // }
+    // const math = new Math();
+    // // passed parameters should get logged now
+    // math.add(1,2);//
+    // 代码中,@log 修饰器的作用就是在执行原始的操作之前,执行一次console.log,
+    // 从而达到输出日志的目的
+    // 修饰器有注释的作用
 
-        // @testable
-        // class Person{
-        //     @readonly
-        //     @nonenumberable
-        //     name(){
-        //         return `${this.first} ${this.last}`
-        //     }
-        // }
-        // 代码中,能看出,Person类是可测试的,而name方法是只读和不可枚举的
+    // @testable
+    // class Person{
+    //     @readonly
+    //     @nonenumberable
+    //     name(){
+    //         return `${this.first} ${this.last}`
+    //     }
+    // }
+    // 代码中,能看出,Person类是可测试的,而name方法是只读和不可枚举的
 
-        // 使用Decorator写法的组件,
-        // @Component({
-        //     tag: 'my-component',
-        //     styleUrl: 'my-component.scss'
-        // })
-        // export class MyComponent{
-        //     @Prop() first :string;
-        //     @Prop() last :string;
-        //     @State() isVisible: boolean = true;
-        //     render(){
-        //         return (
-        //             <p>Hello,{this.first}{this.last}</p>
-        //         )
-        //     }
-        // }
+    // 使用Decorator写法的组件,
+    // @Component({
+    //     tag: 'my-component',
+    //     styleUrl: 'my-component.scss'
+    // })
+    // export class MyComponent{
+    //     @Prop() first :string;
+    //     @Prop() last :string;
+    //     @State() isVisible: boolean = true;
+    //     render(){
+    //         return (
+    //             <p>Hello,{this.first}{this.last}</p>
+    //         )
+    //     }
+    // }
 
-        // 如果同一个方法有多个修饰器,会先从外到内进入,然后由内向外执行
-        // function dec(id) {
-        //     console.log('evaluated',id);
-        //     return (target,property,descriptor)=>{
-        //         console.log('executed',id)
-        //     }
-        // }
-        // class Example{
-        //     @dec(1)
-        //     @dec(2)
-        //     method(){}
-        // }
-        // evaluated 1
-        // evaluated 2
-        // executed 2
-        // executed 1
-        // 代码中,外层修饰器@dec(1)先进入,但是内层修饰器@dec(2)先执行
-        // 除了注释,修饰器还能用来类型检查,所以对于类来说
-        // 这项功能相当有用,从长期来看,它将是JavaScript 代码静态分析的重要工具
+    // 如果同一个方法有多个修饰器,会先从外到内进入,然后由内向外执行
+    // function dec(id) {
+    //     console.log('evaluated',id);
+    //     return (target,property,descriptor)=>{
+    //         console.log('executed',id)
+    //     }
+    // }
+    // class Example{
+    //     @dec(1)
+    //     @dec(2)
+    //     method(){}
+    // }
+    // evaluated 1
+    // evaluated 2
+    // executed 2
+    // executed 1
+    // 代码中,外层修饰器@dec(1)先进入,但是内层修饰器@dec(2)先执行
+    // 除了注释,修饰器还能用来类型检查,所以对于类来说
+    // 这项功能相当有用,从长期来看,它将是JavaScript 代码静态分析的重要工具
 
-        // ------------------
-        // 3.为什么修饰器不能用于函数
-        // 修饰器只能用于类和类的方法,不能用于函数,因为存在函数提升
-        // let counter = 0;
-        // let add = function () {
-        //     counter++;
-        // };
-        // @add
-        // function foo() {
-        //
-        // }
-        // 代码中意图是执行后counter等于1 ,
-        // 但是实际结果是counter等于0
-        // 因为函数提升,使得实际执行的代码是下面这样
-        // @add
-        // function foo() {
-        //
-        // }
-        // let counter;
-        // var add;
-        // counter = 0;
-        // add = function () {
-        //     counter++;
-        // }
+    // ------------------
+    // 3.为什么修饰器不能用于函数
+    // 修饰器只能用于类和类的方法,不能用于函数,因为存在函数提升
+    // let counter = 0;
+    // let add = function () {
+    //     counter++;
+    // };
+    // @add
+    // function foo() {
+    //
+    // }
+    // 代码中意图是执行后counter等于1 ,
+    // 但是实际结果是counter等于0
+    // 因为函数提升,使得实际执行的代码是下面这样
+    // @add
+    // function foo() {
+    //
+    // }
+    // let counter;
+    // var add;
+    // counter = 0;
+    // add = function () {
+    //     counter++;
+    // }
 
-        // 另一个例子:
-        // let readOnly = require('some-decorator');
-        // @readOnly
-        // function foo() {
-        //
-        // }
-        // 这里的代码也有问题,实际执行是下面
-        // var readOnly ;
-        // @readOnly
-        // function foo() {
-        //
-        // }
-        // readOnly = require('some-decorator');
-        // 总结:
-        // 由于存在函数提升使得修饰器不能用于函数,类是不会提升的,所以没有这方面问题
+    // 另一个例子:
+    // let readOnly = require('some-decorator');
+    // @readOnly
+    // function foo() {
+    //
+    // }
+    // 这里的代码也有问题,实际执行是下面
+    // var readOnly ;
+    // @readOnly
+    // function foo() {
+    //
+    // }
+    // readOnly = require('some-decorator');
+    // 总结:
+    // 由于存在函数提升使得修饰器不能用于函数,类是不会提升的,所以没有这方面问题
 
-        // 另外,如果一定要修饰函数,可以采用高阶函数的形式直接执行
-        // function doSomething(name){
-        //     console.log('hello'+name)
-        // }
-        // function loggingDecorator(wrapped) {
-        //     return function () {
-        //         console.log('starting');
-        //         const result = wrapped.apply(this,arguments);
-        //         console.log('Finished');
-        //         return result
-        //     }
-        // }
-        // const wrapped = loggingDecorator(doSomething);
-        // wrapped(123)
+    // 另外,如果一定要修饰函数,可以采用高阶函数的形式直接执行
+    // function doSomething(name){
+    //     console.log('hello'+name)
+    // }
+    // function loggingDecorator(wrapped) {
+    //     return function () {
+    //         console.log('starting');
+    //         const result = wrapped.apply(this,arguments);
+    //         console.log('Finished');
+    //         return result
+    //     }
+    // }
+    // const wrapped = loggingDecorator(doSomething);
+    // wrapped(123)
 
-        // 4. core-decorators.js
-        // 提供几个常见的修饰器,通过它可以更好理解修饰器
-        // (1) autobind
-        // autobind 修饰器是的方法中的this,绑定原始对象
-        // import {autobind} from 'core-decorators'
-        // class Person{
-        //     @autobind
-        //     getPerson(){
-        //         return this;
-        //     }
-        // }
-        // let person = new Person()
-        // let getPerson = person.getPerson();
-        // console.log(getPerson() === person); // true
+    // 4. core-decorators.js
+    // 提供几个常见的修饰器,通过它可以更好理解修饰器
+    // (1) autobind
+    // autobind 修饰器是的方法中的this,绑定原始对象
+    // import {autobind} from 'core-decorators'
+    // class Person{
+    //     @autobind
+    //     getPerson(){
+    //         return this;
+    //     }
+    // }
+    // let person = new Person()
+    // let getPerson = person.getPerson();
+    // console.log(getPerson() === person); // true
 
-        // (2)@readonly
-        // import { readonly } from 'core-decorators'
-        // class Meal {
-        //     @readonly
-        //     entree = 'steak';
-        // }
-        // let dinner = new Meal();
-        // dinner.entree = 'salmon';// cannot assign to read only property 'entree' of [object Object]
+    // (2)@readonly
+    // import { readonly } from 'core-decorators'
+    // class Meal {
+    //     @readonly
+    //     entree = 'steak';
+    // }
+    // let dinner = new Meal();
+    // dinner.entree = 'salmon';// cannot assign to read only property 'entree' of [object Object]
 
-        // (3) override
-        // override 修饰器检查子类的方法, 是否正确覆盖了父类的同名方法,如果不正确,报错
-        // import {override} from 'core-decorator'
-        // class Parent {
-        //     speak(first,second){}
-        // }
-        // class Child extends Parent{
-        //     @override
-        //     speak(){} //  SyntaxError: Child#speak() does not properly override Parent#speak(first, second)
-        // }
+    // (3) override
+    // override 修饰器检查子类的方法, 是否正确覆盖了父类的同名方法,如果不正确,报错
+    // import {override} from 'core-decorator'
+    // class Parent {
+    //     speak(first,second){}
+    // }
+    // class Child extends Parent{
+    //     @override
+    //     speak(){} //  SyntaxError: Child#speak() does not properly override Parent#speak(first, second)
+    // }
 
-        // or
-        // class Child extends Parent{
-        //     @override
-        //     speaks(){}
-        //     // SyntaxError: No descriptor matching Child#speaks() was found on the prototype chain.
-        //     //
-        //     //   Did you mean "speak"?
-        // }
+    // or
+    // class Child extends Parent{
+    //     @override
+    //     speaks(){}
+    //     // SyntaxError: No descriptor matching Child#speaks() was found on the prototype chain.
+    //     //
+    //     //   Did you mean "speak"?
+    // }
 
-        // (4) @deprecate(弃用) (别名@depercated)
-        // deprecate 或deprecated 修饰器在控制台显示一条警告,表示该方法将废除
-        // import {deprecate} from 'core-decorators';
-        // class Person{
-        //     @deprecate
-        //     facepalm(){}
-        //
-        //     @deprecate('We stopped facepalming')
-        //     facepalmHard(){
-        //
-        //     }
-        //
-        //     @deprecate('We stopped facepalming',{url:'some url'})
-        //     facepalmHarder(){}
-        // }
-        //
-        // let person = new Person();
-        //
-        // person.facepalm();
-        // // DEPRECATION Person#facepalm: This function will be removed in future versions.
-        //
-        // person.facepalmHard();
-        // // DEPRECATION Person#facepalmHard: We stopped facepalming
-        //
-        // person.facepalmHarder();
-        // // DEPRECATION Person#facepalmHarder: We stopped facepalming
-        // //
-        // //     See some url for more details.
-        // //
+    // (4) @deprecate(弃用) (别名@depercated)
+    // deprecate 或deprecated 修饰器在控制台显示一条警告,表示该方法将废除
+    // import {deprecate} from 'core-decorators';
+    // class Person{
+    //     @deprecate
+    //     facepalm(){}
+    //
+    //     @deprecate('We stopped facepalming')
+    //     facepalmHard(){
+    //
+    //     }
+    //
+    //     @deprecate('We stopped facepalming',{url:'some url'})
+    //     facepalmHarder(){}
+    // }
+    //
+    // let person = new Person();
+    //
+    // person.facepalm();
+    // // DEPRECATION Person#facepalm: This function will be removed in future versions.
+    //
+    // person.facepalmHard();
+    // // DEPRECATION Person#facepalmHard: We stopped facepalming
+    //
+    // person.facepalmHarder();
+    // // DEPRECATION Person#facepalmHarder: We stopped facepalming
+    // //
+    // //     See some url for more details.
+    // //
 
-        // (5) suppressWarnings
-        // suppressWarnings 修饰器抑制 deprecated修饰器导致的console.warn()调用
-        // 但是异步代码发出的调用除外
-        // import {suppressWarnings} from 'core-decorators'
-        // class Person{
-        //     @deprecated
-        //     facepalm(){}
-        //
-        //     @suppressWarnings
-        //     facepalmWithoutWarning(){
-        //         this.facepalm();
-        //     }
-        // }
-        // let person = new Person();
-        // person.facepalmWithoutWarning();
-        // no warning is logged
+    // (5) suppressWarnings
+    // suppressWarnings 修饰器抑制 deprecated修饰器导致的console.warn()调用
+    // 但是异步代码发出的调用除外
+    // import {suppressWarnings} from 'core-decorators'
+    // class Person{
+    //     @deprecated
+    //     facepalm(){}
+    //
+    //     @suppressWarnings
+    //     facepalmWithoutWarning(){
+    //         this.facepalm();
+    //     }
+    // }
+    // let person = new Person();
+    // person.facepalmWithoutWarning();
+    // no warning is logged
 
-        // 5. 使用修饰器实现自动发布事件
-        // 可以使用修饰器,使得对象的方法被调用时,自动发出一个事件
-        // const postal = require('postal/lib/postal.lodash');
-        //
-        // export default function publish(topic,channel) {
-        //     const channelName = channel || '/';
-        //     const msgChannel = postal.channel(channelName);
-        //     msgChannel.subscribe(topic,v=>{
-        //         console.log('频道: ',channelName);
-        //         console.log('事件',topic);
-        //         console.log('数据',v);
-        //     })
-        //     return function (target, name, descriptor) {
-        //         const fn = descriptor.value;
-        //         descriptor.value = function () {
-        //             let value = fn.apply(this,arguments);
-        //             msgChannel.publish(topic,value)
-        //         }
-        //     }
-        // }
-        // 代码定义了一个publish的修饰器,它通过改写descriptor.value,
-        // 使得原方法被调用时候,会自动发出一个事件。
-        // 它使用的事件"发布/订阅"库是Postal.js
+    // 5. 使用修饰器实现自动发布事件
+    // 可以使用修饰器,使得对象的方法被调用时,自动发出一个事件
+    // const postal = require('postal/lib/postal.lodash');
+    //
+    // export default function publish(topic,channel) {
+    //     const channelName = channel || '/';
+    //     const msgChannel = postal.channel(channelName);
+    //     msgChannel.subscribe(topic,v=>{
+    //         console.log('频道: ',channelName);
+    //         console.log('事件',topic);
+    //         console.log('数据',v);
+    //     })
+    //     return function (target, name, descriptor) {
+    //         const fn = descriptor.value;
+    //         descriptor.value = function () {
+    //             let value = fn.apply(this,arguments);
+    //             msgChannel.publish(topic,value)
+    //         }
+    //     }
+    // }
+    // 代码定义了一个publish的修饰器,它通过改写descriptor.value,
+    // 使得原方法被调用时候,会自动发出一个事件。
+    // 它使用的事件"发布/订阅"库是Postal.js
 
-        // postal 用法如下
-        // import publish from './publish';
-        // class FooComponent{
-        //     @publish('foo.some.message','component')
-        //     someMethod(){
-        //         return {data:'123'}
-        //     }
-        //     @publish('foo.some.other')
-        //     anotherMethod(){
-        //         //...
-        //     }
-        // }
-        // let foo = new FooComponent();
-        // foo.someMethod();
-        // foo.anotherMethod();
-        // 调用someMethod 或者 anotherMethod ,自动发出一个事件
-        // 频道:  component
-        // 事件:  foo.some.message
-        // 数据:  { my: '123' }
-        //
-        // 频道:  /
-        // 事件:  foo.some.other
-        // 数据:  undefined
+    // postal 用法如下
+    // import publish from './publish';
+    // class FooComponent{
+    //     @publish('foo.some.message','component')
+    //     someMethod(){
+    //         return {data:'123'}
+    //     }
+    //     @publish('foo.some.other')
+    //     anotherMethod(){
+    //         //...
+    //     }
+    // }
+    // let foo = new FooComponent();
+    // foo.someMethod();
+    // foo.anotherMethod();
+    // 调用someMethod 或者 anotherMethod ,自动发出一个事件
+    // 频道:  component
+    // 事件:  foo.some.message
+    // 数据:  { my: '123' }
+    //
+    // 频道:  /
+    // 事件:  foo.some.other
+    // 数据:  undefined
 
-        // 6.Mixin
-        // 在修饰器的基础上可以实现Mixin 模式.
-        // 所谓 Mixin 模式,就是对象继承的一种替代方案
-        // mix in (混入),意为: 在一个对象中混入另外一个对象的方法
+    // 6.Mixin
+    // 在修饰器的基础上可以实现Mixin 模式.
+    // 所谓 Mixin 模式,就是对象继承的一种替代方案
+    // mix in (混入),意为: 在一个对象中混入另外一个对象的方法
 
     // const Foo = {
     //         foo() {
