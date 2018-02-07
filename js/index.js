@@ -58,7 +58,7 @@ $(function () {
 
 
     /*-------------------------------------------------------*/
-//----------不允许重复声明
+    //----------不允许重复声明
     //let a = '12';//不允许
     //function a(){
     //    let a = '12';
@@ -138,26 +138,41 @@ $(function () {
     //浏览器和 Web Worker 里面，self也指向顶层对象
     /*----------------------------------------------------------------*/
 
-//  取到顶层对象。下面是两种勉强可以使用的方法。
-// 方法一
-//    var a = (typeof window !== 'undefined' ? window : (typeof process === 'object' && typeof require === 'function' && typeof global === 'object') ? global : this);
-//
-//// 方法二
-//    var getGlobal = function () {
-//        if (typeof self !== 'undefined') {
-//            return self;
-//        }
-//        if (typeof window !== 'undefined') {
-//            return window;
-//        }
-//        if (typeof global !== 'undefined') {
-//            return global;
-//        }
-//        throw new Error('unable to locate global object');
-//    };
-//console.log(a,getGlobal())
-    /*---------------------------------------------------------------------*/
+    //  取到顶层对象。下面是两种勉强可以使用的方法。
+    // 方法一
+    //    var a = (typeof window !== 'undefined' ? window : (typeof process === 'object' && typeof require === 'function' && typeof global === 'object') ? global : this);
+    //
+    //// 方法二
+    //    var getGlobal = function () {
+    //        if (typeof self !== 'undefined') {
+    //            return self;
+    //        }
+    //        if (typeof window !== 'undefined') {
+    //            return window;
+    //        }
+    //        if (typeof global !== 'undefined') {
+    //            return global;
+    //        }
+    //        throw new Error('unable to locate global object');
+    //    };
+    //console.log(a,getGlobal())
 
+    // 作用域理解
+    // let a = 123;
+    // (function () {
+    //     console.log('进来',a);
+    //     function foo() {
+    //         a = 2;
+    //         return a
+    //     }
+    //     let b = foo();
+    //     b++;
+    //     console.log(a,b) //2,3
+    // })(a);
+    // a++;
+    // console.log('外面',a); //3
+    // console.log(b,foo); //not defined
+    /*---------------------------------------------------------------------*/
     /**
      *
      *  变量的解构赋值
@@ -224,41 +239,40 @@ $(function () {
     //console.log(sixth);// 5
 
 
-//    function *gen() {
-//        yield 'hello';
-//        yield 'world';
-//        return true;
-//    }
-//    //以上代码定义了一个简单的 generator，看起来就像一个普通的函数，区别是function关键字后面有个*号，函数体内可以使用yield语句进行流程控制。
-//
-//var iter = gen();
-//    var a = iter.next();//跑第一步,到hello后,停止,返回hello;
-//    console.log(a); // {value:'hello', done:false}
-//    var b = iter.next();//跑第二步,到world后,停止,world;
-//    console.log(b); // {value:'world', done:false}
-//    var c = iter.next();//跑第三步,true,停止,true;
-//    console.log(c); // {value:true, done:true}
-//    var d = iter.next();//之后返回都是undefined;
-//    var e = iter.next();
-//    console.log(d,e)
+    // function *gen() {
+    //     yield 'hello';
+    //     yield 'world';
+    //     return true;
+    // }
+    // //以上代码定义了一个简单的 generator，看起来就像一个普通的函数，区别是function关键字后面有个*号，函数体内可以使用yield语句进行流程控制。
+    //
+    // var iter = gen();
+    // var a = iter.next();//跑第一步,到hello后,停止,返回hello;
+    // console.log(a); // {value:'hello', done:false}
+    // var b = iter.next();//跑第二步,到world后,停止,world;
+    // console.log(b); // {value:'world', done:false}
+    // var c = iter.next();//跑第三步,true,停止,true;
+    // console.log(c); // {value:true, done:true}
+    // var d = iter.next();//之后返回都是undefined;
+    // var e = iter.next();
+    // console.log(d,e)
 
+    // -------------------默认值--------------------------------
+    // 解构赋值允许指定默认值。
+    // let [foo = 1]= [];//没有则取默认值
+    // console.log(foo)
+    // let [x, y = 'b'] = ['a']; // x='a', y='b'
+    // console.log(x,y)
+    // let [x, y = '123'] = ['a', undefined]; // x='a', y='b';复制为undefined也会取回默认值
+    // console.log(x,y)
+    // 注意，ES6 内部使用严格相等运算符（===），判断一个位置是否有值。
+    // 所以，如果一个数组成员不严格等于undefined，默认值是不会生效的。
+    // let [x = 1] = [undefined];
+    // console.log(x)
+    // let [x = 1] = [null];//null,默认值不生效
+    // console.log(x)
 
-//-------------------默认值--------------------------------
-//解构赋值允许指定默认值。
-//    let [foo = 1]= [];//没有则取默认值
-//    console.log(foo)
-//    let [x, y = 'b'] = ['a']; // x='a', y='b'
-//    console.log(x,y)
-//    let [x, y = '123'] = ['a', undefined]; // x='a', y='b';复制为undefined也会取回默认值
-//    console.log(x,y)
-//    注意，ES6 内部使用严格相等运算符（===），判断一个位置是否有值。
-//    所以，如果一个数组成员不严格等于undefined，默认值是不会生效的。
-//    let [x = 1] = [undefined];
-//    console.log(x)
-//    let [x = 1] = [null];//null,默认值不生效
-//    console.log(x)
-
-//----------------------------------------------------------------
+    //----------------------------------------------------------------
     //如果默认值是一个表达式，那么这个表达式是惰性求值的，即只有在用到的时候，才会求值。
 
     //var ab = 'ddd';
@@ -288,7 +302,7 @@ $(function () {
     //报错,不可在声明之前赋值
     //let [x = y, y = 1] = [];     // ReferenceError
 
-//----------    对象解构赋值     -----------------
+    //----------    对象解构赋值     -----------------
     //变量与属性名必须相同匹配,次序可以无序
     //let{foo,bar} = {bar:'1',foo:'123'};
     //console.log(foo,bar)
@@ -1010,61 +1024,61 @@ $(function () {
     //foo() // 3
     //x // 1
 
-//    函数foo的参数形成一个单独作用域。这个作用域里面，
-// 首先声明了变量x，然后声明了变量y，y的默认值是一个匿名函数。
-// 这个匿名函数内部的变量x，指向同一个作用域的第一个参数x。
-// 函数foo内部又声明了一个内部变量x，
-// 该变量与第一个参数x由于不是同一个作用域，
-// 所以不是同一个变量，因此执行y后，内部变量x和外部全局变量x的值都没变。
-//
-//如果将var x = 3的var去除，函数foo的内部变量x就指向第一个参数x，
-// 与匿名函数内部的x是一致的，所以最后输出的就是2，
-// 而外层的全局变量x依然不受影响。
-//
-//    var x = 1;
-//    function foo(x, y = function() { x = 2; }) {
-//        x = 3;
-//        y();
-//        console.log(x);
-//    }
-//
-//    foo() // 2
-//    x // 1
+    // 函数foo的参数形成一个单独作用域。这个作用域里面，
+    // 首先声明了变量x，然后声明了变量y，y的默认值是一个匿名函数。
+    // 这个匿名函数内部的变量x，指向同一个作用域的第一个参数x。
+    // 函数foo内部又声明了一个内部变量x，
+    // 该变量与第一个参数x由于不是同一个作用域，
+    // 所以不是同一个变量，因此执行y后，内部变量x和外部全局变量x的值都没变。
+    //
+    // 如果将var x = 3的var去除，函数foo的内部变量x就指向第一个参数x，
+    // 与匿名函数内部的x是一致的，所以最后输出的就是2，
+    // 而外层的全局变量x依然不受影响。
+    //
+    // var x = 1;
+    // function foo(x, y = function() { x = 2; }) {
+    //     x = 3;
+    //     y();
+    //     console.log(x);
+    // }
+    //
+    // foo() // 2
+    // x // 1
 
 
-//    ES6 引入 rest 参数（形式为...变量名），
-// 用于获取函数的多余参数，这样就不需要使用arguments对象了。
-// rest 参数搭配的变量是一个数组，该变量将多余的参数放入数组中。
-//    function add(...values) {
-//        let sum = 0;
-//
-//        for (var val of values) {
-//            sum += val;
-//        }
-//
-//        return sum;
-//    }
-//
-//    var sum = add(2, 5, 3) ;// 10
-//    console.log(sum)
+    // ES6 引入 rest 参数（形式为...变量名），
+    // 用于获取函数的多余参数，这样就不需要使用arguments对象了。
+    // rest 参数搭配的变量是一个数组，该变量将多余的参数放入数组中。
+    // function add(...values) {
+    //    let sum = 0;
+    //
+    //    for (var val of values) {
+    //        sum += val;
+    //    }
+    //
+    //    return sum;
+    // }
+    //
+    // var sum = add(2, 5, 3) ;// 10
+    // console.log(sum)
 
-//arguments对象不是数组，而是一个类似数组的对象。
-// 所以为了使用数组的方法，
-// 必须使用Array.prototype.slice.call先将其转为数组。
-// rest 参数就不存在这个问题，它就是一个真正的数组，
-// 数组特有的方法都可以使用。
-// 下面是一个利用 rest 参数改写数组push方法的例子。
-// arguments变量的写法
+    // arguments对象不是数组，而是一个类似数组的对象。
+    // 所以为了使用数组的方法，
+    // 必须使用Array.prototype.slice.call先将其转为数组。
+    // rest 参数就不存在这个问题，它就是一个真正的数组，
+    // 数组特有的方法都可以使用。
+    // 下面是一个利用 rest 参数改写数组push方法的例子。
+    // arguments变量的写法
 
-//    function sortNumbers() {
-//        return Array.prototype.slice.call(arguments).sort();
-//    }
-//
-//// rest参数的写法
-//    const sortRestNumbers = (...numbers) => numbers.sort();
-//    var a = sortNumbers(1,5);
-//    var b = sortRestNumbers(5,6);
-//    console.log(a,b);
+    // function sortNumbers() {
+    //     return Array.prototype.slice.call(arguments).sort();
+    // }
+    //
+    //  // rest参数的写法
+    // const sortRestNumbers = (...numbers) => numbers.sort();
+    // var a = sortNumbers(1,5);
+    // var b = sortRestNumbers(5,6);
+    // console.log(a,b);
 
     //数字添加
     //function push(array, ...items) {
@@ -1121,25 +1135,25 @@ $(function () {
 // 这样就有一个不合理的地方，只有从函数体之中，
 // 才能知道参数是否应该以严格模式执行，但是参数却应该先于函数体执行。
 
-//解决:
-//第一种 ,全局性的严格模式
+    //解决:
+    //第一种 ,全局性的严格模式
     //'use strict';
     //
     //function doSomething(a, b = a) {
     //    // code
     //}
 
-//第二种是把函数包在一个无参数的立即执行函数里面。
-//    const doSomething = (function () {
-//        'use strict';
-//        return function(value = 42) {
-//            return value;
-//        };
-//    }());
+    // 第二种是把函数包在一个无参数的立即执行函数里面。
+    // const doSomething = (function () {
+    //    'use strict';
+    //    return function(value = 42) {
+    //        return value;
+    //    };
+    // }());
 
-//函数新增name属性
-//    function foo() {}
-//    console.log(foo.name )// "foo"
+    // 函数新增name属性
+    // function foo() {}
+    // console.log(foo.name )// "foo"
 
 
     /*--------------------------- 箭头函数 -----------------------------*/
@@ -1156,15 +1170,15 @@ $(function () {
     //// 等同于
     //var f = function () { return 5 };
 
-//    var sum = (num1,num2)=> num1 + num2;
-//
-//    console.log(sum());
-//    console.log(sum(1,5));
-//    console.log(sum(1,'字符串'));
-//// 等同于
-//    var sum = function(num1, num2) {
-//        return num1 + num2;
-//    };
+    // var sum = (num1,num2)=> num1 + num2;
+    //
+    // console.log(sum());
+    // console.log(sum(1,5));
+    // console.log(sum(1,'字符串'));
+    //  // 等同于
+    // var sum = function(num1, num2) {
+    //     return num1 + num2;
+    // };
 
 
     //如果箭头函数的代码块部分多于一条语句，
@@ -1196,22 +1210,22 @@ $(function () {
     //console.log(square(7));
 
 
-//    // 正常函数写法
-//    var square = [1,2,3].map(function (x) {
-//        return x * x;
-//    });
-//    console.log(square);
-//// 箭头函数写法
-//    var square = [1,5,3].map(x => x * x);
-//    console.log(square);
+    // // 正常函数写法
+    // var square = [1,2,3].map(function (x) {
+    //     return x * x;
+    // });
+    // console.log(square);
+    // // 箭头函数写法
+    // var square = [1,5,3].map(x => x * x);
+    // console.log(square);
 
-//      正常函数写法
-//    var result = values.sort(function (a, b) {
-//        return a - b;
-//    });
-//
-//       箭头函数写法
-//    var result = values.sort((a, b) => a - b);
+    // 正常函数写法
+    // var result = values.sort(function (a, b) {
+    //    return a - b;
+    // });
+    //
+    // //箭头函数写法
+    // var result = values.sort((a, b) => a - b);
 
 
     //const numbers = (...nums) => nums;
@@ -1259,23 +1273,23 @@ $(function () {
     //setTimeout(() => console.log('s1: ', timer.s1), 310);
     //setTimeout(() => console.log('s2: ', timer.s2), 310);
 
-//// ES6
-//    function foo() {
-//        setTimeout(() => {
-//            console.log('id:', this.id);
-//        }, 100);
-//    }
-//
-//// ES5
-//    function foo() {
-//        var _this = this;
-//        this.id = 10
-//        setTimeout(function () {
-//            console.log('id:', _this.id);
-//        }, 100);
-//    }
-//
-//    foo();
+    //// ES6
+    //    function foo() {
+    //        setTimeout(() => {
+    //            console.log('id:', this.id);
+    //        }, 100);
+    //    }
+    //
+    //// ES5
+    //    function foo() {
+    //        var _this = this;
+    //        this.id = 10
+    //        setTimeout(function () {
+    //            console.log('id:', _this.id);
+    //        }, 100);
+    //    }
+    //
+    //    foo();
 
     //只有一个this，就是函数foo的this，
     // 所以t1、t2、t3都输出同样的结果。
@@ -10258,25 +10272,74 @@ $(function () {
     // obj.foo();// '123'
     // 通过mixins这个修饰器,实现了在MyClass类上面"混入"Foo对象的foo方法
 
+    // 上面的写法会改写MyClass类的prototype对象,如果不喜欢,可以通过类的继承实现Mixin
+    // class MyClass extends MyBaseClass{
+    //     /*...*/
+    // }
+    // 代码中,MyClass 继承了MyBaseClass。如果想在MyClass里面'混入'一个foo方法,
+    // 一个方法是在MyClass和MyBaseClass之间插入一个混入类,这个类具有foo方法,
+    // 并且继承了MyBaseClass的所有方法,然后MyClass 再继承这个类
+    // let myMixin = ()=> class extends superClass{
+    //         foo(){
+    //             console.log('123')
+    //         }
+    //     };
+    // 代码中,MyMixin 是一个混入类生成器,接受superClass 作为参数,
+    // 然后返回一个继承superClass的子类,该子类包含foo方法
+    // 接着,目标类再去继承这个混入类,就达到"混入"foo 方法的目的
+    // class MyClass extends MyMixin(MybaseClass){
+    //     /*...*/
+    // }
+    // let c = new MyClass();
+    // c.foo(); // 123
+    // 如果需要"混入"多个方法,就生成过个混入类
+    // class MyClass extends Mixin1(Mixin2(MyBaseClass)){
+    //     /*...*/
+    // }
+    // 这种写法的好处,是可以调用super,因此可以避免在"混入"过程中
+    // 覆盖父类的同名方法
+    // let Mixin1 = () => class extends superClass {
+    //         foo() {
+    //             console.log('foo from Mixin1');
+    //             if (super.foo) {
+    //                 super.foo()
+    //             }
+    //         }
+    //     };
+    //
+    // let Mixin2 = () => class extends superClass {
+    //     foo() {
+    //         console.log('foo from Mixin2');
+    //         if (super.foo) {
+    //             super.foo()
+    //         }
+    //     }
+    // };
 
+    // class S {
+    //     foo(){
+    //         console.log('foo from S');
+    //     }
+    // }
+    // class C extends Mixin1(Mixin2(S)){
+    //     foo(){
+    //         console.log('foo from C')
+    //         super.foo();
+    //     }
+    // }
+    // 代码中,每次混入发生时,都调用父类的super.foo方法
+    // 导致父类的同名方法没有被覆盖,行为被保留下来
+    // new C().foo();
+    // foo from C
+    // foo from Mixin1
+    // foo from Mixin2
+    // foo from S
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // 7.Trait
+    // Trait 也是一种修饰器 ,效果与Mixin类似,但是提供更多的功能
+    // 比如防止同名方法的冲突,排除混入某些方法,为混入的方法起别名等等
+    // traits-decorator 作为例子
+    //
 
 
 
