@@ -174,7 +174,6 @@ function insertSort(array) {
                 arr[j + 1] = arr[j];
                 j--;
             }
-
             arr[j+1] = guard;
         }
         console.log('insert操作后',arr);
