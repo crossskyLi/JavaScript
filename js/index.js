@@ -10202,7 +10202,7 @@ $(function () {
     // 比如防止同名方法的冲突,排除混入某些方法,为混入的方法起别名等等
     // traits-decorator 作为例子
     // 这个模块提供的traits修饰器,不仅可以接受对象,还可以接受ES6类作为参数
-    import {traits} from 'traits-decorator'
+    // import {traits} from 'traits-decorator'
 
 
     //-----------------------------------------------
