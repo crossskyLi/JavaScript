@@ -152,41 +152,56 @@ console.log('--------------------------')
 // （2） 取出下一个元素，在已经排序的元素序列中从后向前扫描
 // （3） 如果该元素（已排序）大于新元素，将该元素移到下一位置
 // （4） 重复步骤3，直到找到已排序的元素小于或者等于新元素的位置
-// （5）将新元素插入到下一位置中
-// （6） 重复步骤2
+// （5） 将新元素插入到下一位置中
+// （6） 重复步骤2-5
+// function insertSort(array) {
+//     let arr = array.concat();
+//     // 假设第0个元素是一个有序的数列,第1个以后的是无序的序列
+//     // 所以从第一个元素开始将无序数列的元素插入到有序数列中
+//     for (let i = 1; i < arr.length; i++) {
+//         // 升序
+//         if (arr[i] < arr[i - 1]) {
+//             // 取出无序数列中第i个作为被插入元素
+//             let guard = arr[i];
+//             // 记住有序数列的最后一个位置,并将有序数列位置扩大一个
+//             let j = i - 1;
+//             arr[i] = arr[j];
+//             // 比大小,找到被插入元素所在的位置,从后往前找
+//             while (j >= 0 && guard < arr[j]) {
+//                 arr[j + 1] = arr[j];
+//                 j--;
+//             }
+//             arr[j+1] = guard;
+//         }
+//     }
+//     return arr;
+// }
+// let insertResult = insertSort(randomArr);
+// console.log(insertResult);
 
-function insertSort(array) {
-    let arr = array.concat();
-    // 假设第0个元素是一个有序的数列,第1个以后的是无序的序列
-    // 所以从第一个元素开始将无序数列的元素插入到有序数列中
-
-    for (let i = 1; i < arr.length; i++) {
-        console.log('insert操作前',arr);
-        // 升序
-        if (arr[i] < arr[i - 1]) {
-            // 取出无序数列中第i个作为被插入元素
-            let guard = arr[i];
-            // 记住有序数列的最后一个位置,并将有序数列位置扩大一个
-            let j = i - 1;
-            arr[i] = arr[j];
-            // 比大小,找到被插入元素所在的位置,从后往前找
-            while (j >= 0 && guard < arr[j]) {
-                arr[j + 1] = arr[j];
-                j--;
-            }
-            arr[j+1] = guard;
-        }
-        console.log('insert操作后',arr);
-        console.log('------------')
+// 二分查找
+// 解析: 二分查找,也称折半查找
+// 首先要找到一个中间值,通过与中间值比较,大的放右边,小的放左边
+// 再在两边寻找中间值,持续以上操作,直到找到所在位置为止
+// (1)递归方法
+function binarySort(data, dest, start, end) {
+    let newEnd = end || data.length - 1;
+    let newStart = start || 0;
+    let m = Math.floor((start + end) / 2);
+    if (data[m] === dest) {
+        return m
     }
-    return arr;
+    if (dest < data[m]) {
+        return binarySort(data, dest, 0, m - 1);
+    } else {
+        return binarySort(data, dest, m + 1, end);
+    }
+    return false;
 }
-randomArr = makeRandomArr(10);
-let insertResult = insertSort(randomArr);
-console.log(insertResult)
 
-
-
+let arrBinaryIndex = parseInt(randomArr.length / 2);
+let binaryResult = binarySort(randomArr, randomArr[arrBinaryIndex])
+// console.log(binaryResult);
 
 
 
