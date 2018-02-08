@@ -6213,19 +6213,7 @@ $(function () {
     // }
     // console.log(result);
 
-    // 生成一个有十个随机数字的数组
-    // function makeRandomArr() {
-    //     let arr = [];
-    //     let random = 0;
-    //     let fixedNum = 0;
-    //     for (let i = 0; i < 10; i++) {
-    //         random = 10*Math.random();
-    //         fixedNum =  parseInt(random)+1;
-    //         arr.push(fixedNum)
-    //     }
-    //     return arr;
-    // }
-    //
+
 
 
     // 寄生组合式继承

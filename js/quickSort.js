@@ -4,8 +4,21 @@
  * 快速排序
  *
  * */
-let times = 0;
+// 生成一个有十个随机数字的数组
+function makeRandomArr() {
+    let arr = [];
+    let random = 0;
+    let fixedNum = 0;
+    for (let i = 0; i < 10; i++) {
+        random = 10 * Math.random();
+        fixedNum = parseInt(random) + 1;
+        arr.push(fixedNum)
+    }
+    return arr;
+}
 
+let times = 0;
+// 阮 快速排序
 function quickSort(arr) {
     if (arr.length <= 1) {
         return arr;
@@ -26,25 +39,18 @@ function quickSort(arr) {
 }
 
 let arr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]; // 最不理想排序数组 -- 次数19次
-// let arr = [3, 7, 8, 5, 2, 1, 9, 5, 4];  // 定值的但无序的, 21次
+// let arr = makeRandomArr();  // 定值的但无序的, 21次
 console.time('阮-Time');
-// let arr = makeRandomArr(); // 随机数字数组
 let result = quickSort(arr);
 console.log('阮-运算次数', times);
 console.log('阮-运算结果', result);
 console.timeEnd('阮-Time'); // 阮,时间 3-5ms
 
-// 交换元素位置
-function swap(array, i, k) {
-    let temp = array[i];
-    array[i] = array[k];
-    array[k] = temp;
-}
+let bubbleTime = 0;
 // 我的冒泡排序
 function bubbleSort(arr) {
     let result = arr.slice(0);
     let length = result.length;
-    let times = 0;
     for (let i = 0; i < length; i++) {
         let nextLength = length - i;
         let j = 1;
@@ -55,30 +61,22 @@ function bubbleSort(arr) {
                 result[j] = first;
                 result[j - 1] = second;
             }
+            bubbleTime++;
+            j++;
         }
-        swap(array, right, storeIndex); // 将基准元素放置到最后的正确位置上
-        // console.log('分区完成', storeIndex, array);
-        return storeIndex;
     }
+    return result;
 }
-    // 排序递归
-    function sort(array, left, right) {
-        if (left >= right) {
-            return;
-        }
-        let storeIndex = partition(array, left, right);
-        sort(array, left, storeIndex - 1);
-        sort(array, storeIndex + 1, right);
-    }
+console.time('bubble-Time');
+let bubbleArr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+let bubbleResult = bubbleSort(bubbleArr);
+console.log('bubbleTime 运算次数:',bubbleTime);
+console.log('bubbleResult 运算结果: ',bubbleResult);
+console.timeEnd('bubble-Time');
 
-    sort(array, 0, array.length - 1);
-
-
-let arr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-let result = insertSort(arr);
-console.log(result)
 // wiki 快速排序
 let wikiTimes = 0;
+
 function wikiQuickSort(array) {
 
     // 交换元素位置
