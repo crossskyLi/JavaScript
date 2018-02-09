@@ -10203,6 +10203,128 @@ $(function () {
     // traits-decorator 作为例子
     // 这个模块提供的traits修饰器,不仅可以接受对象,还可以接受ES6类作为参数
     // import {traits} from 'traits-decorator'
+    // class TFoo{
+    //     foo(){
+    //         console.log('foo');
+    //     }
+    // }
+    // const TBar = {
+    //     bar(){
+    //         console.log('bar')
+    //     }
+    // }
+    // @traits(TFoo, TBar)
+    // class MyClass{
+    //
+    // }
+    // let obj = new MyClass();
+    // obj.foo();// foo
+    // obj.bar();// bar
+    // 代码中,通过traits 修饰器,在MyClass 类上面 "混入"了TFoo类的foo方法
+    // 和TBar对象的方法。
+
+    // Trait 不允许"混入"同名方法
+    // import {traits} from  'trait-decorator';
+    // class TFoo{
+    //     foo(){
+    //         console.log('foo')
+    //     }
+    // }
+    // const TBar={
+    //     bar(){
+    //         console.log('bar')
+    //     },
+    //     foo(){
+    //       console.log('bar','foo')
+    //     }
+    // }
+    // @traits(TFoo,TBar)
+    // class MyClass{}
+    // 报错
+    // throw new Error('Method named: ' + methodName + ' is defined twice.');
+    //        ^
+    // Error: Method named: foo is defined twice.
+    // 代码中,TFoo 和 TBar都有foo 方法,结果traits 修饰器报错
+    // 一种解决方法是排除TBar的foo方法
+    // import {traits,excludes} from 'traits-decorator';
+    // class TFoo{
+    //     foo(){
+    //         console.log('foo')
+    //     }
+    // }
+    // const TBar = {
+    //     bar(){
+    //         console.log('bar')
+    //     },
+    //     foo(){
+    //         console.log('bar foo')
+    //     }
+    // }
+    // @traits(TFoo,TBar::excludes('foo'))
+    // class MyClass{
+    //
+    // }
+    // let obj = new MyClass();
+    // obj.foo();// foo
+    // obj.bar();// bar
+    // 代码中使用绑定运算符(::)在TBar 上排除foo方法,混入时,就不会报错
+
+    // 另一种方法是为TBar 的foo方法起一个别名
+    // alias 别名
+    // import {traits,alias} from 'traits-decorator'
+    //
+    // class TFoo {
+    //     foo(){
+    //         console.log('foo')
+    //     }
+    // }
+    // const TBar = {
+    //     bar(){
+    //         console.log('bar')
+    //     },
+    //     foo(){
+    //         console.log('foo')
+    //     }
+    // };
+    // @traits (TFoo,TBar::alias({foo:'aliasFoo'}))
+    // class MyClass{
+    //
+    // }
+    // let obj = new MyClass();
+    // obj.foo();// foo
+    // obj.aliasFoo();// foo
+    // obj.bar();// bar
+    // 代码为TBar的foo方法起了别名 aliasFoo,于是MyClass 也可以混入TBar的foo方法
+    // alias 和 excludes 方法,可以结合使用
+    // @traits(TExample::excludes('foo','bar')::alias({baz:'exampleBaz'}))
+    // class MyClass{}
+    // 代码中排除了TExample的foo方法,和bar方法,为baz方法其别名exampleBaz
+    // as 方法则为上面的代码提供了另一种写法
+    // @traits(TExample::as({excludes:['foo','bar'],alias:{baz:'exampleBaz'}}))
+    // class Myclass{}
+
+    // 8 Babel 转码器的支持
+    // 安装 babel-core 和 babel-plugin-transform-decorators
+    // 由于后者包括 babel-preset-stage-0 之中,
+    // 所以改为暗转babel-preset-stage-0也可以
+    // $ npm install babel-core babel-plugin-transform-decorators
+    // 然后设置配置文件.babelrc
+    // {
+    //     "plugins":['transform-decorators']
+    // }
+    // 这时,Babel就可以对Decorator 转码
+    // 脚本中打开的命令如下
+    // babel.transform('code',{plugins:['transform-decorators']})
+    // Babel 的官方网站提供一个在线转码器,只要勾选 Experimental,就能支持Decorator
+    // 的在线转码
+
+    //----------------------------------
+
+    /**
+     *
+     * Module 的语法
+     *
+     * */
 
 
     //-----------------------------------------------
