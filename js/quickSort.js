@@ -184,24 +184,73 @@ console.log('--------------------------')
 // 首先要找到一个中间值,通过与中间值比较,大的放右边,小的放左边
 // 再在两边寻找中间值,持续以上操作,直到找到所在位置为止
 // (1)递归方法
-function binarySort(data, dest, start, end) {
-    let newEnd = end || data.length - 1;
-    let newStart = start || 0;
-    let m = Math.floor((start + end) / 2);
-    if (data[m] === dest) {
-        return m
-    }
-    if (dest < data[m]) {
-        return binarySort(data, dest, 0, m - 1);
-    } else {
-        return binarySort(data, dest, m + 1, end);
-    }
-    return false;
-}
+// function binarySort(data, dest, start, end) {
+//     let newEnd = end || data.length - 1;
+//     let newStart = start || 0;
+//     let m = Math.floor((newStart + newEnd) / 2);
+//     console.log('123',data[m] === dest);
+//     if (data[m] === dest) {
+//         return m
+//     }
+//     console.log(data)
+//     if (dest < data[m]) {
+//         console.log(data, dest, 0, m - 1);
+//         console.log('1--------------');
+//         // debugger;
+//         return binarySort(data, dest, 0, m - 1);
+//
+//     } else {
+//         console.log(data, dest, m + 1, newEnd);
+//         console.log('2--------------');
+//         // debugger;
+//         return binarySort(data, dest, m + 1, newEnd);
+//     }
+//     return false;
+// }
+// console.log(randomArr);
+// let arrBinaryIndex = 3;
+// let binaryResult1 = binarySort(arr, arr[arrBinaryIndex]);
+// console.log('第一个结果',binaryResult1);
+//
+// // (2) 非递归放啊分
+// function binarySearch(data, dest) {
+//     let length = data.length - 1;
+//     let l = 0;
+//     while (l <= length) {
+//         let m = Math.floor((length + 1) / 2);
+//         if (data[m] === dest) {
+//             return m;
+//         }
+//         if (dest > data[m]) {
+//             l = m + 1;
+//         } else {
+//             length = m - 1;
+//         }
+//         console.log(data[m])
+//     }
+//
+//     return false;
+// }
+// console.log(arr);
+// let binaryResult2 = binarySearch(arr,6);
+// console.log('第二结果',binaryResult2);
 
-let arrBinaryIndex = parseInt(randomArr.length / 2);
-let binaryResult = binarySort(randomArr, randomArr[arrBinaryIndex])
-// console.log(binaryResult);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
