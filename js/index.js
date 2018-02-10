@@ -10471,7 +10471,9 @@ $(function () {
     // 另外,export 语句输出的接口,与其对应的值是动态绑定关系
     // 即通过该接口,可以取到模块内部实时的值
 
-
+    export var foo = 'bar';
+    setTimeout(()=>foo = "baz",500)
+    // 代码中输出变量foo ,值为bar,500毫秒后变成baz
 
 
 
