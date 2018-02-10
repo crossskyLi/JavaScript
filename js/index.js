@@ -6214,8 +6214,6 @@ $(function () {
     // console.log(result);
 
 
-
-
     // 寄生组合式继承
     // es5前
     // function object(o) {
@@ -10325,33 +10323,109 @@ $(function () {
      * Module 的语法
      *
      * */
+    // 1. 概述
+    // ES6 模块的设计是尽量静态化,使得编译的时候能确定模块的依赖关系,
+    // 以及输入和输出的变量
+    // CommonJS 和AMD 模块,都只能在运行的时候确定这些东西
+    // 比如,CommonJS模块就是对象,输入时候必须查找对象属性
+    // CommonJS 模块
+    // let {stat,exists,readFile} = require('fs');
+    // // 等同于
+    // let _fs = require('fs');
+    // let stat = _fs.stat;
+    // let exists = _fs.exists;
+    // let readFile = _fs.readFile;
+    // 代码中,实质上是整体加载fs模块,(即加载fs的所有方法),
+    // 生成一个对象(_fs),然后再从这个对象上面读取三个方法,
+    // 这种加载称为"运行加载",因为只有运行时才能得到这个对象,
+    // 导致完全没有办法在编译时做静态优化
+    // ES6 模块不是对象,而是通过export命令显式指定输出的代码
+    // 再通过import命令输入
+    // ES6 模块
+    // import {stat, exists,readFile} from "fs"
+    // 代码的实质是从fs模块加载了三个方法,其他方法不加载,
+    // 这种加载称为:"编译时加载",或者静态加载,即ES6可以在编译时完成模块加载
+    // 效率要比CommonJS模块的加载方式要高
+    // 这也会导致没法应用ES6模块本身,因为它不是对象
 
+    // 由于ES6模块是编译时加载,使得静态分析成为可能,
+    // 这样可以进一步拓宽JavaScript 的语法,
+    // 比如引入宏(macro)和类型检验(type system)这些只能靠静态分析实现的功能
 
-    //-----------------------------------------------
-    // function timeCount() {
-    //     let nowTime = new Date();
-    //     let yearTime = new Date('2018-02-12').setHours(0);
-    //     //毫秒
-    //     let mileSecond = parseInt((yearTime - nowTime) % 1000 / 100);
-    //     let mileSecondStrArr = ((mileSecond) / 10).toString().split('.');
-    //     let mileSecondStr = mileSecondStrArr[1] ? '.' + mileSecondStrArr[1] : '.0';
-    //     //秒
-    //     let second = Math.floor((yearTime - nowTime) / 1000);
-    //     let secondStr = (second % 60) > 0 ? (second % 60) + mileSecondStr + '秒' : '0秒';
-    //     //分
-    //     let min = Math.floor(second / 60);
-    //     let minStr = (min % 60) > 0 ? (min % 60) + '分' : '';
-    //     //时
-    //     let hour = Math.floor(min / 60);
-    //     let hourStr = (hour % 24) > 0 ? (hour % 24) + '时' : '';
-    //     //天
-    //     let day = Math.floor(hour / 24);
-    //     let dayStr = day > 0 ? day + '天' : '';
-    //     let timeCountStr = dayStr + hourStr + minStr + secondStr;
-    //     $('.time-count').text(timeCountStr)
+    // ES6模块还有以下好处:
+    // 1. 不再需要UMD 模块格式, 以后服务器和浏览器都会支持ES6模块格式
+    //    目前通过工具库,已经可以做到这点
+    // 2. 将来浏览器的新API就能用模块格式提供,不再必须做成全局变量或者navigator对象属性
+    // 3. 不再需要对象作为命名空间(比如Math对象),未来这些功能可以通过模块提供
+    //---------------------------------------------
+
+    // 2.严格模式
+    // ES6自动采用严格模式,不管是否有在模块头部加上"use strict"
+
+    // 严格模式主要有以下限制
+    // - 变量必须声明后再使用
+    // - 函数的参数不能有同名属性,否则报错
+    // - 不能使用with 语句
+    // - 不能对只读属性赋值,否则报错
+    // - 不能使用前缀为0表示八进制数,否则报错
+    // - 不能删除不可删除的属性,否则报错
+    // - 不能删除变量 delete prop, 只能删除属性 delete global[prop]
+    // - eval 不会在它的外层作用域引入变量
+    // - eval 和 arguments 不能被重新赋值
+    // - arguments 不会自动反应函数参数的变化
+    // - 不能使用 arguments.callee
+    // - 不能使用 arguments.caller
+    // - 禁止 this 指向全局对象
+    // - 不能使用fn.caller 和fn.arguments 获取函数调用的堆栈
+    // - 增加了保留字(比如 protected static 和 interface)
+    // 这些限制,模块都必须遵守。
+    // 其中,尤其需要注意的是this 的限制, ES6模块中,顶层的this 指向undefined
+    // 即不应该在顶层代码使用this
+
+    // 3. export 命令
+    // 模块功能主要由两个命令构成 :export 和 import
+    // export 命令用于规定模块的对外接口,import 命令用于输入其他模块提供的功能
+
+    // 一个模块就是一个独立的文件,该文件内部的所有变量,外部无法获取
+    // 如果希望外部能读取模块内部的某个变量,就必须使用export 关键字输出该变量
+    // 例子:
+    // profile.js
+    // export var firstName = 'abc';
+    // export var lastName = 'cds';
+    // export var year = 1922;
+    // 代码中保存用户信息,ES6将其视为一个模块,
+    // 里面用export 命令对外部输出三个变量
+
+    // export 的写法,除了像上面这样还有另外写法
+    // profile.js
+    // var firstName = '123';
+    // var lastName = 'sdf';
+    // var year = 1952;
+    // export {firstName,lastName,year};
+    // 代码中,在export命令后面,使用大括号指定所要输出的一组变量
+    // 与上一种写法等价,优先考虑第二种写法,这样可以在脚本尾部,一眼看清所有输出变量
+
+    // export 命令除了输出变量,还可以输出函数或者类 (class)
+    // export function foo(x, y) {
+    //     return x + y;
     // }
+    // 代码输入了一个foo函数
+
+    // 通常情况下,export 输出的变量就是本来的名字,但是可以使用as 关键字重命名
+    // function v1() {
     //
-    // setInterval(timeCount, 100);
+    // }
+    // function v2() {
+    //
+    // }
+    // export {
+    //     v1 as streamV1,
+    //     v2 as streamV2,
+    //     v2 as streamLastestVersion
+    // }
+
+
+
 
 
 });
