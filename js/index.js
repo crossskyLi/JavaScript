@@ -10568,10 +10568,57 @@ $(function () {
     // 也就是说,import 语句是singleton 模式
 
     // 目前阶段,通过Babel,转码,CommonJS 模块的require 命令
+    // 和 ES6 模块的import 命令,可以写在同一个模块里面
+    // 但是最好不要这么做,
+    // 因为import 在静态解析阶段执行,所以它是一个模块之中最早执行的。
 
+    // require('core-js/modules/es6.symbol');
+    // require('core-js/modules/es6.promise');
+    // import React from 'React';
 
+    // 5. 模块的整体加载
+    // 除了指定加载某个输出值,还可以整体加载,即使用 星号 ( * ) 指定一个对象,
+    // 所有输出值都加载在这个对象上
+    // circle.js 文件,有两个输出方法,area 和circumference
+    // circle.s
+    // export function area(radius) {
+    //     return Math.PI * radius * radius
+    // }
+    // export function circumference(radius) {
+    //     return 2 * Math.PI * radius // radius 半径
+    // }
 
+    // 加载模块
+    // import {area,circumference} from './circle'
+    // console.log('面积',area(2));
+    // console.log('圆周长',circumference(123))
 
+    // 上面写法是逐一指定要加载的方法,整体加载的写法如下
+    // import * as circle from "./circle";
+    // console.log('面积',circle.area(2));
+    // console.log('圆周长',circle.circumference(123))
+
+    // 注意模块整体加载所在的那个对象(上例是circle),
+    // 应该是可以静态分析的,所以不允许运行时改变。
+
+    // // 不允许以下写法
+    // import * as circle from './circle'
+    // // 下面两行是不允许的
+    // circle.foo = 'hello';// 改变属性
+    // circle.area = function () {
+    //
+    // };// 改变属性
+
+    // 6. export default 命令
+    // 使用import 命令的时候,用户需要知道所要加载的变量名或者函数名
+    // 否则无法加载。
+
+    // 使用export default 命令,为模块指定默认输出,方便用户使用
+    // export-default.js
+    // export default function () {
+    //     console.log("foo")
+    // }
+    // 上面代码是一个模块文件export-default.js，它的默认输出是一个函数。
 });
 
 
