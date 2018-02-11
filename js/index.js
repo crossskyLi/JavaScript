@@ -10717,7 +10717,86 @@ $(function () {
     // let o = new MyClass
 
     // 7. export 与 import 的复合写法
-    
+    // 一个模块中,先输入后输出同一个模块,import 语句可以与export 语句写在一起
+    // export {foo,bar} from 'my_module';
+    //
+    // // 可以简单理解为
+    // import {foo,bar} from 'my_module';
+    // export {foo,bar}
+    // 代码中,export 和import 语句可以结合在一起,写成一行
+    // 注意: 写成一行后,foo和bar 实际上并没有被导入当前模块
+    // 只是相当于对外转发了这两个接口,导致当前模块不能直接使用foo 和bar
+
+    // 模块的接口改名和整体输出,可以采用下面写法
+    // 接口改名
+    // export {foo as myFoo} from 'my_module';
+    // 整体输出
+    // export * from 'my_module'
+
+    // 默认接口的写法如下
+    // export {default} from 'foo'
+
+    // // 具名接口改为默认接口的写法如下
+    // export {es6 as default} from './someModule';
+    // //等同于
+    // import {es6}  from './someModule';
+    // export default es6;
+
+    //同样,默认接口也可以改为具名接口
+    // export {default as es6} from './someModule'
+
+    // 下面三种import 语句,没有对应的复合写法
+    // import * as someIdentifier from 'someModule';
+    // import someIdentifier from 'someModule';
+    // import someIdentifier,{nameIdentifier} from 'someModule'
+
+    // 为做到形式对称,--提案,提出补上这三种复合写法
+    // export * as someIdentifier from 'someModule';
+    // export someIdentifier from 'someModule'
+    // export someIdentifier,{namedIdentifier} from 'someModule';
+
+    // 8. 模块的继承
+    // 模块之前可以继承
+    // 假设有一个circlePlus 模块,继承 circle 模块
+    // circlePlus.js
+    // export * from 'circle'
+    // export var e = 2.1444;
+    // export default function (x) {
+    //     return Math.exp(x)
+    // }
+    // 代码中的export * ,表示再输出circle 模块的所有属性和方法
+    // 注意,export * 命令会忽略 circle 模块的default 方法,然后,
+    // 上面代码又输出了自定义的e 变量和默认fangfa
+
+    // 这时也可以将circle 的属性或者方法,改名后在输出
+    // export {area as circleArea} from 'circle'
+    // 代码表示,只输出circle模块的area 方法,且将其改名为circleArea
+    // 加载上面模块的写法如下
+    // main.js
+    // import * as math from 'circlePlus'
+    // import exp from 'circlePlus'
+    // console.log(exp(math.e));
+    // 代码中import exp 表示,将circlePlus 模块的默认方法加载为exp 方法
+
+    //-----------------------
+
+    // 9. 跨模块常量
+    // const 声明的变量只在当前代码块有效,
+    // 如果想设置跨模块的常量(即跨多个文件),或者说一个值要被多个模块共享
+    // 可以采用以下写法
+
+    // constants.js 模块
+    export const A = 1;
+    export const B = 2;
+    export const C = 3;
+
+
+
+
+
+
+
+
 
 
 });
