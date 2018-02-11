@@ -10556,7 +10556,18 @@ $(function () {
     // import 'lodash'
     // 上面代码仅仅是执行了lodash 模块,但是不输入任何值
 
+    // 如果多次重复执行同一句import语句,只会执行一次,不会执行多次
+    // import 'lodash'
+    // import 'lodash'
+    // 代码会加载两次,但是只会执行一次
+    // import {foo} from 'my_module';
+    // import {bar} from 'my_module';
+    // // 等同于
+    // import {foo,bar} from "my_module"
+    // 代码中,虽然 foo和bar 在两句语句中加载,但是它们对应的是同一个my_module实例
+    // 也就是说,import 语句是singleton 模式
 
+    // 目前阶段,通过Babel,转码,CommonJS 模块的require 命令
 
 
 
