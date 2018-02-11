@@ -10785,17 +10785,190 @@ $(function () {
     // 如果想设置跨模块的常量(即跨多个文件),或者说一个值要被多个模块共享
     // 可以采用以下写法
 
-    // constants.js 模块
-    export const A = 1;
-    export const B = 2;
-    export const C = 3;
+    // // constants.js 模块
+    // export const A = 1;
+    // export const B = 2;
+    // export const C = 3;
+    // // test1.js 模块
+    // import * as constants from './constants'
+    // console.log(constants.A)// 1
+    // // test2.js 模块
+    // import {A,B} from './constants'
+    // console.log(A );// 1
+    // console.log(B );// 2
+
+    // 如果要使用的常量较多,可以建立一个专门的constants 目录,
+    // 将各种常量写在不同的文件里面,保存在该目录下
+    // constants/db.js
+    // export const db = {
+    //     url:'http://api.com:6500',
+    //     adminName:'admin',
+    //     adminAge :'123'
+    //     }
+
+    // constants/user.js
+    // export const users = [
+    //     'root','admin','editor'
+    //     ]
+    // 然后讲这些文件输出的常量,合并在index.js
+    // constants/index.js
+    // export {db} from './db';
+    // export {users} from './users';
+
+    // 使用的时候,直接加载index.js 就可以
+    // script
+    // import {db,users} from './index';
+
+    // 10 import()
+
+    // import 命令会被JavaScript 引擎静态分析,
+    // 先于模块内的其他模块执行(叫做'连接'更合适),所以以下代码会报错
+    // 报错
+    // if(x ===2){
+    //     import MyModule from 'myModule';
+    // }
+    // 代码中,引擎处理import 语句是在编译时,这是不会去分析或执行if 语句
+    // 所以import 语句放在if 代码块之中毫无意义,
+    // 因此会报句法错误,而不是执行时错误,也就是说,import 和 export 命令只能在模块顶层
+    // 不能在代码块之中(比如,在if 代码块之中,或者函数中)
+
+    // 这样的设计,有利于编译器提高效率,但也导致无法在运行时加载模块,
+    // 在语法上,条件加载就不可能实现
+    // 如果import 命令要取代Node 的require 方法,就形成了一个障碍
+    // 因为require 是运行时加载模块,import 命令无法取代require 的动态加载功能
+
+    // const path = './'+ fileName;
+    // const myModule = require(path);
+    // 这里语句就是动态加载,require 到底加载哪个模块,只有运行时才能知道
+    // import 语句做不到这一点
+
+    // 提案: 建议引入 import () 函数,完成动态加载
+    // import(specifier)
+    // 代码中,import 函数的参数specifier, 指定所要加载的模块的位置
+    // import 命令能够接受什么参数,import() 函数就能接受什么参数,
+    // 两者区别主要是后者为动态加载
+
+    // import () 返回一个promise 对象
+    // 例子:
+    // const main = document.querySelector('main');
+    // import (`./section-module/${someVariable}.js`)
+    //     .then(module=>{
+    //         module.loadPageInto(main);
+    //     })
+    //     .catch(err=>{
+    //         main.textContent = 'err.message'
+    //     })
+
+    // import() 函数可以用在任何地方,不仅仅是模块,
+    // 非模块的脚本也可以使用,
+    // 它是运行时执行,也就是说,什么时候运行到这一句,,也会加载指定的模块
+    // 另外import() 函数与所加载的模块没有静态连接关系
+    // 这点与import 语句不相同
+    // import() 类似于Node 的require 方法,区别主要是import 是异步加载,后者是同步加载
+
+    // import() 适用场合
+    // (1) 按需加载
+    // import() 可以在需要的时候,再加载某个模块
+    // button.addEventListener('click', event => {
+    //     import ('./dialogBox.js')
+    //         .then(dialogBox => {
+    //             dialogBox.open
+    //         }).catch(err => {
+    //         console.error(err)
+    //     })
+    // })
+    // 代码中,import() 方法放在click 事件的监听函数中,
+    // 只有用户点击按钮,才会加载这个模块
+
+    // (2) 条件加载
+    // import() 可以放在if 代码块,根据不同的情况,加载不同的模块
+    // if (condition) {
+    //     import('moduleA').then(moduleA => {
+    //         moduleA.doSomeThing();
+    //     }).catch(err => {
+    //         console.log(err)
+    //     })
+    // } else {
+    //     import ('moduleB')
+    //         .then(moduleB => moduleB.doElseThing())
+    //         .catch(err=> console.error(err))
+    // }
+    // 代码中,满足条件加载模块A,否则加载模块B
+
+    // (3) 动态的模块路径
+    // import() 允许模块路径动态生成
+    // import (f()).then(fModule => {
+    //         fModule.doSome();
+    //     }
+    // ).catch(err => {
+    //     console.error(err)
+    // });
+    //
+    // function f(url) {
+    //     return url
+    // }
+    // 代码中,根据函数f 的返回结果,加载不同的模块
+
+    // 注意点
+    // import() 加载模块成功后,这个模块会作为一个对象,
+    // 当作then 方法的参数。
+    // 因此可以使用对象的解构赋值的语法,获取输出接口
+    // import ('./myModule.js')
+    //     .then(({export1,export2})=>{
+    //         //...
+    //     })
+    // 代码中,export1 和export2 都是myModule.js 的输出接口,可以解构获得
+    // 如果模块有default 输出接口,可以用参数直接获得
+    // import ('./module.js')
+    //     .then(moduleName => moduleName.default)
+    //     .catch(err=>console.error(err))
+    // 上面代码也可以使用具名输入的形式
+    // import ('./myModule.js')
+    //     .then(({default:theDefault})=>{
+    //         console.log(theDefault)
+    //     })
+    //     .catch(err=>console.error(err))
+
+    // 一次同时加载多个模块,可以采用以下写法
+    // Promise.all([
+    //     import('module1.js'),
+    //     import('module2.js'),
+    //     import('module3.js'),
+    //     import('module4.js')
+    // ])
+    //     .then(([module1,module2,module3,module4])=>{
+    //         // ...
+    //     })
+    //     .catch(err=>{
+    //         console.error(err)
+    //     })
+
+    // import() 也可以用在async 函数之中
+    // async function main() {
+    //     const myModule = await import('./myModule1.js');
+    //     const {export1,export2} = await import('./myModule2.js');
+    //     const [module1,module2,module3] = await Promise.all([
+    //         import('./module1.js'),
+    //         import('./module2.js'),
+    //         import('./module3.js'),
+    //     ])
+    // }
+    // main()
+
+    //---------------------------------------------------------------
 
 
+    /**
+     *
+     * 23. Module的加载实现
+     *
+     * */
+    // 介绍如何在浏览器和Node 之中加载ES6模块,
+    // 以及实际开发容易遇到的问题 (比如循环加载)
 
-
-
-
-
+    // 1.浏览器加载
+    // 传统方法
+    // HTML网页中,浏览器通过<script>标签加载JavaScript 脚本
 
 
 
