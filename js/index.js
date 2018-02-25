@@ -11035,13 +11035,131 @@ $(function () {
     // - CommonJS 模块是运行时加载,ES6 模块是编译时输出接口
 
     // 第二个差异是因为 CommonJS 加载的是一个对象(即 module.exports 属性)
-    // 该对象只有在脚本运行完了才会生成
+    // 该对象只有在脚本运行完了才会生成。
+    // 而ES6 模块不是对象,它的对外接口只是一种静态定义,在代码静态解析阶段就会生成
 
+    // 第一个差异解释:
+    // CommonJS 模块输出的是值的拷贝,也就是说,一旦输出一个值,
+    // 模块内部的变化就影响不到这个值。
 
+    // 例子
 
+    // lib.js
+    // let counter = 3;
+    // function incCounter(){
+    //     counter++;
+    // }
+    // module.exports = {
+    //     counter:counter,
+    //     incCounter:incCounter,
+    // }
+    // 代码输出内部变量counter 和改写这个变量的内部方法incCounter
 
+    // 然后在main.js里面加载这个模块
+    // main.js
+    // let mod = require('./lib.js');
+    // console.log(mod.counter);// 3
+    // mod.incCounter();
+    // console.log(mod.counter);//3
+    // 代码说明,lib.js 模块加载以后,它的内部变化就影响不到输出的mod.counter
+    // 这是因为mod.counter 是一个原始类型的值,会被缓存,
+    // 除非写成一个函数,才能得到内部变动后的值
+
+    // lib.js
+    // let counter = 3;
+    // function incCounter() {
+    //     counter++;
+    // }
+    // module.exports = {
+    //     get counter(){
+    //         return counter
+    //     },
+    //     incCounter:incCounter,
+    // }
+    // 代码中输出的counter 属性实际上是一个取值器函数,在执行main.js
+    // 就可以正确读取内部变量counter的变动了
+    // 结果分别为3、4
+
+    // ES6 模块的运行机制与CommonJS不一样,
+    // JS 引擎对脚本静态分析的时候,遇到模块加载命令import,就会生成一个只读引用
+    // 等到脚本真正执行时,再根据这个只读引用,到被加载的那个模块里面去取值
+    // 换句话说,ES6 的import 有点像Unix 系统的"符号连接",原始值变了,
+    // import 加载的值也会跟着变
+    // 因此ES6 模块是动态引用,并且不会缓存值,模块里面的变量绑定其所在的模块
+
+    // 例子:
+    // // lib.js
+    // export let counter = 3;
+    // export function incCounter() {
+    //     counter++;
+    // }
+    //
+    // // main.js
+    // import {counter,incCounter} from './lib.js';
+    // console.log(counter); // 3
+    // incCounter();
+    // console.log(counter); // 4
+    // 代码说明,ES6 模块输入的变量counter 是活的,完全反应其所在模块lib.js内部的变化
+
+    // 另外出现在export 一节例子
+    // m1.js
+    // export var foo = 'bar';
+    // setTimeout(() => foo = 'baz', 500);
+    //
+    // // m2.js
+    // import {foo} from './m1.js';
+    // console.log(foo);
+    // setTimeout(()=>console.log(foo),500);
+    // 代码中,m1.js 的变量foo,在刚加载时候等于bar,过了500毫秒,又变为等于baz
+    // 结果为:
+    // bar
+    // baz
+    // 代码结果表明,ES6 模块不会缓存运行结果,而是动态地去被加载的模块取值
+    // 并且变量总是绑定其所在的模块
+    // 由于ES6 输入的模块变量只是一个'符号连接',所以这个变量是只读的,对她进行重新赋值会报错
+    // lib.js
+    // export let obj = {}
+    // // main.js
+    // import{obj} from './lib';
+    // obj.prop = 123; // 不会报错
+    // obj = {}; // 报错TypeError
+    // 代码中main.js 从lib.js 输入变量obj,可以对obj添加属性,
+    // 但是重新赋值会报错
+    // 因为变量obj 指向的地址是只读的,不能重新赋值
+    // 这就好比main.js 创造了一个名为obj 的const 变量
+    // 最后,export 通过接口,输出的是同一个值
+    // 不同的脚本加载这个接口,得到的都是同样的实例
+
+    // mod.js
+    // function C(){
+    //     this.sum = 0;
+    //     this.add = function () {
+    //         this.sum += 1;
+    //     }
+    //     this.show = function () {
+    //         console.log(this.sum)
+    //     }
+    // }
+    // export let c = new C();
+    // 上面脚本mod.js 输出的是一个C的实例,不同的脚本加载这个模块得到的都是同一个实例
+    // // x.js
+    // import {c} from './mod';
+    // c.add();
+    //
+    // // y.js
+    // import {c} from './mod';
+    // c.show();
+    //
+    // // main.js
+    // import './x';
+    // import './y';
+    // 执行main.js 输出的是 1
+    // 证明x.js 和y.js 加载的都是C的同一个实例
 
 });
+
+
+
 
 
 
