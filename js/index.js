@@ -11376,7 +11376,232 @@ $(function () {
     // b 依赖 c,c 又依赖a 这样的情况,这意味着,模块加载机制必须考虑 "循环加载"的情况
     // 对于JS 来说,两种模块格式 CommonJS 和 ES6 ,处理"循环加载"的方法不一样,返回的结果不一样
 
-});
+    // CommonJS 模块的加载原理
+    // CommonJS 的一个模块就是一个脚本文件,require 命令第一次加载该脚本,就会执行整个脚本
+    // 然后在内存中生成一个对象 假设为a
+    // a = {
+    //     id: '123',
+    //     exports: {
+    //         //...
+    //     },
+    //     loaded:true,
+    // }
+    // 上面代码就是Node 内部加载模块后生成的一个对象,该对象的id属性就是模块名
+    // exports 属性是模块输出的各种接口,
+    // loaded 属性是一个布尔值,表示该模块的脚本是否加载完毕
+    // 其他属性,这里忽略
+
+    // 以后需要用到这个模块的时候,就会到exports 这个属性上取值
+    // 即使再次执行require 命令,也不会在此执行该模块,而是到缓存中取值
+    // 也就是说,CommonJS模块无论挤在多少次,
+    // 都只会在第一次加载时运行一次,以后再加载,
+    // 就返回第一次运行的结果,除非手动清除系统缓存
+
+    // CommonJS 模块 的循环加载
+    // CommonJS 模块的重要特性是加载时执行,即脚本代码在require的时候,就会全部执行
+    // 一旦出现某个模块被 "循环加载",就只输出已经执行的部分
+    // 还未执行的部分不会输出
+    // 官方例子
+    // a.js
+    // export.done =false;
+    // var b = require('./b.js');
+    // console.log('在a.js 之中,b.done = %j ',b.done);
+    // exports.done = true;
+    // console.log('a 执行完毕')
+    // 代码中,a.js 脚本先输出一个done变量,然后加载另一个脚本b.js
+    // 注意此时a.js 代码就停在这里,等待b.js 执行完毕,再往下执行
+    // 再看 b.js 的代码
+    // export.done = false;
+    // var a = require ('./a.js');
+    // console.log('在 b.js 之中，a.done = %j', a.done);
+    // exports.done = true;
+    // console.log('b.js 执行完毕');
+    // 上面代码中,b.js 执行到第二行,就会去加载a.js,
+    // 这时候就发生了"循环加载"。
+    // 系统会去a.js 模块对应对象的exports 属性取值,可是因为a.js 还没执行完
+    // 从exports 属性只能取回已经执行的部分而不是最后的值
+    // a.js 已经执行的部分,只有一行
+    // export.done = false;
+    // 因此对于b.js来说,它从a.js 只输入一个变量done,值为false
+
+    // 然后,b.js 接着往下执行,等到全部执行完毕,再把执行权交还给a.js。
+    // a.js 接着往下执行,直到执行完毕。
+    // 例子, main.js
+    // var a = require ('./a.js');
+    // var b = require ('./b.js');
+    // console.log('在main.js 中,a.done = %j,b.done = %j',a.done, b.done);
+    // 执行main.js 运行结果如下
+    // 在 b.js 中,a.done = false
+    // b.js 执行完毕
+    // 在a.js 中,b.done = true
+    // a.js 执行完毕
+    // 在main.js中,a.done = true,b.done = true
+
+    // 上面代码证明两件事情,
+    // 一是,在b.js ,中 a.js 没有执行完毕,只执行了第一行
+    // 二是,main.js 执行到第二行的时候,不会再执行b.js,而是输出缓存的b.js 的执行结果
+    //      即它的第四行
+    // export.done = true
+    // 总之,CommonJS 输入的是被输出值的拷贝,而不是引用
+
+    // 另外,由于CommonJS 模块遇到循环加载时,返回的是当前已经执行的部分的值
+    // 而不是代码全部执行后的值,两者可能会有差异,所以,输入变量的时候,必须非常小心
+    // var a = require('a'); // 安全写法
+    // var foo = require('a').foo; // 危险写法
+    //
+    // exports.good = function (arg) {
+    //     return a.foo('good',arg) // 使用的是 a.foo 的最新值
+    // }
+    // exports.bad = function (arg) {
+    //     return foo('bad',arg) // 使用的是一个部分加载时的值
+    // }
+    // 上面危险写法,如果发生循环加载,require ('a').foo 的值很可能后面会被改写
+    // 改用require('a')会更加保险
+
+
+    // ES6 模块的循环加载
+    // ES6 处理"循环加载"与CommonJS 有本质的不同
+    // ES6 模块是动态引用,如果使用import 从一个模块加载变量(即 import foo from 'foo'),
+    // 那些变量不会被缓存,而是成为一个指向被加载模块的引用,
+    // 需要开发者自己保证,真正取值的时候能够取到值
+
+    // // a.mjs
+    // import {bar} from './b';
+    // console.log('a.mjs');
+    // console.log(bar);
+    // export let foo = 'foo';
+    //
+    // // b.mjs
+    // import {foo} from './a';
+    // console.log('b.mjs');
+    // console.log(foo);
+    // export let bar = 'bar';
+
+    // 代码中,a.mjs 加载 b.mjs ,b.mjs 又加载了 a.mjs ,构成循环加载,执行a.mjs
+    // 结果如下
+    // b.mjs
+    // ReferenceError: foo is not defined
+    // 上面代码中,执行a.mjs 以后会报错,foo 变量未定义
+
+    // 原因:
+    // 首先 , 执行a.mjs 以后,引擎发现了它加载了b.js ,因此会优先执行b.mjs
+    // 然后再执行a.mjs, 接着,执行b.mjs 的时候,已知它从a.mjs 输入了foo 接口,
+    // 这时不会去执行a.mjs ,而是认为这个接口已经存在,继续往下执行
+    // 执行到第三行 console.log(foo) 的时候,才发现这个接口根本没定义,因此报错
+    // 解决这个问题的方法,就是让b.mjs 运行的时候,foo 已经有定义了
+    // 这可以通过将foo 改写为函数来解决
+
+    // // a.mjs
+    // import {bar} from './b';
+    // console.log('a.mjs');
+    // console.log(bar());
+    // function foo() {
+    //     return 'foo'
+    // }
+    // export { foo }
+    //
+    // // b.mjs
+    // import {foo} from './a';
+    // console.log('b.mjs');
+    // console.log(foo());
+    // function bar (){
+    //     return 'bar'
+    // }
+    // export {bar};
+
+    // 这时候再执行a.mjs 就可以得到预期结果
+    // b.mjs
+    // foo
+    // a.mjs
+    // bar
+
+    // 这是因为函数具有提升作用,在执行import {bar} from './b'时候,
+    // 函数foo 已经有定义了,
+    // 所以 b.mjs 加载的时候不会有报错
+    // 这也意味着,如果把函数foo 改写成函数表达式,也会报错
+
+    // // a.mjs
+    // import {bar} from './b';
+    // console.log('a.mjs');
+    // console.log(bar());
+    // const foo = () => 'foo';
+    // export {foo}
+    // 代码第四行,改成了函数表达式,就不具有提升作用,执行就会报错
+
+    // ES6 模块加载器SystemJS 给出的例子
+    // // even.js
+    // import {odd} from './odd';
+    // export var counter = 0;
+    // export function even(n) {
+    //     counter++;
+    //     return n === 0 || odd( n - 1 )
+    // }
+    //
+    // // odd.js
+    // import {even} from './even';
+    // export function odd(n) {
+    //     return n !== 0 && even( n - 1);
+    // }
+    // 代码中,even.js 里面的函数,even 有一个参数n,只要不等于,就会减去1 ,
+    // 传入加载的odd (), odd.js 也会做类似操作
+    // 结果如下
+    // even 偶数,odd 奇数
+    // import * as m from './even.js';
+    // let result = m.even(10);
+    // console.log(result);// true
+    // console.log(m.counter);// 6
+    // result = m.even (20);
+    // console.log(result ) ; // 20
+    // console.log(m.counter); //17  (11 + 6)
+    // 代码中,参数n 从 10 变为0 的过程中,even()一共会执行六次.
+    // 所以变量会等于6
+    // 第二次调用的even() ,参数n 从20 变为0 ,even() 一共会执行11次
+    // 加上前面6次,所以变量counter 等于17
+
+
+    // 上面例子,改写成CommonJS,就无法执行,会报错
+    // var odd = require('./odd');
+    // var counter = 0;
+    // exports.counter = counter;
+    // exports.even = function (n) {
+    //     counter++;
+    //     return n === 0 || odd(n - 1)
+    // }
+    //
+    // // odd.js
+    // var even = require('./even').even;
+    // module.exports = function (n) {
+    //     return n != 0 && even(n - 1)
+    // }
+    // 上面代码中,even.js 加载odd.js ,而odd.js 又去加载even.js ,形成循环加载
+    // 这时候,执行引擎就会输出even.js 已经执行的部分( 不存在任何结果 ),
+    // 所以在odd.js 中变量even 等于null,等到后面调用even(n-1) 就会报错
+    // var m = require ('./even');
+    // m.even(10);
+    // TypeError :even is not a function
+
+
+    // 5. ES6 模块转码
+    // 暂时忽略 unFinish
+    //--------------------------------------------------------------
+
+
+    /**
+     *
+     * 24 . 编程风格
+     *
+     * */
+
+    /*
+    * 块级作用域
+    * */
+
+    // (1) let 取代 var
+    // ES6 提出两个新的声明变量的命令: let 和const ,
+    // 其中let 完全可以取代var, 因为两者语义相同,而且let 没有副作用
+
+
+;
 
 
 
