@@ -11157,11 +11157,226 @@ $(function () {
     // 证明x.js 和y.js 加载的都是C的同一个实例
 
     // 3.Node 加载
+
+    // 概述
+    // Node 对ES6模块的处理比较麻烦,因为它有自己的CommonJS 模块格式,与ES6模块格式不兼容。
+    // 解决方案:
+    // 将两者分开,ES6模块和 CommonJS采用各自的加载方案
+
+    // Node 要求ES6模块采用.mjs后缀文件名,也就是说,只要脚本文件里面使用import 或者export命令
+    // 那么就必须采用.mjs后缀名。
+    // require 命令不能加载.mjs 文件,会报错
+    // 只有import 命令才可以加载 .mjs 文件,
+    // 反过来,.mjs文件中也不能使用require命令,必须使用import
+    // 目前这项功能还在试验阶段,8.5.0以上版本,要用--experimental-modules参数才能打开该功能
+    // node --experimental-modules my-app.mjs
+
+    // 为了与浏览器的import 加载规则相同,Node的.mjs文件支持URL路径
+    // import './foo?query=1';
+    // 上面代码,中脚本路径带有参数?query=1,Node 会按URL 规则解读,
+    // 同一脚本只要参数不同就会被加载多次,并且保存成不同的缓存,
+    // 由于这个原因,只要文件名中含有 : / % / # / ? 等特殊符号,最好对这些字符进行转义
+
+    // 目前Node的import 命令只支持加载本地模块(file: 协议),不支持加载远程模块
+    // 如果模块名不含路径,那么import 命令回去node_modules 目录寻找模块
+    // import 'baz';
+    // import 'abc/312';
+
+    // 如果模块名包含路径,那么import 命令会按照路径去寻找这个名字的脚本文件
+    // import 'file:///etc/config/app.json'
+    // import './foo'
+    // import './foo?search';
+    // import '../bar'
+    // import '/bar'
+
+    // 如果脚本文件省略了后缀名,比如import './foo',
+    // Node 会依次尝试四个后缀名 ./foo.mjs , ./foo.js , ./foo.json , ./foo.node
+    // 如果这些脚本文件都不存在,Node就会去加载 ./foo/package.js 的main字段指定的脚本
+    // 如果 ./foo/package.json 不存在或者没有main字段
+    // 那么就会依次加载 ./foo/index.mjs , ./foo/index.js , ./foo/index.json , ./foo/index.node
+    // 如果这四个文件还是不存在,就会抛出错误
+
+    // Node 的import 命令是异步加载,这一点与浏览器的处理方法相同
+
+    // 内部变量
+    // ES6 模块应该是通用的,同一个模块不用修改,就可以在浏览器和服务器环境上使用
+    // 为了达到这个目标,Node 规定ES6模块之中不能使用CommonJS 模块的特有的一些内部变量
+
+    // 首先就是this 关键字。
+    // ES6模块之中,顶层this 指向undefined;
+    // CommonJS 模块的顶层this 指向当前模块,这是两者的重大差异
+    // 其次 , 以下这些顶层变量在ES6 模块之中是不存在的
+    // - arguments
+    // - require
+    // - module
+    // - exports
+    // - __filename
+    // - __dirname
+    // 如果一定要用这些变量,变通方法就是写一个CommonJS模块输出这些变量
+    // 然后再用ES6 模块加载这个CommonJS模块
+    // 但是这样的话, 该ES6 模块就不能直接用于浏览器,不推荐这样子做
+
+    // // expose.js
+    // module.exports = {__dirname};
+    // // user.mjs
+    // import expose from './expose.js';
+    // const {__driname} = expose;
+    // 代码中,expose.js 是一个CommonJS模块,输出变量__dirname,
+    // 该变量在ES6 模块之中不存在,ES6 模块加载expose.js ,就可以得到__dirname
+
+    // ES6 模块加载 CommonJS模块
+    // CommonJS模块的输出都定义在module.exports 这个属性上。
+    // Node 的import 命令加载CommonJS模块,Node 会自动将module.exports 属性当作模块的默认输出
+    // 即等同于export default xxx
+
+    // 一个CommonJS模块
+    // // a.js
+    // module.exports = {
+    //     foo:'2',
+    //     bar:'sd',
+    // }
+    // // 等同于
+    // export default {
+    //     foo:'2',
+    //     bar:'sd',
+    // }
+
+    // import 命令加载上面的模块,module.exports 会被视为默认输出
+    // 即import 命令实际上输入的是这样的一个对象{default:module.exports}
+    // 一共有三种写法,可以拿到CommonJS 模块的module.exports
+
+    // // 写法一
+    // import baz from './a';
+    // // baz = {foo:'2',bar:'sd'}
+
+    // // 写法二
+    // import {default as baz } from './a';
+    // // baz = {foo:'2',bar:'sd'}
+
+    // 写法三
+    // import * as baz from './a';
+    // baz = {
+    //     get default(){
+    //         return module.exports;
+    //     },
+    //     get foo(){return this.default.foo}.bind(baz),
+    //     get bar(){return this.default.bar}.bind(baz)
+    // }
+
+    // 上面代码的第三种写法,可以通过baz.default 拿到module.exports
+    // foo 属性和bar 属性就是可以通过这个方法拿到了module.exports
+
+    // 例子
+    // // b.js
+    // module.exports = null;
+    //
+    // // es.js
+    // import foo from './b';
+    // // foo = null
+    //
+    // import * as bar from './b';
+    // // bar = {default :null}
+
+    // 代码中,es.js 采用第二种写法,要通过bar.default 这样的写法,,才能拿到module.exportsd
+
+    // // c.js
+    // module.exports = function two() {
+    //     return 2
+    // }
+    //
+    // // es.js
+    // import foo from './c';
+    // foo(); // 2
+    //
+    // import * as bar from './c';
+    // bar.default();// 2
+    // bar(); // throw ERROR  bar is not a function
+    // 代码中bar 本身是一个对象,不能当作函数调用,只能通过bar.default 调用
+
+    // CommonJS 模块 的输出缓存机制,在ES6 的加载方式下依旧有效
+    // foo.js
+    // module.exports = 21;
+    // setTimeout(_ =>module.exports = null);
+    // 代码中,对于加载foo.js 的脚本,module.exports 将一直是123,而不会变成null
+    // 由于ES6 模块是编译时确定输出接口, CommonJS 模块 是运行时确定输出接口,
+    // 所以采用import 命令加载CommonJS 模块时候,不允许采用下面的写法
+    // 不正确的
+    // import {readfile} from './fs'
+    // 上面的写法不正确,是因为fs 是CommonJS 格式,只有在运行时才能确定readfile接口
+    // 而import 命令要求编译时就确定这个接口,解决方法就是改为整体输入
+
+    // 正确写法一
+    // import * as express from 'express';
+    // const app = express.default()
+
+    // 正确写法二
+    // import express from 'express';
+    // const app = express();
+
+    // CommonJS 模块 加载ES6 模块
+
+    // CommonJS 模块加载 ES6 模块 不能使用require 命令
+    // 而要使用import() 函数。
+    // ES6 模块所有的输出接口,会成为输入对象的属性
+
+    // es.mjs
+    // let foo = { bar : 'my-default'};
+    // export default foo;
+    // foo = null;
+
+    // cjs.js
+    // const es_namespace = await import ('./es');
+    // es_namespace = {
+    //     get default(){
+    //         //...
+    //     }
+    // }
+    // console.log(es_namespace.default);
+    //  //{bar: 'my-default'}
+    // 代码中,default 接口变成 es_namespace.default 属性。
+    // 另外,由于存在缓存机制,es.mjs 对foo 的重新赋值没有在模块外部反应出来
+
+    // 另一个例子
+    // es.js
+    // export let foo = {bar : "123"};
+    // export {foo as bar};
+    // export function f() {
+    //
+    // }
+    // export class C{}
+
+    // cjs.js
+    // const es_namespace = await import ('./es');
+    // es_namespace = {
+    //     get foo(){
+    //         return foo;
+    //     },
+    //     get bar(){
+    //         return foo;
+    //     },
+    //     get f(){return f;},
+    //     get C(){return C;},
+    // }
+
+    // 4. 循环加载
+
+    // "循环加载"(circular dependency) 指的是,a脚本执行依赖b脚本
+    // 而 b 脚本的执行有依赖 a 脚本
+
+    // // a.js
+    // var b = require('b');
+    //
+    // // b.js
+    // var a = require('a');
+
+    // 通常,循环加载表示存在强耦合,如果处理不好,可能导致递归加载
+    // 使得程序无法执行,因此应该避免出现
+
+    // 但实际上很难避免,尤其是依赖关系复杂的大项目,很容易出现a 依赖 b
+    // b 依赖 c,c 又依赖a 这样的情况,这意味着,模块加载机制必须考虑 "循环加载"的情况
+    // 对于JS 来说,两种模块格式 CommonJS 和 ES6 ,处理"循环加载"的方法不一样,返回的结果不一样
+
 });
-
-
-
-
 
 
 
