@@ -11599,7 +11599,15 @@ $(function () {
     // (1) let 取代 var
     // ES6 提出两个新的声明变量的命令: let 和const ,
     // 其中let 完全可以取代var, 因为两者语义相同,而且let 没有副作用
-
+    // 'use strict'
+    // if(true){
+    //     let x = 'hello'
+    // }
+    // for (let i = 0; i < 10 ; i++){
+    //     console.log(i);
+    // }
+    // 上面代码如果用var 代替let ,实际上就声明了两个全局变量,这显然不是本意,
+    // 变量应该只在其声明的代码块内有效,var 做不到这点
 });
 
 
