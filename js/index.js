@@ -11950,14 +11950,79 @@ $(function () {
     // console.log(queue.pop());// 2
     // console.log(queue.pop());// 3
 
-    // 使用extends 继承
+    // 使用extends 实现继承,这样子更简单,且不会破坏instanceof 的危险
+    // bad
+    // const inherits = require('inherits');
+    // function PeekableQueue(contents) {
+    //     Queue.apply(this,contents);
+    // }
+    //
+    // inherits(PeekableQueue,Queue);
+    //
+    // PeekableQueue.prototype.peek = function () {
+    //     return this._queue[0];
+    // }
 
+    // good
+    // class PeekableQueue extends Queue{
+    //     peek(){
+    //         return this._queue[0]
+    //     }
+    // }
 
+    // 9. 模块
+    // 首先,Module语法是js模块的标准写法,坚持使用这种写法,使用import 取代 require
+    // bad
+    // const moduleA = require('moduleA');
+    // const method1 = moduleA.method1;
+    // const method2 = moduleA.method2;
 
+    // good
+    // import {method1,method2} from 'moduleA'
 
+    // 使用export 取代module.exports
+    // commonJS的写法
+    // let react = require('react');
+    // let Breadcrumbs = React.createClass({
+    //     render(){
+    //         return <nav />
+    //     }
+    // });
+    // module.exports = Breadcrumbs;
 
+    // ES6 写法
+    // import React from 'react';
+    // class Breadcrumbs extends React.component{
+    //     render(){
+    //         return <nav />;
+    //     }
+    // }
+    // export default Breadcrumbs;
 
+    // 如果模块只有一个输出值,就是使用export default,如果模块有多个输出值
+    // 就不实用export default ,export default 与普通的export 不要同时使用
 
+    // 不要在模块输入中使用通配符,因为这样可以确保你的模块之中,有一个默认输出(export default)
+    // bad
+    // import * as myObj from './importModule';
+
+    // good
+    // import myObj from './importModule'
+
+    // 如果模块默认输出一个函数,函数名的首字母应该小写
+    // function makeSomething() {
+    //
+    // }
+    // export default makeSomething;
+
+    // 如果模块默认输出一个对象,对象名的首字母应该大写
+    // const OutputObj = {
+    //     a: 1,
+    // }
+    // export default OutputObj;
+
+    // 10. ESlint 的使用
+    // ESlint 是一个语法规则和代码风格检查工具
 
 
 
