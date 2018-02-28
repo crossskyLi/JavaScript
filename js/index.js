@@ -12028,10 +12028,50 @@ $(function () {
     // 然后安装 Airbnb 语法规则 ,以及import , a11y(数字1),react插件
     // npm i -g eslint-config-airbnb
     // npm i -g eslint-plugin-import eslint-plugin-a11y eslint-plugin-react
-    
+    // 最后在项目的根目录下新建一个.eslinttrc文件,配置ESLint
+    // {
+    //     "extends": "eslint-config-airbnb"
+    // }
+
+    // index.js 代码
+    // var unused = 'something unused'
+    // function greet() {
+    //     var message = 'message';
+    //     alert(message);
+    // }
+    // greet();
+    // 使用ESLint 检查文件,报出错误
+    // eslint index.js
+    // index.js
+    // 1:1 error Unexpected var use let or const instead   no-var
+    // 1:5 error unused is defined but not used            no-unused-vars
+    // 4:5 error Expected indentation of 2 characters but found 4      indent
+    // 4:5 error Unexpected var ,use let or const instead    no-var
+    // 5:5 error Expected indentation of 2 characters but fount 4      indent
+    // 5 problems (5 errors, 0 warnings)
+    // 代码报错在于,原文有五个错误,
+    // 其中两个是不应该使用var,而应该使用let 或者const
+    // 一个是unused 变量声明了,但是没有使用到
+    // 另外两个是行缩进是4个空格,而不是规定的2个空格
 
 
+    /**
+     *
+     * 读懂规格 unFinish
+     *
+     * */
 
+    /**
+     *
+     * ArrayBuffer unFinish
+     *
+     * */
+
+    /**
+     *
+     * 最新提案 unFinish
+     *
+     * */
 
 });
 
