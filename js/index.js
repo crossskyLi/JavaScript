@@ -11793,6 +11793,175 @@ $(function () {
     //     },
     // };
 
+    // 5. 数组
+    // 使用扩展运算符( ... )拷贝数组
+    // bad
+    // const len = items.length;
+    // const itemCopy = [];
+    // let i;
+    // for (i = 0; i < len; i++) {
+    //     itemCopy[i] = items[i];
+    // }
+    // good
+    // const itemCopy = [...items];
+
+    // 使用 Array.from 方法,将类似数组的对象转为数组
+    // const foo = document.querySelectorAll('.foo');
+    // const nodes = Array.from(foo);
+
+    // 6. 函数
+
+    // 立即执行函数可以写成箭头函数的形式
+    // (()=>{
+    //     console.log('立即执行')
+    // })()
+
+    // 需要函数表达式的场合,尽量使用箭头函数代替,这样更加简洁,而且绑定了this
+    // bad
+    // [1,2,3].map(function (x) {
+    //     return x * x
+    // })
+
+    // good
+    // [1,2,3].map((value) => {
+    //     return value * value;
+    // })
+
+    // best
+    // [1,2,3].map(value => value * value)
+
+    // 箭头函数取代 Function.prototype.bind, 不应再用self / _this/ that 绑定this
+    // // bad
+    // let _this = this;
+    // const boundMethod = function (...params) {
+    //     return method.apply(self, params)
+    // }
+    // // acceptable
+    // const boundMethod = method.bind(this);
+    //
+    // // best
+    // const boundMethod = (...params) => method.apply(this, params);
+
+    // 简单的,单行的,不会复用的函数,建议采用箭头函数
+    // 如果函数体较为复杂,,行数较多,使用传统的函数写法
+
+    // 所有配置项都应该集中在一个对象,放在最后一个参数,布尔值不可以直接作为参数
+    // bad
+    // function divide(a, b, option = false) {
+    //
+    // }
+
+    // good
+    // function divide(a, b, {option = false} = {}) {
+    //     console.log(a, b, option);
+    //      console.log(arguments)// 不要使用
+    // }
+    //
+    // divide(1, 2, {option: true}); // 1 2 true
+    // divide(1, 2); // 1 2 false
+
+    // 不要在函数体内使用 arguments 变量,使用rest 运算符代替
+    // 因为rest 运算符显式表明你要想要获取参数
+    // 而且arguments 是一个类似数组的对象,而rest 运算符可以提供一个真正的数组
+
+    // bad
+    // function concatenateAll() {
+    //     const arr = Array.prototype.slice.call(arguments);
+    //     console.log(arr)
+    //     return arr.join('');
+    // }
+    // let result = concatenateAll(1,2,3);
+    // console.log(result) // 123
+
+    // good
+    // function concatenateAll(...args) {
+    //     return args.join('');
+    // }
+
+    // 使用默认语法设置函数参数的默认值
+    // // bad
+    // function handleThings(opts) {
+    //     opts = opts || {};
+    // }
+    //
+    // // good
+    // function handleThings(opts = {}) {
+    //     //...
+    // }
+
+    // 7. Map结构
+    // 注意区分 Object 和 Map ,只有模拟现实世界的实体对象时,才使用Object
+    // 如果只是需要key: value 的数据结构,使用Map结构。
+    // 因为Map 有内建的遍历机制
+    //
+    // let m = new Map();
+    // let o ={a:1};
+    // m.set(o, 'content');//如何向 Map 添加成员
+    // m.get(o); // "content"
+    // m.has(o); // true //判断是否有键
+    // let isDelete =  m.delete(o); // true // 删除键值,并返回成功与否
+    // console.log('isDelete 1',isDelete);// true
+    // isDelete =  m.delete(o);
+    // console.log('isDelete 2',isDelete);// false
+
+    //Map 可以接受一个数组作为参数。该数组的成员是一个个表示键值对的数组。
+    // let arr = [
+    //     ['a', 11],
+    //     ['b', 4]
+    // ];
+    // let map = new Map(arr);
+    // console.log(map)
+    // for (let key of map.keys()) {
+    //     console.log(key);
+    // }
+    // for (let value of map.values()) {
+    //     console.log(value)
+    // }
+    //
+    // for (let item of map.entries()) {
+    //     console.log(item[0], item[1]);
+    // }
+
+    // 8. Class
+    // 总是使用Class,取代需要使用prototype操作,因为Class写法更加简洁,易于理解
+    // bad
+    // function Queue(contents = []) { // queue 队列
+    //     this._queue = [...contents]
+    // }
+    // Queue.prototype.pop = function () {
+    //     const value = this._queue[0];
+    //     this._queue.splice(0,1);
+    //     return value;
+    // }
+
+    // good
+    // class Queue {
+    //     constructor(contents = []){
+    //         this._queue = [...contents];
+    //     }
+    //     pop(){
+    //         const [value] = this._queue;
+    //         this._queue.splice(0,1);
+    //         return value;
+    //     }
+    // }
+    // let queue = new Queue([1,2,3]);
+    // console.log(queue.pop());// 1
+    // console.log(queue.pop());// 2
+    // console.log(queue.pop());// 3
+
+    // 使用extends 继承
+
+
+
+
+
+
+
+
+
+
+
 
 });
 
