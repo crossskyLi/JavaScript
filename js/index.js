@@ -11648,6 +11648,152 @@ $(function () {
     // 这是let 表示的变量,只应出现在单线程运行的代码中,不能是多线程共享的,
     // 这样有利于保证线程安全
 
+    // 2. 字符串
+    // 静态字符串一路来使用单引号或者双引号,动态字符串使用反引号
+    // // bad
+    // const a = "foobar";
+    // const b = 'foo'+ a + 'bar';
+    //
+    // // acceptable
+    // const c = `foobar`;
+    //
+    // // good
+    // const a = 'foobar'; // 静态
+    // const b = `foo${a}bar`;// 动态
+    // const c = 'foobar'; // 静态
+
+    // 3. 解构赋值
+    // 使用数组成员对变量赋值,优先使用解构赋值
+
+    // const arr = [1,2,4,5];
+
+    // bad
+    // const first = arr[0];
+    // const second = arr[2];
+
+    // good
+    // const [first, second] = arr;
+
+
+    // const [,first,] = arr;
+    // console.log(first) // 2
+
+    // 函数的参数如果是对象的成员,优先使用解构赋值
+    // // bad
+    // function getFullName(user) {
+    //     const firstName = user.firstName;
+    //     const secondName = user.secondName;
+    // }
+    //
+    // // good
+    // function getFullName(user) {
+    //     const {firstName,secondName} = user;
+    // }
+    //
+    // best
+    // function getFullName({firstName, lastName}) {
+    //     console.log(firstName, lastName)
+    // }
+    // let user = {
+    //     firstName:'123',
+    //     lastName:'321'
+    // };
+    // getFullName(user);
+
+    // 如果函数返回多个值,优先使用对象的解构赋值,
+    // 而不是数组的解构赋值,这样便于以后添加返回值,
+    // 以及更改返回值的顺序
+
+    // // bad
+    // function processInput(input) {
+    //     return [left, right, top, bottom];
+    // }
+    //
+    // // good
+    // function processInput(input) {
+    //     return {
+    //         left,
+    //         right,
+    //         top,
+    //         bottom,
+    //     }
+    // }
+    // const {left,top} = processInput(input)
+
+    // 4. 对象
+    // 单行定义的对象,最后一个成员不以逗号结尾
+    // 多行定义的对象,最后一个成员以逗号结尾
+    // bad
+    // const a = {k1:v1,k2:v2,};
+    // const b = {
+    //     k1:v1,
+    //     k2:v2
+    // }
+
+    // good
+    // const a = {k1: v1, k2: v2};
+    // const b = {
+    //     k1: v1,
+    //     k2: v2,
+    // }
+
+    // 对象尽量静态化,一旦定义,就不得随意添加新的属性
+    // 如果添加属性不可避免,要使用 Object.assign 方法
+
+    // // bad
+    // const a = {};
+    // a.x = 3;
+    //
+    // // if reshape unavoidable 如果不得已要添加
+    // const a = {};
+    // Object.assign(a,{x:3});
+    //
+    // // good
+    // const a = {x: null};
+    // a.x = 3
+
+    // 如果对象的属性名是动态的,可以在创造对象的时候,使用属性表达式定义
+
+    // bad
+    // const obj = {
+    //     id: 5,
+    //     name: 'San Francisco',
+    // };
+    // obj[getKey('enabled')] = true;
+
+    // good
+    // const obj = {
+    //     id: 5,
+    //     name: 'and',
+    //     [getKey('enabled')]: true,
+    // }
+    // 上面代码中,对象obj 的最后一个属性名,需要计算得到,
+    // 这时候最好采用属性表达式
+    // 在新建obj 的时候,将该属性与其他属性定义在一起,
+    // 这样就可以所有属性都定义在一个地方,方便维护
+
+    // 另外,对象的属性和方法,尽量采用简洁表达法,这样易于描述和书写
+    // const ref = 'some value';
+    //
+    // // bad
+    // const atom = {
+    //     ref: ref,
+    //     value: 1,
+    //     addValue:function (value) {
+    //         return atom.value + value;
+    //     },
+    // };
+    //
+    // //  good
+    // const atom = {
+    //     ref,
+    //     value: 1,
+    //     addValue(value){
+    //         return atom.value + value;
+    //     },
+    // };
+
+
 });
 
 
