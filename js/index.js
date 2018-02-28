@@ -12023,7 +12023,12 @@ $(function () {
 
     // 10. ESlint 的使用
     // ESlint 是一个语法规则和代码风格检查工具
-
+    // 首先安装 ESLint
+    // npm i -g eslint
+    // 然后安装 Airbnb 语法规则 ,以及import , a11y(数字1),react插件
+    // npm i -g eslint-config-airbnb
+    // npm i -g eslint-plugin-import eslint-plugin-a11y eslint-plugin-react
+    
 
 
 
