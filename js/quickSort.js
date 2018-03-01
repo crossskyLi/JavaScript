@@ -4,7 +4,7 @@
  * 快速排序
  *
  * */
-// 生成一个有十个随机数字的数组
+// 生成一个有指定个数随机数字的数组,没有指定默认十个
 function makeRandomArr(arrLength) {
     let length = 10;
     let arr = [];
