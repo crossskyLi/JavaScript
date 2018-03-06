@@ -309,7 +309,7 @@ $(function () {
     //变量名未取到相同则为undefined
     //let {a} = {b:'11'};
     //console.log(a)//undefined
-    //变量名与属性名不通,写法如下
+    //变量名与属性名不同,写法如下
     //冒号前的参数为匹配属性名,冒号后为新的变量;
     //let {foo:baz} = {foo:'aa',bar:'12'};
     //console.log(baz);
@@ -346,11 +346,11 @@ $(function () {
     //console.log(loc);
     //console.log(start);
     /*-----多变量嵌套赋值----*/
-    //let obj = {};
-    //let arr = [];
-    //({foo:obj.prop,bar:arr[1]} = {foo:444,bar:true});
-    //console.log(obj);
-    //console.log(arr)
+    // let obj = {};
+    // let arr = [];
+    // ({foo:obj.prop,bar:arr[1]} = {foo:444,bar:true});
+    // console.log(obj);
+    // console.log(arr)
     //解构,指定默认值
     //var {x = 3} = {};
     //console.log(x);
@@ -372,16 +372,16 @@ $(function () {
     //let {foo:{bar}} = {baz:'baz'};
 
     // 错误的写法,要将一个已经声明的变量用于解构赋值，必须非常小心。
-    //let x;
-    //({x} = {x: 1});//{x} = {x: 1}不加括号会出错;
-    //console.log(x)
+    // let x;
+    // ({x} = {x: 1});//{x} = {x: 1}不加括号会出错;
+    // console.log(x)
 
     //数组本质也是特殊对象,可以多数组进行对象属性的解构,使用对应下标取值,
     //利用数组长度可以取到数组倒数的元素;
-    //let arr = [1, 2, 3];
-    //let {0 : first, [arr.length - 1] : last} = arr;
-    //console.log(first) // 1
-    //console.log(last) // 1
+    // let arr = [1, 2, 3];
+    // let {0 : first, [arr.length - 1] : last} = arr;
+    // console.log(first) // 1
+    // console.log(last) // 3
 
     //字符串也可以解构
     //const [a, b, c, d, e] = 'hello';
@@ -406,35 +406,35 @@ $(function () {
     //map,操作数组每个元素,返回一个新的数组
     //var result = [1,5,5,4,5].map(function(i){ return i+1});
     //console.log(result)
-    //var result = [[1,2],[3,5]].map(([a,b])=>a+b);
-    //console.log(result)
+    // var result = [[1,2],[3,5]].map(([a,b])=>a+b);
+    // console.log(result)
 
-    //function move({x,y}={x:0,y:0}){
+    // function move({x,y}={x:0,y:0}){
     //    return [x,y]
-    //}
-    //var a = move ({x:3,y:8});
-    //var b = move({x:4});
-    //var c = move({});
-    //var d = move();
-    //console.log(a);
-    //console.log(b);
-    //console.log(c);
-    //console.log(d);
+    // }
+    // var a = move ({x:3,y:8});
+    // var b = move({x:4});
+    // var c = move({});
+    // var d = move();
+    // console.log(a);
+    // console.log(b);
+    // console.log(c);
+    // console.log(d);
 
     //undefined会触发函数参数的默认值;
-    //var arr = [1,undefined,3].map((x = 'moren')=>x);
-    //console.log(arr)
-    //var [a] = [a,1];
-    //a = 11;
-    //console.log(a)
+    // var arr = [1,undefined,3].map((x = 'moren')=>x);
+    // console.log(arr)
+    // var [a] = [a,1];
+    // a = 11;
+    // console.log(a)
 
     //-------------  解构赋值的用途  -----------------------------------------
     //交换变量的值
-    //let x = 1;
-    //let y = 2;
-    //console.log(x,y);
-    //[x, y] = [y, x];
-    //console.log(x,y);
+    // let x = 1;
+    // let y = 2;
+    // console.log(x,y);
+    // [x, y] = [y, x];
+    // console.log(x,y);
     // 从函数返回多个值或者对象取值;
     //数组返回
     //function returnArr (){
