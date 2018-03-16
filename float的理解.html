@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding:0;
+    }
+    .box{
+        margin: 0 auto;
+        width: 300px;
+    }
+    .float{
+        float: left;
+        width: 100px;
+        height: 100px;
+        background: red;
+    }
+
+</style>
+<body>
+<div class="box">
+    <span class="float"></span>
+    浮动的本职工作是让匿名inline boxes性质的文字环绕图片显示，而其他所有用浮动实现的效果都不是浮动应该做的事情，我称之为“非本职工作”。
+</div>
+<ul style="width:440px;">
+    <li style="border:4px solid #ff6633; background:#ffffc0;"><img src="./img/float_test.png" /></li>
+</ul>
+
+<ul style="width:440px;">
+    <li style="border:4px solid #ff6633; background:#ffffc0;"><img style="float:left;" src="./img/float_test.png" /></li>
+</ul>
+<div>
+    <br>
+    <br>
+    <br>
+    由于图片没有应用float属性,其本身有个正常的inline-box,这个inline box 高度等于图片的height,
+    在这行元素中,图片的这个inline box 高度最高,于是传递给了 line box ,line box 是个真正意义上的高度,
+    直接作用于containing box (就是li 元素,使得li元素有一个高度)。理解这个,就会明白为什么这里给img添加了float属性
+    li 高度就会塌陷 : 浮动破坏了inline box ,
+
+    li 没有添加float属性,可以见到li宽度 100% 自适应于父ul
+</div>
+
+<div>
+    <br>
+    <br>
+    <br>
+    <br>
+    再看一个li浮动 ,但是img不浮动的;
+
+    li多了一个float:left,但是img 不浮动,浮动的  《包裹性》  很清晰,:
+    1. 水平方向上,li宽度紧贴内部元素, "撇开浮动的破坏性,浮动就是一个带有方位的display :inline-block 属性。"
+    2. display: inline-block 将对象呈递为内联对象,但是对象的内容作为块对象呈递,所谓对象呈递为内联对象就是元素
+        呈递为inline-block ,所以 浮动 "包裹性" 所产生的结果就是使得元素转为了line box 模型中的inline box 元素
+    3. 浮动的 "包裹性" 让元素编程类似于 inline box 的元素,而浮动的 "破坏性"正是破坏inline box 元素的;
+    4.
+    //
+</div>
+<ul style="width:440px;">
+    <li style="border:4px solid #ff6633; background:#ffffc0;float:left;"><img src="./img/float_test.png" /></li>
+</ul>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div>多个左浮动的li元素</div>
+<br>
+
+<ul style="width:440px;">
+    <li style="border:4px solid #ff6633; background:#ffffc0; float:left;"><img src="./img/float_test.png" /></li>
+    <li style="border:4px solid #ff6633; background:#ffffc0; float:left;"><img src="./img/float_test.png" /></li>
+</ul>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div>左浮动的li元素和无浮动的li元素</div>
+<br><br><br>
+<div>这里后面的一个li 没有float 属性, 直接无视前面float li 元素,宽度100%显示,而且与float 属性的li 同一水平线排列
+     因为浮动破坏了li的实际高度, 只是图片是实体,无法与同样实体的同一文档流的图片重合,所以图片靠在一起
+</div>
+
+<ul style="width:440px;">
+    <li style="border:4px solid #ff6633; background:#ffffc0; float:left;"><img src="./img/float_test.png" /></li>
+    <li style="border:4px solid #f06; background:#ffffc0;"><img src="./img/float_test.png" /></li>
+</ul>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div> 高度的塌陷,证明了 "页面布局不是浮动的 '本职工作'"</div>
+
+<div> 浮动出现的本质意义就是让 文字能够环绕图片,就如word</div>
+
+<div> 解决浮动带来的高度塌陷的问题 </div>
+<div style="background: #ccc">
+    .fix { *zoom:1; }
+    <br>
+    <br>
+    .fix:after {<br>
+        display: block;<br>
+        content:'200B'<br>
+        font-size:0;<br>
+        line-height:0;<br>
+        clear:both;<br>
+        height:0;<br>
+        visibility:hidden<br>
+    }
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
