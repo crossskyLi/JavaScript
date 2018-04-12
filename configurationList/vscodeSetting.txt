@@ -1,0 +1,13 @@
+{
+    // 启用要发送给 Microsoft 的使用情况数据和错误。
+    "telemetry.enableTelemetry": false,
+    // 控制何时自动保存已更新文件。接受的值: "off"、"afterDelay"、"onFocusChange" (编辑器失去焦点)、"onWindowChange" (窗口失去焦点)。如果设置为 "afterDelay"，可在 "files.autoSaveDelay" 中配置延迟时间。
+    "files.autoSave": "off",
+    // 控制在多少毫秒后自动保存更改过的文件。仅在“files.autoSave”设置为“afterDelay”时适用。
+    "files.autoSaveDelay": 2000,
+    // 启用要发送给 Microsoft 的故障报表。
+    // 此选项需重启才可生效。
+    "telemetry.enableCrashReporter": false,
+    // 以像素为单位控制字号。
+    "editor.fontSize": 16,
+}
