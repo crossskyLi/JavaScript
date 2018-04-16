@@ -9,27 +9,24 @@
     };
     result = anagrams('abc');
 
-    // charCodeAt过滤中文字符串,可顺便反转字符串
+    // charCodeAt过滤中文字符串,可顺便反转字符串,几十万长度的字符串运行会在140ms左右
     const strFilterChinese = ((str, doTurn) => {
         let length = str.length;
         let result = '';
-        if(doTurn){
+        if (doTurn) {
             for (let i = 0; i < length; i++) {
-                if (str[i].charCodeAt() < 255) { 
+                if (str.charAt(i).charCodeAt() < 255) {
                     result = `${str[i]}${result}`
                 }
             }
             return result
         }
         for (let i = 0; i < length; i++) {
-            if (str[i].charCodeAt() < 255) { 
+            if (str.charAt(i).charCodeAt() < 255) {
                 result = `${result}${str[i]}`
             }
         };
         return result
     })
-
-    result = strFilterChinese('斯蒂芬hi123',true);
-    console.log(result)
-
+    
 })()
