@@ -9,6 +9,7 @@
     };
     result = anagrams('abc');
 
+    // charCodeAt过滤中文字符串,可顺便反转字符串
     const strFilterChinese = ((str, doTurn) => {
         let length = str.length;
         let result = '';
@@ -31,9 +32,4 @@
     result = strFilterChinese('斯蒂芬hi123',true);
     console.log(result)
 
-
-
 })()
-
-
-
