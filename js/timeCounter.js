@@ -23,5 +23,6 @@ $(function () {
         $('.time-count').text(timeCountStr)
     }
 
+    
     // setInterval(timeCount, 100);
 });
