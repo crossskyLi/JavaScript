@@ -22,7 +22,5 @@ $(function () {
         let timeCountStr = dayStr + hourStr + minStr + secondStr;
         $('.time-count').text(timeCountStr)
     }
-
-    
     // setInterval(timeCount, 100);
 });
