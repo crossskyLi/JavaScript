@@ -1,32 +1,51 @@
 (() => {
-    let result
-    const anagrams = str => {
-        if (str.length <= 2) return str.length === 2 ? [str, str[1] + str[0]] : [str];
-        let strArr = str.split('');
-        let result = strArr.reduce((acc, letter, i) =>
-            acc.concat(anagrams(str.slice(0, i) + str.slice(i + 1)).map(val => letter + val)), [])
-        return result;
-    };
-    result = anagrams('abc');
+  let result
+  const anagrams = str => {
+    if (str.length <= 2) return str.length === 2 ? [str, str[1] + str[0]] : [str];
+    let strArr = str.split('');
+    let result = strArr.reduce((acc, letter, i) =>
+      acc.concat(anagrams(str.slice(0, i) + str.slice(i + 1)).map(val => letter + val)), [])
+    return result;
+  };
+  result = anagrams('abc');
 
-    // charCodeAt过滤中文字符串,可顺便反转字符串,几十万长度的字符串运行会在140ms左右
-    const strFilterChinese = ((str, doTurn) => {
-        let length = str.length;
-        let result = '';
-        if (doTurn) {
-            for (let i = 0; i < length; i++) {
-                if (str.charAt(i).charCodeAt() < 255) {
-                    result = `${str[i]}${result}`
-                }
-            }
-            return result
+  // charCodeAt过滤中文字符串,可顺便反转字符串,几十万长度的字符串运行会在140ms左右
+  const strFilterChinese = ((str, doTurn) => {
+    let length = str.length;
+    let result = '';
+    if (doTurn) {
+      for (let i = 0; i < length; i++) {
+        if (str.charAt(i).charCodeAt() < 255) {
+          result = `${str[i]}${result}`
         }
-        for (let i = 0; i < length; i++) {
-            if (str.charAt(i).charCodeAt() < 255) {
-                result = `${result}${str[i]}`
-            }
-        };
-        return result
-    })
-    
+      }
+      return result
+    }
+    for (let i = 0; i < length; i++) {
+      if (str.charAt(i).charCodeAt() < 255) {
+        result = `${result}${str[i]}`
+      }
+    };
+    return result
+  })
+
+
+  // 切换元素的className 写法
+  // 鼠标移入
+  function handleMouseEnter(event) {
+    // 兼容IE7/8
+    // if (event.target.className.indexOf('active') < 0) {
+    //   event.target.className = `${event.target.className} active`;
+    // }
+    //  HTML5 写法
+    event.target.classList.toggle('active');
+  }
+
+  // 鼠标移出
+  function handleMouseleave(event) {
+    // 兼容IE7/8
+    // event.target.className = event.target.className.replace(' active', '');
+    // HTML5 写法
+    event.target.classList.remove('active');
+  }
 })()
