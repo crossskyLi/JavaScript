@@ -29,6 +29,63 @@
     return result
   })
 
+  // HTML5 对element 提供 classList ,并且提供以下API
+
+  /* add(String[, String[, ...]])  */
+  // Add specified class values. If these classes already exist in attribute of the element, then they are ignored.
+
+  /* remove(String[, String[, ...]]) */
+  // Remove specified class values.
+  // Note: Removing a class that does not exist, does NOT throw an error.
+  
+  /* item(Number) */
+  // Return class value by index in collection.
+
+  /* toggle(String[, force]) */
+  // When only one argument is present: Toggle class value; i.e., if class exists then remove it and return false, if not, then add it and return true.
+  // When a second argument is present: If the second argument evaluates to true, add specified class value, and if it evaluates to false, remove it.
+
+    /* contains(String) */
+  // Checks if specified class value exists in class attribute of the element.
+
+  /* replace(oldClass, newClass) */
+  // Replaces an existing class with a new class.
+  
+  const div = document.createElement('div');
+  div.className = 'foo';
+
+  // our starting state: <div class="foo"></div>
+  console.log(div.outerHTML);
+
+  // use the classList API to remove and add classes
+  div.classList.remove("foo"); // 删除
+  div.classList.add("anotherclass"); // 添加
+
+  // <div class="anotherclass"></div>
+  console.log(div.outerHTML);
+
+  // if visible is set remove it, otherwise add it 有则删除,无则增加
+  div.classList.toggle("visible");
+
+  // add/remove visible, depending on test conditional, i less than 10
+  // 后面的条件决定增加还是删除,true => 增加,如果已有,忽略, false,删除,如果没有,忽略
+  div.classList.toggle("visible", i < 10);
+
+  // contain 是否有某个类名
+  console.log(div.classList.contains("foo"));
+
+  // add or remove multiple classes
+  div.classList.add("foo", "bar", "baz");
+  div.classList.remove("foo", "bar", "baz");
+
+  // add or remove multiple classes using spread syntax
+  const cls = ["foo", "bar"];
+  div.classList.add(...cls);
+  div.classList.remove(...cls);
+
+  // replace class "foo" with class "bar"
+  div.classList.replace("foo", "bar");
+
 
   // 切换元素的className 写法
   // 鼠标移入
