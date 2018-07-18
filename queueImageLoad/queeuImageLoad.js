@@ -17,7 +17,7 @@ window.onload = () => {
     }
 
     function pushImage(image) {
-        imageRecord.push(image);
+        imageRecord.unshift(image);
         debounceByKey(pullImage, 2000)
     }
 
