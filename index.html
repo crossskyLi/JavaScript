@@ -1,68 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title>ES6</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-        
-        .test {
-            position: relative;
-            height: 100px;
-            width: 100%;
-            background: #ccc;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <title>ES6</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
 
-        .one {
-            width: 30%;
-            height: 12%;
-            overflow: auto;
-            background: red;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%)
-        }
-        .time-count{
-            font-size: 30px;
-            font-weight: 400;
-        }
+    .test {
+      position: relative;
+      height: 100px;
+      width: 100%;
+      background: #ccc;
+    }
 
-        .justify{
-            display:-webkit-box;
-            display:-webkit-flex;
-            display:-ms-flexbox;
-            display:flex;
-            -webkit-box-pack:justify;
-            -webkit-justify-content:space-between;
-            -ms-flex-pack:justify;
-            justify-content:space-between;
-            width: 200px;
-            text-indent: 2em;
-            border: 1px solid #cccccc;
-            margin: 0 auto;
-        }
-        /*.justify> span { display: inline-block !* Opera *!; padding-left: 100%; }*/
-    </style>
+    .one {
+      width: 30%;
+      height: 12%;
+      overflow: auto;
+      background: red;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%)
+    }
+
+    .time-count {
+      font-size: 30px;
+      font-weight: 400;
+    }
+
+    .justify {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      width: 200px;
+      text-indent: 2em;
+      border: 1px solid #cccccc;
+      margin: 0 auto;
+    }
+
+    /*.justify> span { display: inline-block !* Opera *!; padding-left: 100%; }*/
+  </style>
 </head>
+
 <body>
-<div class="test">
+  <div class="test">
     <div class="one"></div>
-</div>
-<image src=''></image>
-<input type="file" style="width: 100px; height: 100px; background: red" id = 'fileInput'>
-<div>
+  </div>
+  <image src=''></image>
+  <input type="file" style="width: 100px; height: 100px; background: red" id='fileInput'>
+  <div>
     倒计时:<span class="time-count"></span>
-</div>
-<div class="justify">
+  </div>
+  <div class="justify">
     文字两端对齐文字两端对齐文字两端对齐文字两端对齐文字两端对齐
-</div>
+  </div>
 
 </body>
+
 </html>
 <script src="js/jquery.js"></script>
 
@@ -93,4 +98,7 @@
 <!-- <script src="./js/sortN.js"></script> -->
 
 <!-- object -->
-<script src="./object/object.js"></script>
+<!-- <script src="./object/object.js"></script> -->
+
+<!-- worker -->
+<script src="./worker/index.js"></script>
