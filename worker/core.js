@@ -3,7 +3,6 @@ var start
 onmessage = getStart;
 
 function getStart(event) {
-  debugger;
   start = event.data;
   onmessage = getEnd;
 }
