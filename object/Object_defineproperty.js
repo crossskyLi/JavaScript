@@ -1,25 +1,20 @@
 
 (() => {
-    function defineObj(target, index, maxLength) {
-        let next = index + 1
-        Object.defineProperty(target, next, {
-            set: function () {
-               
-                if (next > maxLength) {
-                    return;
-                }
-                next = next + 1;
-                // defineObj(target, next, maxLength);
-                target[next] = next;
-            },
-            get: function () {
-                target[index] = 0
-                defineObj(target, next, maxLength);
-            },
-        })
+    // 递归实现一个 for 循环
+    function loop(handler, index, maxLength) {
+        let i = index + 1;
+        handler(i)
+        if (i >= maxLength) {
+            return;
+        } else {
+            loop(handler, i, maxLength);
+        }
     }
     let arr = [];
-    defineObj(arr, 0, 100);
-    console.log(arr[0])
-    // 未完待续
+    let i = 0;
+    let maxLength = 100;
+    function handler(index) {
+        arr.push(index)
+    }
+    loop(handler, i, maxLength);
 })()
