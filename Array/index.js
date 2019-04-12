@@ -1,6 +1,6 @@
 import {
-  // lengthOperate,
+  lengthOperate,
   funtionLoop
 } from './lengthOperate.js';
-// lengthOperate();
+lengthOperate();
 funtionLoop();
