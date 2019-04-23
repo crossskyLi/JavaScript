@@ -78,6 +78,130 @@ export function regTest() {
   }
   let result = connectorCaseToUpperCase('case-apple');
   console.log('连接符 "-" 转换',result)
+
+
+  console.log(`-------匹配任何一个元音字母-------`)
+  testReg = /[aeiou]/
+  testStr = 'sdsddfi';
+  console.log(testStr.match(testReg))
+  console.log(testStr.search(testReg))
+  console.log(testStr.replace(testReg, 'replaceStr'))
+  console.log(testReg.exec(testStr))
+
+
+  console.log(`--------匹配电话号码的一个例子-----------`);
+  testReg = /\(?0\d{2}[)-]?\d{8}/;
+  testStr = '(010)88886666';
+  console.log(testStr.match(testReg))
+  console.log(testStr.search(testReg))
+  console.log(testStr.replace(testReg, 'replaceStr'))
+  console.log(testReg.exec(testStr))
+  testStr = '010-88886666';
+  console.log(testStr.match(testReg))
+  console.log(testStr.search(testReg))
+  console.log(testStr.replace(testReg, 'replaceStr'))
+  console.log(testReg.exec(testStr))
+  testStr = '01088886666';
+  console.log(testStr.match(testReg))
+  console.log(testStr.search(testReg))
+  console.log(testStr.replace(testReg, 'replaceStr'))
+  console.log(testReg.exec(testStr))
+  /** 上面的正则也能匹配010)12345678
+   * 或(022-87654321这样的“不正确”的格式
+   * 故不严谨,应该是有括号后面也需要跟
+   */
+
+  /*    常用的反义代码
+  * 代码/语法	            说明
+  * \W 	    | 匹配任意不是字母和数字的字符
+  * \S	    | 匹配任意不是空白符的字符
+  * \D	    | 匹配任意非数字的字符
+  * \B	    | 匹配不是单词开头或结束的位置
+  * [^x]    |	匹配除了x以外的任意字符
+  * [^aeiou]| 匹配除了aeiou这几个字母以外的任意字符
+  */
+  console.log(`-----------反义-------`);
+  testReg = /[^x]/g
+  testStr = `axios`;
+  console.log(testStr.match(testReg))
+  console.log(testStr.search(testReg))
+  console.log(testStr.replace(testReg, 'replaceStr'))
+  console.log(testReg.exec(testStr))
+  console.log('\\B');
+  testReg = /\B/g
+  testStr = `axi - os`;
+  console.log(testStr.match(testReg))
+  console.log(testStr.search(testReg))
+  console.log(testStr.replace(testReg, '-replaceStr-'))
+  console.log(testReg.exec(testStr))
+
+
+  console.log(`-----------不同规则使用 | 分割-------`);
+  /** 第一条规则会优先匹配,
+  * 第一条规则匹配完成则第二条规则不会匹配 
+  */
+  //这里第二条规则没有开头没有写0
+  testReg = /0\d{2}-\d{8}|\d{3}-\d{7}/;
+  testStr = "0755-5332214";
+  console.log(testStr.match(testReg))
+  console.log(testStr.search(testReg))
+  console.log(testStr.replace(testReg, '-replaceStr-'))
+  console.log(testReg.exec(testStr))
+  console.log(`---------`)
+  testReg = /0\d{2}-\d{8}|0\d{3}-\d{7}/
+  testStr = "055-12345678";
+  console.log(testStr.match(testReg))
+  console.log(testStr.search(testReg))
+  console.log(testStr.replace(testReg, '-replaceStr-'))
+  console.log(testReg.exec(testStr))
+  console.log(`---------`)
+  testReg = /0\d{2}-\d{8}|0\d{3}-\d{7}/
+  testStr = "0556-1234567";
+  console.log(testStr.match(testReg))
+  console.log(testStr.search(testReg))
+  console.log(testStr.replace(testReg, '-replaceStr-'))
+  console.log(testReg.exec(testStr))
+
+  console.log(`--------IP正则匹配----------`);
+  testReg = /(\d{1,3}\.){3}\d{1,3}/
+  testStr = `10.3.44.66`;
+  // \d{1,3}代表1到3位的数字，
+  // (\d{1,3}\.}{3}代表三位数字加上一个英文句号(这个整体也就是这个分组)重复3次，
+  // 最后再加上一个一到三位的数字(\d{1,3})。
+  console.log(testStr.match(testReg))
+  console.log(testStr.search(testReg))
+  console.log(testStr.replace(testReg, '-replaceStr-'))
+  console.log(testReg.exec(testStr))
+  //它也将匹配256.300.888.999这种不可能存在的IP地址(IP地址中每个数字都不能大于255)
+
+  console.log(`-----正确的编写方式---`)
+  testReg = /((2[0-4]\d|25[0-5]|[01]?\d\d?)\.){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)/
+  testStr = `256.300.888.999`;
+  console.log(testStr.match(testReg))
+  console.log(testStr.search(testReg))
+  console.log(testStr.replace(testReg, '-replaceStr-'))
+  console.log(testReg.exec(testStr))
+
+  console.log(`--------`)
+  testStr = `11.234.5.77`;
+  console.log(testStr.match(testReg))
+  console.log(testStr.search(testReg))
+  console.log(testStr.replace(testReg, '-replaceStr-'))
+  console.log(testReg.exec(testStr))
+  console.log(testReg.test(testStr))
+
+  testStr = `011.234.05.77`;
+  console.log(`--------`)
+  console.log(testStr.match(testReg))
+  console.log(testStr.search(testReg))
+  console.log(testStr.replace(testReg, '-replaceStr-'))
+  console.log(testReg.exec(testStr))
+  console.log(testReg.test(testStr))
+
+
+
+
+
 }
 
 
