@@ -77,7 +77,7 @@ export function regTest() {
     return result;
   }
   let result = connectorCaseToUpperCase('case-apple');
-  console.log('连接符 "-" 转换',result)
+  console.log('连接符 "-" 转换', result)
 
 
   console.log(`-------匹配任何一个元音字母-------`)
