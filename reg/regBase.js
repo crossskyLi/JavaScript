@@ -199,8 +199,12 @@ export function regTest() {
   console.log(testReg.test(testStr))
 
 
-
-
+  function repalceFun(match, index, str) {
+    console.log(match, index, str);
+    return "*"
+  }
+  let str = `abcasddcaac`;
+  console.log('?:', str.replace(/(?:a)/gi, repalceFun));
 
 }
 
