@@ -3251,10 +3251,21 @@ $(function () {
      * */
     // const s = new Set();
     // console.log(s);
-    // let arr = [1,4,5,4,8,7,6];
+    // let arr = [1,2,2,3,3,4,4];
     // arr.forEach(x=>s.add(x));
-    // console.log(s)
+    // console.log(s.entries())
+    // console.log(s.keys())
+    // console.log(s.has("3"))// 区别字符串数字
+    // console.log(s.has(3))
+    // console.log(s.add(18))
+    // console.log(s.size)
+    // console.log(s.delete(4))
+    // console.log(s);
+    // console.log(s.delete(4))
+    // console.log(s);
     // s.forEach(i => console.log(i));
+    // console.log(s.clear())
+    // console.log(s)
     // 结果表明 Set 结构不会添加重复的值。
 
     // set 函数可以接受一个数组(或者 具有 iterable 接口的其他数据结构)作为参数
@@ -3274,8 +3285,13 @@ $(function () {
     //     return [...$('div')]
     // }
     // const set = new Set(divs());
+    // console.log([...set])
 
     // 等价于
+    // function divs() {
+    //   return [...$('div')]
+    // }
+    // const set = new Set();
     // divs().forEach(div => set.add(div));
     // console.log(set);
     // console.log(set.size)
@@ -3293,13 +3309,15 @@ $(function () {
     // console.log(set) // Set {NaN}
 
     // 两个空对象是不相等的
-    // let a = {};
-    // let set = new Set();
-    // set.add(a); // size: 1
-    // set.add(a); // size :1
-    // set.add({});// size :2
-    // set.add({});// size :3
-    // console.log(set.size)
+    let a = {};
+    let set = new Set();
+    set.add(a); // size: 1
+    set.add(a); // size :1
+    console.log(set ,set.size)
+
+    set.add({});// size :2
+    set.add({});// size :3
+    console.log(set.size)
 
     // Set 实例的属性和方法
     // Set.prototype.constructor : 构造函数,默认是set函数
