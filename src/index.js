@@ -1,0 +1,1 @@
+import functional from '../functional_paradigm/index'
