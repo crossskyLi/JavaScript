@@ -1,6 +1,6 @@
 const typeofNumber = function (num) {
   if (typeof num === "number") {
-    return num
+    return true
   } else {
     return false;
   }
@@ -14,30 +14,27 @@ const compose = function (...args) {
   return function (...targetArgs) {
     let index = args.length - 1;
     let result = null;
-    while (index > 0) {
-      let _result = null;
+    while (index >= 0) {
       if (index === args.length - 1) {
-        _result = args[index](...targetArgs);
-        continue;
+        result = args[index](...targetArgs);
+      } else {
+        result = args[index](result);
       }
       index -= 1;
-      result = args[index](_result);
     };
     return result;
   }
 }
 
 const check = function (tag) {
-  return function (...params) {
+  return function (params) {
     console.log(tag, params)
     return params;
   }
 }
 
 const _isFinite = function (num) {
-  return
-  debugger;
   const flag = isFinite(num);
   return flag ? num : false;
 }
-export const isNumber = compose(_isFinite, check('checkNum'), typeofNumber)
+export const isNumber = compose(typeofNumber, check('checkNum'), _isFinite)
