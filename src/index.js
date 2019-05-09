@@ -1,1 +1,13 @@
-import functional from '../functional_paradigm/index'
+
+
+/* 函数式编程 functional paradigm */
+// import functional from '../functional_paradigm/index'
+
+
+
+
+
+
+// import { bindPloyfill } from '../bind_applay_call/bind.js'
+
+
