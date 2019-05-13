@@ -5,6 +5,9 @@ import functional from '../functional_paradigm/index'
 import { bindPloyfill } from '../bind_applay_call/bind.js'
 
 
+/* memory monitor */
+import monitor from '../memoryMonitor/index'
+
 
 
 
