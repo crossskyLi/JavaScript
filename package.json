@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "commitmsg": "validate-commit-msg",
     "start": "npm run dev",
     "dev": "webpack-dev-server --config build/webpack.dev.conf.js",
     "build": "webpack --config build/webpack.pro.conf.js"
@@ -14,7 +15,9 @@
     "cz-conventional-changelog": "^2.1.0",
     "extract-text-webpack-plugin": "4.0.0-beta.0",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^2.3.0",
     "terser-webpack-plugin": "^1.2.3",
+    "validate-commit-msg": "^2.14.0",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.1",
     "webpack-dev-server": "^3.3.1"
