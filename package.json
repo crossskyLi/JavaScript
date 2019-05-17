@@ -1,7 +1,6 @@
 {
   "private": true,
   "scripts": {
-    "commitmsg": "validate-commit-msg",
     "start": "npm run dev",
     "dev": "webpack-dev-server --config build/webpack.dev.conf.js",
     "build": "webpack --config build/webpack.pro.conf.js"
@@ -38,6 +37,11 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky":{
+    "hooks":{
+      "pre-commit": "validate-commit-msg"
     }
   }
 }
