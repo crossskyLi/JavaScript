@@ -1,14 +1,14 @@
 
 
 /* 函数式编程 functional paradigm */
-import functional from '../functional_paradigm/index'
-import { bindPloyfill } from '../bind_applay_call/bind.js'
+// import functional from '../functional_paradigm/index'
+// import { bindPloyfill } from '../bind_applay_call/bind.js'
 
 
 /* memory monitor */
-import monitor from '../memoryMonitor/index'
+// import monitor from '../memoryMonitor/index'
 
-
+import operational from '../operational_character/index'
 
 
 
