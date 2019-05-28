@@ -8,7 +8,7 @@ import { bindPloyfill } from '../bind_applay_call/bind.js'
 /* memory monitor */
 import monitor from '../memoryMonitor/index'
 
-
+import { reqVideoPictureInPicture } from '../video/index.js'
 
 
 
