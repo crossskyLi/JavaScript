@@ -18,4 +18,4 @@ export function reqVideoPictureInPicture() {
   })
 }
 
-reqVideoPictureInPicture();
+// reqVideoPictureInPicture();

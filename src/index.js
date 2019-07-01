@@ -6,14 +6,13 @@
 
 
 /* memory monitor */
-import monitor from '../memoryMonitor/index'
-
-import { reqVideoPictureInPicture } from '../video/index.js'
 // import monitor from '../memoryMonitor/index'
 
-import operational from '../operational_character/index'
+// import { reqVideoPictureInPicture } from '../video/index.js'
 
+// import operational from '../operational_character/index'
 
+import ES6 from '../ES6'
 
 
 
