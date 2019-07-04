@@ -193,5 +193,5 @@ export function constFunc() {
   /*---------------------------------------------------------------------*/
 }
 
-letFunc();
-constFunc();
+// letFunc();
+// constFunc();

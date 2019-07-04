@@ -14,5 +14,10 @@
 
 import ES6 from '../ES6'
 
+// designPattern - watcher pattern
+import watcher from '../designPattern/watcher'
+
+// designPattern - singleton pattern
+import singleton from "../designPattern/singleton"
 
 
