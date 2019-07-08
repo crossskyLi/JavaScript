@@ -53,5 +53,5 @@ function test() {
   console.log(result2, result2 === result)
   console.log(result3, result3 === result)
 }
-test();
+// test();
 

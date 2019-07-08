@@ -14,10 +14,7 @@
 
 import ES6 from '../ES6'
 
-// designPattern - watcher pattern
-import watcher from '../designPattern/watcher'
+import object from '../object'
 
-// designPattern - singleton pattern
-import singleton from "../designPattern/singleton"
-
-
+// designPattern
+import designPattern from "../designPattern"
