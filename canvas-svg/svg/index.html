@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    M = moveto<br />
+    L = lineto<br />
+    H = horizontal lineto <br />V = vertical lineto <br />C = curveto<br />
+    S = smooth curveto<br />
+    Q = quadratic Belzier curve<br />
+    T = smooth quadratic Belzier curveto <br />A = elliptical Arc <br />
+    Z = closepath d="M150,50 A50,50, 0,1,1,50,150"<br />
+    移动到 x:150 y:50 <br />
+    椭圆 x轴: 50 y轴: 50 <br />
+    x-axis-rotation(弧线旋转): 0, <br />
+    large-arc-flag 决定弧线是大于还是小于180度，0表示小角度弧，1表示大角度弧:1<br />
+    顺时针/逆时针: 0(逆时针) 1(顺时针) <br />
+    终点的坐标 : dx: 100 dy: 150 <br />
+
+    <ul>
+      <li>
+        <svg class="rotate" viewBox="0 0 200 200">
+          <!-- <circle id="mycircle" cx="400" cy="300" r="50"></circle> -->
+          <g>
+          <path
+            onclick="onclickEvent(event)"
+            class="trigger"
+            fill="none"
+            stroke="#fd30ae"
+            d="M100,20 A80,80, 0,0,1, 140,30.8"
+            stroke-width="10"
+          ></path>
+          </g>
+          <path
+            onclick="onclickEvent(event)"
+            class="trigger"
+            fill="none"
+            stroke="#4541ae"
+            d="M140,30.8 A80,80, 0,0,1, 156.5,44.5"
+            stroke-width="10"
+          ></path>
+          <path
+            fill="none"
+            stroke="#fd30ae"
+            d="M100,50 A50,50, 0,1,1, 50,100"
+            stroke-width="1"
+          ></path>
+          <!--  x="150"  r="50"
+            y="150" -->
+          <!-- <path x="54" y="7" r="47" fill="none" stroke="#fd30ae" d="M54,7 A47,47, 0, 1,1,54,7" stroke-width="4"></path> -->
+        </svg>
+      </li>
+      <li>
+        画圆形
+        <svg width="300" height="300">
+          <circle
+            cx="50"
+            cy="50"
+            r="48"
+            fill="none"
+            
+            style="stroke: black; stroke-width: 3px;"
+          />
+          <circle cx="60" cy="60" r="50" fill="none" storke-style="#f60" />
+        </svg>
+      </li>
+      <li>
+        <svg width="300" height="300">
+          <line
+            x1="0"
+            y1="100"
+            x2="200"
+            y2="100"
+            style="stroke:rgb(0,0,0);stroke-width:5"
+          />
+        </svg>
+      </li>
+
+      <li>
+        <svg width="300" height="300">
+          <circle
+            cx="100"
+            cy="100"
+            r="50"
+            fill="none"
+            style="stroke: black;stroke-width: 3px;"
+          ></circle>
+        </svg>
+      </li>
+    </ul>
+  </body>
+</html>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    list-style: none;
+    float: left;
+    width: 200px;
+    background: rgba(223, 223, 223, 0.5);
+    margin: 1px;
+  }
+  @-webkit-keyframes rotation {
+    from {
+      -webkit-transform: rotate(0deg) translateZ(1px);
+      transform: rotate(0deg) translateZ(1px);
+    }
+    to {
+      -webkit-transform: rotate(360deg) translateZ(1px);
+      transform: rotate(360deg) translateZ(1px);
+    }
+  }
+  @keyframes rotation {
+    from {
+      -webkit-transform: rotate(0deg) translateZ(1px);
+      transform: rotate(0deg) translateZ(1px);
+    }
+    to {
+      -webkit-transform: rotate(360deg) translateZ(1px);
+      transform: rotate(360deg) translateZ(1px);
+    }
+  }
+  .rotate {
+    transform-origin: center;
+  }
+  .active {
+    animation: rotation 3s linear infinite;
+  }
+</style>
+<script>
+  window.onload = function() {
+    const rotate = document.getElementsByClassName('rotate')[0];
+    rotate.addEventListener('mouseenter', function() {
+      rotate.setAttribute('class', 'rotate');
+
+      // rotate.className = 'rotate';
+      // console.log(rotate);
+    });
+    rotate.addEventListener('mouseleave', function() {
+      // rotate.setAttribute('class' , 'rotate active');
+    });
+  };
+  function onclickEvent(event){
+    console.log(this,event)
+  }
+</script>
