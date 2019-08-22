@@ -17,7 +17,8 @@
     移动到 x:150 y:50 <br />
     椭圆 x轴: 50 y轴: 50 <br />
     x-axis-rotation(弧线旋转): 0, <br />
-    large-arc-flag 决定弧线是大于还是小于180度，0表示小角度弧，1表示大角度弧:1<br />
+    large-arc-flag
+    决定弧线是大于还是小于180度，0表示小角度弧，1表示大角度弧:1<br />
     顺时针/逆时针: 0(逆时针) 1(顺时针) <br />
     终点的坐标 : dx: 100 dy: 150 <br />
 
@@ -26,14 +27,14 @@
         <svg class="rotate" viewBox="0 0 200 200">
           <!-- <circle id="mycircle" cx="400" cy="300" r="50"></circle> -->
           <g>
-          <path
-            onclick="onclickEvent(event)"
-            class="trigger"
-            fill="none"
-            stroke="#fd30ae"
-            d="M100,20 A80,80, 0,0,1, 140,30.8"
-            stroke-width="10"
-          ></path>
+            <path
+              onclick="onclickEvent(event)"
+              class="trigger"
+              fill="none"
+              stroke="#fd30ae"
+              d="M100,20 A80,80, 0,0,1, 140,30.8"
+              stroke-width="10"
+            ></path>
           </g>
           <path
             onclick="onclickEvent(event)"
@@ -62,7 +63,6 @@
             cy="50"
             r="48"
             fill="none"
-            
             style="stroke: black; stroke-width: 3px;"
           />
           <circle cx="60" cy="60" r="50" fill="none" storke-style="#f60" />
@@ -81,14 +81,29 @@
       </li>
 
       <li>
-        <svg width="300" height="300">
-          <circle
-            cx="100"
-            cy="100"
-            r="50"
-            fill="none"
-            style="stroke: black;stroke-width: 3px;"
-          ></circle>
+        <svg width="500" height="500">
+            <linearGradient data-v-04637bab=""
+             id="orange_red1" spreadMethod="pad" x1="0%" y1="0%" x2="100%" y2="0%">
+             <stop data-v-04637bab="" 
+             offset="0%" style="stop-color: rgb(255, 198, 0); stop-opacity: 1;"></stop><stop data-v-04637bab="" offset="100%" 
+             style="stop-color: rgb(243, 36, 36); stop-opacity: 1;"></stop>
+            </linearGradient>
+            </defs>
+
+             <circle 
+              r="125" cx="50%" cy="50%" 
+              fill="none" stroke-width="10"
+              class="circular-bg-path"
+              style="stroke: url(&quot;#orange_red1&quot;); 
+             stroke-width: 10; stroke-dashoffset: 0; stroke-dasharray: 115.9, 785.398;">
+            </circle>
+            <circle  r="125" cx="50%" cy="50%" 
+            fill="none" stroke-width="10" class="circular-bg-path"
+             style="stroke: url(&quot;#orange_red1&quot;); stroke-width: 10; stroke-dashoffset: -130.9; stroke-dasharray: 246.799, 785.398;">
+            </circle>
+            <!-- <circle  r="125" cx="50%" cy="50%" fill="none" stroke-width="10" class="circular-bg-path" 
+            style="stroke: url(&quot;#orange_red1&quot;); stroke-width: 10; stroke-dashoffset: -392.699; stroke-dasharray: 377.699, 785.398;">
+          </circle> -->
         </svg>
       </li>
     </ul>
@@ -146,7 +161,7 @@
       // rotate.setAttribute('class' , 'rotate active');
     });
   };
-  function onclickEvent(event){
-    console.log(this,event)
+  function onclickEvent(event) {
+    console.log(this, event);
   }
 </script>
