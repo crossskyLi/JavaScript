@@ -18,3 +18,6 @@ import object from '../object'
 
 // designPattern
 import designPattern from "../designPattern"
+
+// url parser
+import url from "../url"

@@ -1,7 +1,7 @@
-export const parser = {
+export const Url = {
   parse(url) {
     let ret = {};
-
+    // []中的 ^ 表示取非, 这里[^:]代表取非 : 的字符
     let regex = /^([^:]+):\/\/([^\/]+)(.*)$/; //protocol, login, urlpath
     let result = regex.exec(url);
 
@@ -63,3 +63,18 @@ export const parser = {
     return 0;
   }
 };
+// test
+(()=>{
+  let result
+  result = Url.parse('http://localhost:8080/');
+  console.log(result)
+
+  result = Url.parse('^://localhost:8080/');
+  console.log(result)
+
+  result = Url.isAbsolute('://localhost:8080/');
+  console.log(result)
+
+  debugger;
+
+})(window)
