@@ -21,3 +21,5 @@ import designPattern from "../designPattern"
 
 // url parser
 import url from "../url"
+import { urlParams } from "../algorithm/urlParams"
+import * as renderTemplate from "../renderTemplate"

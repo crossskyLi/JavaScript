@@ -5,7 +5,6 @@ function test() {
 
 
   function ObjectFactory() {
-    debugger
     var obj = {};
     // 获取第一个参数作为constructor
     var Constructor = Array.prototype.shift.call(arguments);

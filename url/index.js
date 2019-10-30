@@ -64,7 +64,7 @@ export const Url = {
   }
 };
 // test
-(()=>{
+(() => {
   let result
   result = Url.parse('http://localhost:8080/');
   console.log(result)
@@ -74,7 +74,5 @@ export const Url = {
 
   result = Url.isAbsolute('://localhost:8080/');
   console.log(result)
-
-  debugger;
 
 })(window)
