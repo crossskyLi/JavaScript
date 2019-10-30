@@ -20,4 +20,3 @@ export function render(template, data) {
 
 const result = render(template, data);
 console.log(result)
-debugger;
