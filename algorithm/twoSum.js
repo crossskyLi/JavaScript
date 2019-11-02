@@ -1,53 +1,38 @@
-
 'use strict';
-var obj = {};
-var secondNum = 0;
-var sameKey = "_";
-// 偷懒使用 random生成唯一hash
-  /**
- * @param {number[]} nums
- * @param {number} target
- * @return {number[]}
- */
 var twoSum = function(nums, target) {
-    for(var i = 0; length = nums.length,i <length;i++){
-        secondNum = target - nums[i];
-        if(!obj[nums[i]]){
-          obj[nums[i]] = {
-            index: i,
-            hash: Math.random()
-          };
-        }else {
-          var key = "";
-          while (obj[nums[i] + key]) {
-            key += sameKey;
-          }
-          obj[nums[i] + key] = {
-            index: i,
-            hash: Math.random()
-          };
-        }
+  if (!nums.length) {
+    return [];
+  }
+  let result = [];
+  let length = 1;
+  let obj = {};
+  let whileKey = '';
+  obj[nums[0]] = 0;
 
-        if(obj[secondNum]){
-          var index = null;;
-          var key = sameKey;
-          var result = [];
-          if(obj[secondNum].hash === obj[nums[i]].hash){
-            if(obj[nums[i] + sameKey]){
-              index = obj[secondNum].index;
-            }
-          }else {
-            index = obj[secondNum].index;
-          }
-          if(index !== null){
-            result = [index,i]
-            return result;
-          }
-        }
+  while (length < nums.length) {
+    if (typeof obj[nums[length]] !== 'undefined') {
+      if (target - nums[length] === nums[length]) {
+        result = [obj[nums[length]], length];
+        break;
+      }
+      length += 1;
+      continue;
+    } else {
+      obj[nums[length]] = length;
     }
-};
+    whileKey = target - nums[length];
+    if (typeof obj[whileKey] !== 'undefined' && obj[whileKey] !== length) {
+      result = [obj[whileKey], length];
+      break;
+    }
+    length += 1;
+  }
 
-var arr = [3,2,4];
-var target = 6;
-var result = twoSum(arr,target);
-console.log(result)
+  if (!result.length) {
+    return [];
+  }
+  return result;
+};
+const arr = [650, 920, 125, 277, 199, 863, 997, 417, 568];
+const target = 542;
+// console.log('result ', twoSum(arr, target));

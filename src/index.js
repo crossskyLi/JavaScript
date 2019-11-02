@@ -22,5 +22,6 @@ import designPattern from "../designPattern"
 // url parser
 import url from "../url"
 import { urlParams } from "../algorithm/urlParams"
+import * as twoSum from "../algorithm/twoSum"
 import * as renderTemplate from "../renderTemplate"
 import * as vnodeRender from "../vnodeRender"
