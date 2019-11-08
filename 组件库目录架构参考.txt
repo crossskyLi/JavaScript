@@ -1,0 +1,20 @@
+项目级
+├─ test // 测试相关
+├─ scripts // 自定义的脚本
+├─ docs // 文档，通常文档较多，有多个 md 文档
+├─ examples // 可以运行的示例代码
+├─ packages // 要发布的 npm 包，一般用在一个仓库要发多个 npm 包的场景
+├─ dist|build // 代码分发的目录
+├─ src|lib // 源码目录
+├─ bin // 命令行脚本入口文件
+├─ website|site // 官方网站相关代码，譬如 antd、react
+├─ benchmarks // 性能测试相关
+├─ types|typings// typescript 的类型文件
+├─ Readme.md // 仓库介绍或者组件文档
+└─ index.js // 入口文件
+
+组件级
+├─ test // 测试相关
+├─ src|lib // 源码目录
+├─ Readme.md // 仓库介绍或者组件文档
+└─ index.js // 入口文件
