@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #f6f6f6;
+    }
+    .a {
+      width: 214px;
+      height: 300px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+    .b {
+      width: 200px;
+      height: 500px;
+      padding: 3px;
+    }
+    li {
+      list-style: none;
+      border: 1px solid black;
+      margin: 3px 0;
+    }
+    li:hover {
+      border-color: #3e96d4;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      background-color: transparent;
+      opacity: 0.5;
+    }
+
+    ::-webkit-scrollbar:horizontal {
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(86, 102, 141, 1);
+      cursor: pointer;
+      border-radius: 9px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 141, 0.5);
+    }
+
+    ::-webkit-scrollbar-corner {
+      display: none;
+    }
+  </style>
+  <body>
+    <div style="padding-right: 4px; width: fit-content; background: #79aaa6">
+      <div class="a">
+        <ul class="b">
+          <li>ddd</li>
+          <li>ddd</li>
+          <li>ddd</li>
+          <li>123123</li>
+          <li>ddd</li>
+          <li>123213</li>
+          <li>123</li>
+          <li>ddd</li>
+          <li>123</li>
+          <li>ddd</li>
+          <li>123</li>
+          <li>ddd</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
