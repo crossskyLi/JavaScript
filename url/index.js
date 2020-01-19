@@ -65,14 +65,14 @@ export const Url = {
 };
 // test
 (() => {
-  let result
-  result = Url.parse('http://localhost:8080/');
-  console.log(result)
+  // let result
+  // result = Url.parse('http://localhost:8080/');
+  // console.log(result)
 
-  result = Url.parse('^://localhost:8080/');
-  console.log(result)
+  // result = Url.parse('^://localhost:8080/');
+  // console.log(result)
 
-  result = Url.isAbsolute('://localhost:8080/');
-  console.log(result)
+  // result = Url.isAbsolute('://localhost:8080/');
+  // console.log(result)
 
 })(window)

@@ -4,7 +4,7 @@ import { strict } from 'assert';
  * @param {string} s
  * @return {string}
  */
-export const longestPalindrome = function(s, leftStr) {
+export const longestPalindrome = function (s, leftStr) {
   if (s.length < 2) {
     return s;
   }
@@ -19,8 +19,8 @@ export const longestPalindrome = function(s, leftStr) {
 
   if (_leftStr.length) {
     if (lastIndexOfRight === indexOfLeft + _leftStr.length + 1) {
-      result =  _leftStr + s.substr(indexOfLeft + _leftStr.length, 1) + rightStr;
-    }else {
+      result = _leftStr + s.substr(indexOfLeft + _leftStr.length, 1) + rightStr;
+    } else {
       longestPalindrome(s);
     }
   }
@@ -35,4 +35,4 @@ export const longestPalindrome = function(s, leftStr) {
 };
 
 const result = longestPalindrome('abcba');
-console.log(result)
+// console.log(result)
