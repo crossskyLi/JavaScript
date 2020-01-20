@@ -163,22 +163,22 @@ const addTwoNumbers2 = function (l1, l2) {
 };
 
 // Test Case
-const l1 = getNodeByIteration([8, 4, 6, 5])
-const l2 = getNodeByIteration([5, 6, 5])
-const res = addTwoNumbers2(l1, l2)
+// const l1 = getNodeByIteration([8, 4, 6, 5])
+// const l2 = getNodeByIteration([5, 6, 5])
+// const res = addTwoNumbers2(l1, l2)
 
-const l12 = getNodeByIteration([5])
-const l22 = getNodeByIteration([5])
-const res1 = addTwoNumbers2(l12, l22)
+// const l12 = getNodeByIteration([5])
+// const l22 = getNodeByIteration([5])
+// const res1 = addTwoNumbers2(l12, l22)
 
-let arr1 = new Array(1000000).fill(0).map(() => Math.floor(Math.random() * 10))
-let arr2 = new Array(1000000).fill(0).map(() => Math.floor(Math.random() * 10))
-console.log(arr1)
-console.log(arr2)
-const l13 = getNodeByIteration(arr1)
-const l23 = getNodeByIteration(arr2)
-console.time("test")
-const res3 = addTwoNumbers2(l13, l23)
-console.timeEnd("test")
-console.log(res3)
+// let arr1 = new Array(1000000).fill(0).map(() => Math.floor(Math.random() * 10))
+// let arr2 = new Array(1000000).fill(0).map(() => Math.floor(Math.random() * 10))
+// console.log(arr1)
+// console.log(arr2)
+// const l13 = getNodeByIteration(arr1)
+// const l23 = getNodeByIteration(arr2)
+// console.time("test")
+// const res3 = addTwoNumbers2(l13, l23)
+// console.timeEnd("test")
+// console.log(res3)
 
