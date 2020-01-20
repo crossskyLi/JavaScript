@@ -54,4 +54,5 @@ var findMedianSortedArrays = function (nums1, nums2) {
   const result = odd ? arr[midIndex] : (arr[midIndex] + arr[midIndex - 1]) / 2
   return result;
 };
-findMedianSortedArrays([1, 3, 5, 7, 9, 15], [2, 5, 6, 47, 98])
+// let result = findMedianSortedArrays([1, 3, 5, 7, 9, 15], [2, 5, 6, 47, 98])
+// console.log(result)
