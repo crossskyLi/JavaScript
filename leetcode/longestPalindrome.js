@@ -185,8 +185,6 @@ function longestPalindrome2(s) {
 
   for (let i = 1; i < n - 1; i++) {
     let i_mirror = 2 * C - i;
-    debugger;
-    console.log(i_mirror, C)
     if (R > i) {
       P[i] = Math.min(R - i, P[i_mirror]);// 防止超出 R
     } else {
