@@ -15,7 +15,7 @@
  * @param {string} s
  * @return {string}
  */
-/* 暴力破解 */
+/* 暴力解法 */
 var longestPalindrome = function (str) {
   const length = str.length;
 
@@ -108,6 +108,7 @@ var longestPalindrome = function (str) {
     right = i + 1;
     max = result.length;
 
+    /* 相同字符,右移位置 */
     while (str[i] === str[right]) {
       samestr = str.substr(i, right - i + 1);
       right += 1
