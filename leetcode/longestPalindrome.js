@@ -217,8 +217,8 @@ function longestPalindrome2(s) {
   return s.substring(start, start + maxLen);
 }
 
-result = longestPalindrome2("babada");
-console.log(result)
+// result = longestPalindrome2("babada");
+// console.log(result)
 // result = longestPalindrome2("bbad");
 // console.log(result)
 // result = longestPalindrome2("aabbag");
