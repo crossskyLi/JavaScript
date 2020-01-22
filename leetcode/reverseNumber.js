@@ -50,12 +50,12 @@ var reverse = function (number) {
   return isLegal ? result : 0
 }
 
-let result;
-result = reverse(123)
-console.log(result)
-result = reverse(320)
-console.log(result)
-result = reverse(-320)
-console.log(result)
-result = reverse(1534236469)
-console.log(result)
+// let result;
+// result = reverse(123)
+// console.log(result)
+// result = reverse(320)
+// console.log(result)
+// result = reverse(-320)
+// console.log(result)
+// result = reverse(1534236469)
+// console.log(result)

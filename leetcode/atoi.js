@@ -57,19 +57,19 @@ var myAtoi = function (s) {
   }
   return number
 };
-let result
-result = myAtoi("472332")
-console.log(result)
+// let result
+// result = myAtoi("472332")
+// console.log(result)
 
-result = myAtoi("-91283472332")
-console.log(result)
+// result = myAtoi("-91283472332")
+// console.log(result)
 
-result = myAtoi("-4193 with words")
-console.log(result)
+// result = myAtoi("-4193 with words")
+// console.log(result)
 
-result = myAtoi("words and 987")
-console.log(result)
+// result = myAtoi("words and 987")
+// console.log(result)
 
-result = myAtoi("   -42")
-console.log(result)
+// result = myAtoi("   -42")
+// console.log(result)
 
