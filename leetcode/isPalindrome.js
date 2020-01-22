@@ -93,12 +93,12 @@ var isPalindrome = function (x) {
   return x == revertedNumber || x == revertedNumber / 10;
 }
 
-let flag;
-flag = isPalindrome(12121)
-console.log(flag)
+// let flag;
+// flag = isPalindrome(12121)
+// console.log(flag)
 
-flag = isPalindrome(1211)
-console.log(flag)
+// flag = isPalindrome(1211)
+// console.log(flag)
 
-flag = isPalindrome(101)
-console.log(flag)
+// flag = isPalindrome(101)
+// console.log(flag)
