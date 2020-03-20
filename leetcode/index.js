@@ -7,3 +7,5 @@ import "./reverseNumber"
 import "./atoi"
 import "./isPalindrome"
 import "./isMatchReg"
+import './eightQueens';
+import "./climbStairs"
