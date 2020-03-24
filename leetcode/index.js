@@ -9,3 +9,4 @@ import "./isPalindrome"
 import "./isMatchReg"
 import './eightQueens';
 import "./climbStairs"
+import "./flatAndSortArr"

@@ -125,7 +125,7 @@ var isMatch = function (s, p) {
       pStep++
     }
   }
-  console.log(isMatched)
+  // console.log(isMatched)
   return isMatched
 }
 

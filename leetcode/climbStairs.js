@@ -100,7 +100,7 @@ let n = 5 // 金矿数量
 let w = 10 // 工人数量
 let G = arr.map(a => a.gold) // 金矿量数组
 let P = arr.map(a => a.man) // 金矿的用工量
-console.log(G, P)
+// console.log(G, P)
 
 // F(n,w) = 0    (n<=1, w<p[0]);
 // F(n,w) = g[0]     (n==1, w>=p[0]);
@@ -129,13 +129,13 @@ function solution(n/* 金矿数量 */, w,/*  工人数量 */ G,/* 金矿量数�
         results[j] = Math.max(preResult[j], preResult[j - P[i]] + G[i])
       }
     }
-    console.log(results)
+    // console.log(results)
     preResult = [...results]
   }
   return results[w - 1]
 }
 
-console.log(solution(n, w, G, P))
+// console.log(solution(n, w, G, P))
 
 // const maxSum = arr => {
 //   const size = arr.length;
@@ -167,4 +167,4 @@ function maxSum(arr) {
   return store[arr.length - 1];
 }
 
-console.log(maxSum([15, 2, 11, 8, 26]));
+// console.log(maxSum([15, 2, 11, 8, 26]));
