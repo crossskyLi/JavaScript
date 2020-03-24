@@ -18,7 +18,7 @@ function flatAndSort(arr) {
     return quickSort(left).concat([Number(pivot)], quickSort(right))
   }
   /* flat 的变形需要有个 map 存起来 */
-  function walk(arr) {
+  function flat(arr) {
     let resultMap = {};
     while (arr.length) {
       let num = arr.shift();
@@ -30,7 +30,7 @@ function flatAndSort(arr) {
     }
     return resultMap
   }
-  let resultMap = walk(arr)
+  let resultMap = flat(arr)
   let result = quickSort(Object.keys(resultMap))
   return result
 }
