@@ -10,3 +10,5 @@ import "./isMatchReg"
 import './eightQueens';
 import "./climbStairs"
 import "./flatAndSortArr"
+import './arr2Tree';
+import "./letterCombinations"
