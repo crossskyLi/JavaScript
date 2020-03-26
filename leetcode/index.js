@@ -12,3 +12,4 @@ import "./climbStairs"
 import "./flatAndSortArr"
 import './arr2Tree';
 import "./letterCombinations"
+import "./minCostClimbStairs"
