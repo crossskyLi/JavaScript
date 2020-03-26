@@ -28,11 +28,17 @@ let arr = [
     parentId: 1,
     name: '2'
   },
+  {
+    id: 10,
+    name: '我是独立的'
+  },
 ];
 
-function getTree(arr, key, parentIdKey, parentId) {
+function getTree(arr, key, parentIdKey) {
   const map = {};
-  let length = arr.length
+  let tree = [];
+  let length = arr.length;
+
   for (let i = 0; i < length; i++) {
     let item = arr[i]
     map[item[key]] = arr[i]
@@ -43,12 +49,12 @@ function getTree(arr, key, parentIdKey, parentId) {
     let item = arr[i];
     if (item[parentIdKey] !== undefined) {
       map[item[parentIdKey]].children.push(item)
+    } else {
+      tree.push(item)
     }
   }
-
-  return {
-    ...map[parentId]
-  };
+  return tree
 }
 
-export const tree = getTree(arr, 'id', 'parentId', 0);
+export const tree = getTree(arr, 'id', 'parentId');
+console.log(tree)
