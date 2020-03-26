@@ -40,8 +40,8 @@ function getTree(arr, key, parentIdKey) {
   let length = arr.length;
 
   for (let i = 0; i < length; i++) {
-    let item = arr[i]
-    map[item[key]] = arr[i]
+    let item = arr[i] // item 指向 arr[i], 接下来的都指向item 即 arr[i]
+    map[item[key]] = item
     map[item[key]].children = [];
 
     if (item[parentIdKey] === undefined) {
@@ -51,7 +51,7 @@ function getTree(arr, key, parentIdKey) {
 
   length = arr.length;
   for (let i = 0; i < length; i++) {
-    let item = arr[i];
+    let item = arr[i];// 同上
 
     if (item[parentIdKey] !== undefined) {
       map[item[parentIdKey]].children.push(item)
