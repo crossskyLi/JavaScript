@@ -51,8 +51,7 @@
 // 其实简化后, 后一个结果就等于前两个结果之和
 function climb(n) {
   /* 边界 */
-  if (n <= 1) return n;
-  if (n === 2) return 2;
+  if (n <= 2) return n;
   let a = 1; // 目标数前面第二个数字
   let b = 2; // 目标数前面第一个数字
   let temp = 0;
@@ -65,7 +64,7 @@ function climb(n) {
   }
   return temp;
 }
-// console.log('climb(10)', ii, climb(10))
+console.log('climb(10)', climb(2))
 
 /*
 动态规划
