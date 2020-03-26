@@ -43,18 +43,22 @@ function getTree(arr, key, parentIdKey) {
     let item = arr[i]
     map[item[key]] = arr[i]
     map[item[key]].children = [];
-  }
 
-  for (let i = 0; i < length; i++) {
-    let item = arr[i];
-    if (item[parentIdKey] !== undefined) {
-      map[item[parentIdKey]].children.push(item)
-    } else {
+    if (item[parentIdKey] === undefined) {
       tree.push(item)
     }
+  }
+
+  length = arr.length;
+  for (let i = 0; i < length; i++) {
+    let item = arr[i];
+
+    if (item[parentIdKey] !== undefined) {
+      map[item[parentIdKey]].children.push(item)
+    }
+
   }
   return tree
 }
 
 export const tree = getTree(arr, 'id', 'parentId');
-console.log(tree)
