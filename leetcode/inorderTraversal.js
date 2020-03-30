@@ -42,12 +42,12 @@ var inorderTraversal = function (root) {
   let stackArr = []
   while (root != null || stackArr.length != 0) {
     while (root != null) {
-      stackArr.push(root)
+      stackArr.push(root) // 往数组里面添加,压栈
       root = root.left
     }
-    root = stackArr.pop()
-    arr.push(root.val)
-    root = root.right
+    root = stackArr.pop() // 出栈
+    arr.push(root.val) // 放入值
+    root = root.right // 左边的节点
   }
   return arr
 };

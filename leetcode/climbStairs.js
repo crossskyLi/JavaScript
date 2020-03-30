@@ -28,7 +28,7 @@
 
 /* 拿一个map 存已经算过的数字  时间空间复杂度都是O(n)*/
 // i = 0;
-// function climb(n, store) {
+// function climb1(n, store) {
 //   i++
 //   console.log(i)
 //   if (n <= 1) return n;
@@ -37,13 +37,13 @@
 //   if (store[n]) {
 //     return store[n]
 //   } else {
-//     let value = climb(n - 1, store) + climb(n - 2, store)
+//     let value = climb1(n - 1, store) + climb1(n - 2, store)
 //     store[n] = value
 //     return value
 //   }
 // }
 // let store = {}
-// console.log('climb(10)', i, climb(10, store))
+// console.log('climb1(10)', i, climb1(10, store))
 
 
 /* 不要递归呢  p(n) = p(n - 1 ) + p(n - 2) */
@@ -64,7 +64,7 @@ function climb(n) {
   }
   return temp;
 }
-console.log('climb(10)', climb(2))
+// console.log('climb(10)', climb(10))
 
 /*
 动态规划

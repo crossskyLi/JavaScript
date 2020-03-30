@@ -39,7 +39,7 @@ var minCostClimbingStairs = function (cost) {
 let cost = [0, 1, 2, 2]
 let result = 0;
 result = minCostClimbingStairs(cost);
-console.log(result)
+// console.log(result)
 
 
 function minCostClimbingStairs(cost) {

@@ -53,7 +53,7 @@ function getTree(arr, key, parentIdKey) {
   for (let i = 0; i < length; i++) {
     let item = arr[i];// 同上
 
-    if (item[parentIdKey] !== undefined) {
+    if (item[parentIdKey] !== undefined && map[item[parentIdKey]]) {
       map[item[parentIdKey]].children.push(item)
     }
 
@@ -61,4 +61,26 @@ function getTree(arr, key, parentIdKey) {
   return tree
 }
 
-export const tree = getTree(arr, 'id', 'parentId');
+const tree = getTree(arr, 'id', 'parentId');
+
+function treeToArr(tree) {
+  let result = [];
+
+  function push(tree) {
+    let item = { ...tree }
+    result.push(item);
+    if (tree.children && tree.children.length) {
+      for (let i = 0, length = tree.children.length; i < length; i++) {
+        push(tree.children[i])
+      }
+    }
+    delete item.children
+  }
+
+  for (let i = 0, length = tree.length; i < length; i++) {
+    push(tree[i])
+  }
+  return result;
+}
+
+let result = treeToArr(tree);
