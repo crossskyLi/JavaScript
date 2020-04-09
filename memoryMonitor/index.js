@@ -26,7 +26,7 @@ class MemoryMonitor {
   }
 
   register() {
-    this.timer = setInterval(this.callback.bind(this), 500)
+    this.timer = setInterval(this.callback.bind(this), 50)
     // 等任务队列执行完,再开始统计
     setTimeout(() => { this.usedJSHeapSize = this.performance.memory.usedJSHeapSize; }, 0)
   }
@@ -42,7 +42,8 @@ const increaseCallback = (result) => {
 }
 const threshold = 1000;
 let monitor = new MemoryMonitor(window.performance, increaseCallback, threshold);
-let arr = [];
-let timer = setInterval(() => { arr.push(0) }, 10)
-setTimeout(() => { monitor.destroy(); clearInterval(timer) }, 3000)
+
+// window.arr = [];/* 内存不释放 */
+// let timer = setInterval(() => { arr.push(new Array(102400).fill(Math.random())) }, 10)
+// setTimeout(() => { monitor.destroy(); clearInterval(timer) }, 5000)
 export default monitor
