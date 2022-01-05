@@ -59,8 +59,9 @@ export const vertexShaderSource = `
  
     // 把 0->2 转换到 -1->+1 (裁剪空间)
     vec2 clipSpace = zeroToTwo - 1.0;
- 
-    gl_Position = vec4(clipSpace, 0, 1);
+		
+		// 翻转y轴
+    gl_Position = vec4((clipSpace * vec2(1, -1)), 0, 1);
   }
 `
 
