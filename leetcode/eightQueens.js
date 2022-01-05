@@ -49,8 +49,8 @@ function eightQueen(arr, cnt) {
   this.search = function (r) {
     //if r == 8, then a solution is found
     if (r == 8) {
-      document.write('<br>' + this.cnt + '<br>');
-      this.output(this.arr);
+      // document.write('<br>' + this.cnt + '<br>');
+      // this.output(this.arr);
       this.cnt++;
       return null
     }

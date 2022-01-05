@@ -20,7 +20,7 @@
 // 链接：https://leetcode-cn.com/problems/sqrtx
 
 // 找到一个除这个数，得到的数字还是这个数的方法
-function MathSqrt(num) {
+function MathSqrt(x) {
   let left = 1, right = x / 2;
   let last_mid;
   if (x < 2) return x;

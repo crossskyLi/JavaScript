@@ -27,3 +27,5 @@ import * as renderTemplate from "../renderTemplate"
 import * as vnodeRender from "../vnodeRender"
 import * as algorithm from "../algorithm"
 import * as leetcode from "../leetcode"
+import * as webgl from "../webgl"
+
