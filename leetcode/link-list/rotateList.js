@@ -44,7 +44,7 @@ function run() {
 	}
 
 	const myRotateKGroup = () => {
-		const n
+		const n = 1;
 	}
 	const myReverse = (head, tail) => {
 		let prev = tail.next;
