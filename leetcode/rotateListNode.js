@@ -133,4 +133,4 @@ let result = rotateRight(
   },
   2
 )
-console.log(result)
+// console.log(result)

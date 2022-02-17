@@ -24,10 +24,10 @@ function getTree(count) {
 	let i = 0;
 	while (i < count) {
 		const key = Math.floor(Math.random() * 100)
-		console.log(key)
+		// console.log(key)
 		searchTree.insert(key, `value: ${key}`)
 		i++
 	}
 	return searchTree;
 }
-console.log(getTree(10))
+// console.log(getTree(10))

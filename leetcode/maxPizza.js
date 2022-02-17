@@ -58,10 +58,10 @@ var maxSizeSlices = function (slices) {
 			)
 		}
 		res = Math.max(res, dp[i][Math.floor(len / 3)])
-		console.log(dp[i][Math.floor(len / 3)])
+		// console.log(dp[i][Math.floor(len / 3)])
 	}
 
-	console.log('res',res)
+	// console.log('res',res)
 	dp = new Array(len)
 		.fill(0)
 		.map((item) => new Array(Math.floor(len / 3) + 1).fill(0))
@@ -77,4 +77,4 @@ var maxSizeSlices = function (slices) {
 	return res
 }
 let result = maxSizeSlices([1, 2, 3, 4, 5, 6])
-console.log(result)
+// console.log(result)
