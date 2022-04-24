@@ -2,42 +2,39 @@ import LinkedList from '../link-list/LinkedList'
 
 
 // 积水问题，使用单调栈的思想
-class Solution42 {
-	trap(height) {
-		const stack = new LinkedList();
-		// 最少也需要3个柱子才能积水，否则直接返回0
-		if (height.length < 3) return 0;
+function trap(height) {
+	const stack = new LinkedList();
+	// 最少也需要3个柱子才能积水，否则直接返回0
+	if (height.length < 3) return 0;
 
-		let res = 0;
-		for (let i = 0; i < height.length; i++) {
-			// 当栈不为空，且不满足递减关系 弹栈并记录弹出元素下标，用于计算积水高度
-			while (!stack.isEmpty() && height[i] > height[stack.getLast()]) {
-				let temp = stack.deleteTail();
-				// 当有重复连续值时都弹出
-				while (!stack.isEmpty() && height[temp] == height[stack.getLast()]) {
-					stack.deleteTail();
-				}
-				//计算积水深度
-				if (!stack.isEmpty()) {
-					// 计算宽度
-					let width = i - stack.getLast() - 1;
-					// 计算高度
-					let high = Math.min(height[i] - height[temp], height[stack.getLast()] - height[temp]);
-					//                    System.out.println(i + "  " + width + "  " + high + "  " + temp);
-					res += high * width;
-				}
+	let res = 0;
+	for (let i = 0; i < height.length; i++) {
+		// 当栈不为空，且不满足递减关系 弹栈并记录弹出元素下标，用于计算积水高度
+		while (!stack.isEmpty() && height[i] > height[stack.getLast()]) {
+			let temp = stack.deleteTail();
+			// 当有重复连续值时都弹出
+			while (!stack.isEmpty() && height[temp] == height[stack.getLast()]) {
+				stack.deleteTail();
 			}
-			stack.append(i);
-			//            System.out.println();
+			//计算积水深度
+			if (!stack.isEmpty()) {
+				// 计算宽度
+				let width = i - stack.getLast() - 1;
+				// 计算高度
+				let high = Math.min(height[i] - height[temp], height[stack.getLast()] - height[temp]);
+				//                    System.out.println(i + "  " + width + "  " + high + "  " + temp);
+				res += high * width;
+			}
 		}
-
-		return res;
+		stack.append(i);
+		//            System.out.println();
 	}
+
+	return res;
 }
 
-const s = new Solution42()
-const result= s.trap([4,2,0,3,2,5])
-console.log('water-problem',result)
+const result = trap([4, 2, 0, 3, 2, 5])
+console.log('water-problem', result)
 // // 按层计算，负责度较高可能会超时
 // class Solution42_byLayer {
 // 	public let trap(let[] height) {
@@ -148,3 +145,42 @@ console.log('water-problem',result)
 // 	}
 // }
 
+// 链接：https://leetcode-cn.com/problems/trapping-rain-water/solution/jie-yu-shui-by-leetcode/
+// 暴力解法
+function trap(height = []) {
+	let ans = 0;
+	let size = height.length;
+	for (let i = 1; i < size - 1; i++) {
+		let max_left = 0, max_right = 0;
+		for (let j = i; j >= 0; j--) { //Search the left part for max bar size
+			max_left = Math.max(max_left, height[j]);
+		}
+		for (let j = i; j < size; j++) { //Search the right part for max bar size
+			max_right = Math.max(max_right, height[j]);
+		}
+		ans += Math.min(max_left, max_right) - height[i];
+	}
+	return ans;
+}
+// 链接：https://leetcode-cn.com/problems/trapping-rain-water/solution/jie-yu-shui-by-leetcode/
+// 动态规划
+function trap(height = []) {
+	if (height == null || height.length == 0)
+		return 0;
+	let ans = 0;
+	let size = height.length;
+	let left_max = new Array(size).fill(0);
+	let right_max = new Array(size).fill(0);
+	left_max[0] = height[0];
+	for (let i = 1; i < size; i++) {
+		left_max[i] = Math.max(height[i], left_max[i - 1]);
+	}
+	right_max[size - 1] = height[size - 1];
+	for (let i = size - 2; i >= 0; i--) {
+		right_max[i] = Math.max(height[i], right_max[i + 1]);
+	}
+	for (let i = 1; i < size - 1; i++) {
+		ans += Math.min(left_max[i], right_max[i]) - height[i];
+	}
+	return ans;
+}
