@@ -2,7 +2,7 @@ import LinkedList from '../link-list/LinkedList'
 
 
 // 积水问题，使用单调栈的思想
-function trap(height) {
+function trap0(height) {
 	const stack = new LinkedList();
 	// 最少也需要3个柱子才能积水，否则直接返回0
 	if (height.length < 3) return 0;
@@ -33,7 +33,7 @@ function trap(height) {
 	return res;
 }
 
-const result = trap([4, 2, 0, 3, 2, 5])
+const result = trap0([4, 2, 0, 3, 2, 5])
 console.log('water-problem', result)
 // // 按层计算，负责度较高可能会超时
 // class Solution42_byLayer {
@@ -147,7 +147,7 @@ console.log('water-problem', result)
 
 // 链接：https://leetcode-cn.com/problems/trapping-rain-water/solution/jie-yu-shui-by-leetcode/
 // 暴力解法
-function trap(height = []) {
+function trap1(height = []) {
 	let ans = 0;
 	let size = height.length;
 	for (let i = 1; i < size - 1; i++) {
