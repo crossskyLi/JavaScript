@@ -57,23 +57,23 @@ var findMedianSortedArrays = function (nums1, nums2) {
 // let result = findMedianSortedArrays([1, 3, 5, 7, 9, 15], [2, 5, 6, 47, 98])
 // console.log(result)   let m = nums1.length;
 /* 非数组版本 */
-var findMedianSortedArrays2 = function (nums1, nums2) {
-  let n = nums2.length;
+var findMedianSortedArrays = function (nums1, nums2) {
+  const m = nums1.length;
+  const n = nums2.length;
   let len = m + n;
   let left = -1, right = -1;
-  let mStart = 0, bStart = 0;
+  let mStart = 0, nStart = 0;
   for (let i = 0; i <= len / 2; i++) {
     left = right;
-    if (mStart < m && (bStart >= n || nums1[mStart] < nums2[bStart])) {
+    if (mStart < m && (nStart >= n || nums1[mStart] < nums2[nStart])) {
       right = nums1[mStart++];
     } else {
-      right = nums2[bStart++];
+      right = nums2[nStart++];
     }
   }
-  if ((len & 1) == 0) {
+  if ((len & 1) === 0) {
     return (left + right) / 2.0;
-  }
-  else {
+  } else {
     return right;
   }
 }
