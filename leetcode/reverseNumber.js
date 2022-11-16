@@ -22,34 +22,46 @@
  */
 /* 递归 */
 var reverse = function (number, arr1) {
-  let minus = number < 0;
-  let _number = minus ? 0 - number : number;
-  let arr = arr1 || [];
-  number = _number / 10 > 0 ? Math.floor(_number / 10) : _number / 10;
-  arr.push(_number % 10)
-  if (number) {
-    reverse(number, arr)
-  }
-  let result = minus ? 0 - parseInt(arr.join('')) : parseInt(arr.join(''));
-  let isLegal = result > Math.pow(-2, 31) && result < Math.pow(2, 31) - 1
-  return isLegal ? result : 0
+	let minus = number < 0;
+	let _number = minus ? 0 - number : number;
+	let arr = arr1 || [];
+	number = _number / 10 > 0 ? Math.floor(_number / 10) : _number / 10;
+	arr.push(_number % 10)
+	if (number) {
+		reverse(number, arr)
+	}
+	let result = minus ? 0 - parseInt(arr.join('')) : parseInt(arr.join(''));
+	let isLegal = result > Math.pow(-2, 31) && result < Math.pow(2, 31) - 1
+	return isLegal ? result : 0
 }
 
 
 /* while 循环 */
 var reverse = function (number) {
-  let minus = number < 0;
-  let _number = minus ? 0 - number : number;
-  let str = '';
-  while (_number) {
-    str += _number % 10
-    _number = _number / 10 > 0 ? Math.floor(_number / 10) : _number / 10;
-  }
-  let result = minus ? 0 - parseInt(str) : parseInt(str);
-  let isLegal = result > Math.pow(-2, 31) && result < Math.pow(2, 31) - 1
-  return isLegal ? result : 0
+	let minus = number < 0;
+	let _number = minus ? 0 - number : number;
+	let str = '';
+	while (_number) {
+		str += _number % 10
+		_number = _number / 10 > 0 ? Math.floor(_number / 10) : _number / 10;
+	}
+	let result = minus ? 0 - parseInt(str) : parseInt(str);
+	let isLegal = result > Math.pow(-2, 31) && result < Math.pow(2, 31) - 1
+	return isLegal ? result : 0
 }
 
+var reverse = function (x) {
+	let rev = 0;
+	while (x !== 0) {
+		const digit = x % 10;
+		x = ~~(x / 10);
+		rev = rev * 10 + digit;
+		if (rev < Math.pow(-2, 31) || rev > Math.pow(2, 31) - 1) {
+			return 0;
+		}
+	}
+	return rev;
+};
 // let result;
 // result = reverse(123)
 // console.log(result)

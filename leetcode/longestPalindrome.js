@@ -163,7 +163,9 @@ var longestPalindrome = function (str) {
 // result = longestPalindrome("aaaabcbbbbb");
 // console.log(result)
 
-
+// 把字符数都变成单数
+// 3个字符 3 * 2 = 6 + 3 = 9
+// 4个字符 4 * 2 = 8 + 3 = 9
 function preProcess(s) {
   let n = s.length;
   if (n == 0) {
@@ -181,9 +183,15 @@ function preProcess(s) {
 function longestPalindrome2(s) {
   let T = preProcess(s);
   let n = T.length;
+	// 用一个数组 P 保存从中心扩展的最大个数，而它刚好也是去掉 "#" 的原字符串的总长度。
   let P = new Array(n).fill(0);
+	// 用 C center表示回文串的中心，用 R radius表示回文串的右边半径。
   let C = 0, R = 0;
-
+	// 例如下图中下标是 6 的地方。
+	// 可以看到 P[ 6 ] 等于 5，所以它是从左边扩展 5 个字符，相应的右边也是扩展 5 个字符，也就是 "#c#b# c #b#c#"。
+	// 而去掉 # 恢复到原来的字符串，变成 "cbcbc"，它的长度刚好也就是 5。
+	// 求原字符串下标 #c#b# c #b#c# c#d#e#
+	// 用 P 的下标 i 减去 P [ i ]，再除以 2 ，就是原字符串的开头下标了。
   for (let i = 1; i < n - 1; i++) {
     let i_mirror = 2 * C - i;
     if (R > i) {
@@ -193,6 +201,9 @@ function longestPalindrome2(s) {
     }
 
     // 碰到之前讲的三种情况时候，需要利用中心扩展法
+		// #c#b# c #b#c# c#d#e#
+		//    <<-- x -->>
+		// 以P[i]的自增来循环，知道两个字符不同为止
     while (T.charAt(i + 1 + P[i]) == T.charAt(i - 1 - P[i])) {
       P[i]++;
     }
@@ -236,5 +247,5 @@ function longestPalindrome2(s) {
 // result = longestPalindrome2("ddcfff");
 // console.log(result)
 
-// result = longestPalindrome2("aaaabcbbbbb");
-// console.log(result)
+result = longestPalindrome2("aaaabcccbbbabbbccc");
+console.log(result)

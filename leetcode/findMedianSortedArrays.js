@@ -55,7 +55,6 @@ var findMedianSortedArrays = function (nums1, nums2) {
   return result;
 };
 // let result = findMedianSortedArrays([1, 3, 5, 7, 9, 15], [2, 5, 6, 47, 98])
-// console.log(result)   let m = nums1.length;
 /* 非数组版本 */
 var findMedianSortedArrays = function (nums1, nums2) {
   const m = nums1.length;
