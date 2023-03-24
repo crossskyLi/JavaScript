@@ -1,4 +1,3 @@
-import { strict } from 'assert';
 
 /**
  * @param {string} s
