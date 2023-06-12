@@ -9,6 +9,10 @@ const hack = () => {
     fontSize: '16px',
   };
   Array.from(document.querySelectorAll('*')).forEach((item) => {
+    const ignoreElmReg = /p-4|button|input|textarea/gi;
+    if (ignoreElmReg.test(item.tagName) || ignoreElmReg.test(item.className)) {
+      return;
+    }
     Object.entries(customStyle).forEach(([key, value]) => {
       item.style[key] = value;
     });
