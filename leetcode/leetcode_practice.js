@@ -779,4 +779,26 @@ var toHex = function(num) {
   return sb.join('');
 }
 
+function nextGreaterElements(nums) {
+  const stack = [];
+  const result = new Array(nums.length).fill(-1);
+  
+  for (let i = 0; i < nums.length * 2; i++) {
+    // 循环数组，所以取模 循环两次
+    const num = nums[i % nums.length];
+    // 如果栈顶元素小于当前元素，则栈顶元素的下一个更大元素就是当前元素
+    while (stack.length > 0 && num > nums[stack[stack.length - 1]]) {
+      const index = stack.pop();
+      result[index] = num;
+    }
+    if (i < nums.length) {
+      stack.push(i);
+    }
+  }
+  
+  return result;
+}
+
+const nums = [2, 5, 3, 7, 6, 8, 1];
+console.log(nextGreaterElements(nums)); // 输出：[5, 7, 7, 8, 8, -1, 2]
 
