@@ -1,5 +1,7 @@
 // 请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。
 
+const { toUpper } = require("lodash");
+
 // 函数 myAtoi(string s) 的算法如下：
 
 // 读入字符串并丢弃无用的前导空格
@@ -15,7 +17,7 @@
 
 // 本题中的空白字符只包括空格字符 ' ' 。
 function myAtoi(str) {
-  // 
+  //
   let res = str.trim().match(/^(-|\+)?\d+/g);
   // 先跟正则匹配，匹配到的结果是一个数组，数组的第一项就是匹配到的结果
   // 如果匹配不到，就返回null
@@ -49,7 +51,6 @@ var isPalindrome = function (x) {
   }
 };
 
-
 // 给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 '.' 和 '*' 的正则表达式匹配。
 
 // '.' 匹配任意单个字符
@@ -66,39 +67,39 @@ var isPalindrome = function (x) {
  * @param {string} p
  * @return {boolean}
  */
-var isMatch = function(s, p) {
+var isMatch = function (s, p) {
   // 这个函数检查字符串s中的字符是否与字符串p中给定的索引i和j处的字符匹配
   function matches(s, p, i, j) {
     if (i === 0) {
       return false;
     }
-    if (p[j - 1] === '.') {
+    if (p[j - 1] === ".") {
       return true;
     }
     return s[i - 1] === p[j - 1];
   }
-  
+
   // 创建一个二维布尔数组来存储子问题的结果
   const dp = new Array(s.length + 1);
   for (let i = 0; i < dp.length; i++) {
     dp[i] = new Array(p.length + 1).fill(false);
   }
-  
+
   // 空字符串与空模式匹配
   dp[0][0] = true;
-  
+
   // 填充dp数组的第一行
   // 如果模式在索引j-1处有一个*，则如果没有*的模式与字符串匹配，则它与空字符串匹配
   for (let j = 1; j <= p.length; j++) {
-    if (p[j - 1] === '*') {
+    if (p[j - 1] === "*") {
       dp[0][j] = dp[0][j - 2];
     }
   }
-  
+
   // 填充dp数组的其余部分
   for (let i = 1; i <= s.length; i++) {
     for (let j = 1; j <= p.length; j++) {
-      if (p[j - 1] === '*') {
+      if (p[j - 1] === "*") {
         // 如果模式在索引j-1处有一个*，则如果没有*的模式与字符串匹配，则它与空字符串匹配
         // 或者如果带有*的模式与去掉最后一个字符的字符串匹配，则它与字符串匹配
         dp[i][j] = dp[i][j - 2];
@@ -113,12 +114,10 @@ var isMatch = function(s, p) {
       }
     }
   }
-  
+
   // 返回整个字符串和模式的子问题结果
   return dp[s.length][p.length];
 };
-
-
 
 // 给定一个长度为 n 的整数数组 height 。有 n 条垂线，第 i 条线的两个端点是 (i, 0) 和 (i, height[i]) 。
 
@@ -130,19 +129,19 @@ var isMatch = function(s, p) {
  * @param {number[]} height
  * @return {number}
  */
-var maxArea = function(height) {
+var maxArea = function (height) {
   const len = height.length;
   let max = 0;
   let i = 0;
   let j = len - 1;
-  while (i < j) { 
-      const area = Math.min(height[i], height[j]) * (j - i);
-      max = Math.max(max, area);
-      if (height[i] <= height[j]) {
-          i++;
-      } else {
-          j--;
-      }
+  while (i < j) {
+    const area = Math.min(height[i], height[j]) * (j - i);
+    max = Math.max(max, area);
+    if (height[i] <= height[j]) {
+      i++;
+    } else {
+      j--;
+    }
   }
   return max;
 };
@@ -162,19 +161,33 @@ var maxArea = function(height) {
 // 通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如 4 不写做 IIII，而是 IV。数字 1 在数字 5 的左边，所表示的数等于大数 5 减小数 1 得到的数值 4 。同样地，数字 9 表示为 IX。这个特殊的规则只适用于以下六种情况：
 
 // I 可以放在 V (5) 和 X (10) 的左边，来表示 4 和 9。
-// X 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。 
+// X 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。
 // C 可以放在 D (500) 和 M (1000) 的左边，来表示 400 和 900。
 // 给你一个整数，将其转为罗马数字。
 
 function intToRoman(num) {
-  const values = [1000,900,500,400,100,90,50,40,10,9,5,4,1];
-  const reps = ['M','CM','D','CD','C','XC','L','XL','X','IX','V','IV','I'];
-  let res = '';
+  const values = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+  const reps = [
+    "M",
+    "CM",
+    "D",
+    "CD",
+    "C",
+    "XC",
+    "L",
+    "XL",
+    "X",
+    "IX",
+    "V",
+    "IV",
+    "I",
+  ];
+  let res = "";
   for (let i = 0; i < 13; i++) {
-      while (num >= values[i]) {
-          num -= values[i];
-          res += reps[i];
-      }
+    while (num >= values[i]) {
+      num -= values[i];
+      res += reps[i];
+    }
   }
   return res;
 }
@@ -183,15 +196,15 @@ function intToRoman(num) {
 
 // 如果不存在公共前缀，返回空字符串 ""。
 function longestCommonPrefix(strs) {
-  if (!strs.length) return '';
+  if (!strs.length) return "";
   let res = strs[0];
   for (let i = 1; i < strs.length; i++) {
-      let j = 0;
-      for (; j < res.length && j < strs[i].length; j++) {
-          if (res[j] !== strs[i][j]) break;
-      }
-      res = res.substr(0, j);
-      if (!res) return '';
+    let j = 0;
+    for (; j < res.length && j < strs[i].length; j++) {
+      if (res[j] !== strs[i][j]) break;
+    }
+    res = res.substr(0, j);
+    if (!res) return "";
   }
   return res;
 }
@@ -210,31 +223,34 @@ function longestCommonPrefix(strs) {
 function threeSum(nums) {
   const res = []; // 存储结果的数组
   nums.sort((a, b) => a - b); // 将数组排序, 从小到大
-  for (let i = 0; i < nums.length - 2; i++) { // 遍历数组
+  for (let i = 0; i < nums.length - 2; i++) {
+    // 遍历数组
     // 必须比0小，否则三数之和一定大于0
     if (nums[i] > 0) break; // 如果当前数大于0，跳出循环
     if (i > 0 && nums[i] === nums[i - 1]) continue; // 如果当前数和前一个数相同，跳过当前循环
     let l = i + 1; // 左指针
     let r = nums.length - 1; // 右指针
-    while (l < r) { // 双指针遍历
+    while (l < r) {
+      // 双指针遍历
       const sum = nums[i] + nums[l] + nums[r]; // 三数之和
-      if (sum === 0) { // 如果三数之和为0
+      if (sum === 0) {
+        // 如果三数之和为0
         res.push([nums[i], nums[l], nums[r]]); // 将三个数加入结果数组
         while (l < r && nums[l] === nums[l + 1]) l++; // 跳过重复的左指针
         while (l < r && nums[r] === nums[r - 1]) r--; // 跳过重复的右指针
         l++; // 左指针右移
         r--; // 右指针左移
-      } else if (sum < 0) { // 如果三数之和小于0
+      } else if (sum < 0) {
+        // 如果三数之和小于0
         l++; // 左指针右移
-      } else { // 如果三数之和大于0
+      } else {
+        // 如果三数之和大于0
         r--; // 右指针左移
       }
     }
   }
   return res; // 返回结果数组
 }
-
-
 
 //给你一个长度为 n 的整数数组 nums 和 一个目标值 target。请你从 nums 中选出三个整数，使它们的和与 target 最接近。
 
@@ -252,24 +268,30 @@ function threeSum(nums) {
  * @param {number} target
  * @return {number}
  */
-// now ->           <-  
+// now ->           <-
 //  1  2 3 4 5 6 7 8 9
 function threeSumClosest(nums, target) {
   nums.sort((a, b) => a - b); // 将数组排序
   let res = nums[0] + nums[1] + nums[2]; // 初始化结果
-  for (let i = 0; i < nums.length; i++) { // 遍历数组
+  for (let i = 0; i < nums.length; i++) {
+    // 遍历数组
     let l = i + 1; // 左指针
     let r = nums.length - 1; // 右指针
-    while (l < r) { // 双指针遍历
+    while (l < r) {
+      // 双指针遍历
       const sum = nums[i] + nums[l] + nums[r]; // 三数之和
-      if (Math.abs(sum - target) < Math.abs(res - target)) { // 如果当前三数之和与目标值的差小于结果与目标值的差
+      if (Math.abs(sum - target) < Math.abs(res - target)) {
+        // 如果当前三数之和与目标值的差小于结果与目标值的差
         res = sum; // 更新结果
       }
-      if (sum > target) { // 如果三数之和大于目标值
+      if (sum > target) {
+        // 如果三数之和大于目标值
         r--; // 右指针左移
-      } else if (sum < target) { // 如果三数之和小于目标值
+      } else if (sum < target) {
+        // 如果三数之和小于目标值
         l++; // 左指针右移
-      } else { // 如果三数之和等于目标值
+      } else {
+        // 如果三数之和等于目标值
         return res; // 直接返回结果
       }
     }
@@ -291,26 +313,35 @@ function threeSumClosest(nums, target) {
 function letterCombinations(digits) {
   if (!digits) return [];
   const res = []; // 结果数组
-  const map = { // 映射表
-    2: 'abc', 3: 'def', 4: 'ghi', 5: 'jkl',
-    6: 'mno', 7: 'pqrs', 8: 'tuv', 9: 'wxyz'
+  const map = {
+    // 映射表
+    2: "abc",
+    3: "def",
+    4: "ghi",
+    5: "jkl",
+    6: "mno",
+    7: "pqrs",
+    8: "tuv",
+    9: "wxyz",
   };
   // 深度优先搜索（Depth-First-Search）
-  const dfs = (curStr, i) => { // curStr是当前字符串，i是扫描的指针
-    if (i > digits.length - 1) { // 指针越界，递归的出口
+  const dfs = (curStr, i) => {
+    // curStr是当前字符串，i是扫描的指针
+    if (i > digits.length - 1) {
+      // 指针越界，递归的出口
       res.push(curStr); // 将解推入res
       return; // 结束当前递归分支
     }
     const letters = map[digits[i]]; // 当前数字对应的字母
-    for (const l of letters) { // 一个字母是一个选择，对应一个递归分支
+    for (const l of letters) {
+      // 一个字母是一个选择，对应一个递归分支
       dfs(curStr + l, i + 1); // 生成新字符串，i指针右移，递归
     }
   };
-  
-  dfs('', 0); // 递归的入口，初始字符串为''，指针为0
+
+  dfs("", 0); // 递归的入口，初始字符串为''，指针为0
   return res;
 }
-
 
 // 题目描述
 // 已知rand5可以等概率随机获得[0,1,2,3,4]中的一个数字。
@@ -327,9 +358,425 @@ function rand7() {
   let num = 5 * rand5() + rand5(); // 生成[0,24]范围内的随机数
   // 为什么需要随机数小于20
   // 生成[0,24]范围内的随机数，只需要生成[0,20]范围内的随机数即可
-  while (num > 20) { // 如果生成的随机数大于20，就重新生成
+  while (num > 20) {
+    // 如果生成的随机数大于20，就重新生成
     num = 5 * rand5() + rand5();
   }
   return num % 7; // 对7取余，得到[0,6]范围内的随机数
 }
+
+// 给你一个下标从 0 开始的正整数数组 nums 。请你找出并统计满足下述条件的三元组 (i, j, k) 的数目：
+
+// 0 <= i < j < k < nums.length
+// nums[i]、nums[j] 和 nums[k] 两两不同 。
+// 换句话说：nums[i] != nums[j]、nums[i] != nums[k] 且 nums[j] != nums[k] 。
+// 返回满足上述条件三元组的数目。
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+
+var unequalTriplets = function (nums) {
+  let len = nums.length;
+  let res = 0;
+  for (let i = 0; i < len; i++) {
+    for (let j = i + 1; j < len; j++) {
+      for (let k = j + 1; k < len; k++) {
+        if (nums[i] !== nums[j] && nums[i] !== nums[k] && nums[j] !== nums[k]) {
+          res++;
+        }
+      }
+    }
+  }
+  return res;
+};
+
+// 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+
+// 请你将两个数相加，并以相同形式返回一个表示和的链表。
+
+// 你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+
+// 来源：力扣（LeetCode）
+// 链接：https://leetcode.cn/problems/add-two-numbers
+// 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+// 输入：l1 = [2,4,3], l2 = [5,6,4]
+// 输出：[7,0,8]
+// 解释：342 + 465 = 807
+
+function ListNode(val) {
+  this.val = val;
+  this.next = null;
+}
+function addTwoNumbers(l1, l2) {
+  let head = null,
+    tail = null;
+  let carry = 0;
+  while (l1 || l2) {
+    const n1 = l1 ? l1.val : 0;
+    const n2 = l2 ? l2.val : 0;
+    const sum = n1 + n2 + carry;
+    if (!head) {
+      head = tail = new ListNode(sum % 10);
+    } else {
+      tail.next = new ListNode(sum % 10);
+      tail = tail.next;
+    }
+    carry = Math.floor(sum / 10);
+    if (l1) {
+      l1 = l1.next;
+    }
+    if (l2) {
+      l2 = l2.next;
+    }
+  }
+  if (carry > 0) {
+    tail.next = new ListNode(carry);
+  }
+  return head;
+}
+
+// 给你一个由 n 个整数组成的数组 nums ，和一个目标值 target 。
+// 请你找出并返回满足下述全部条件且不重复的四元组 [nums[a], nums[b], nums[c], nums[d]]
+// （若两个四元组元素一一对应，则认为两个四元组重复）：
+
+// 0 <= a, b, c, d < n
+// a、b、c 和 d 互不相同
+// nums[a] + nums[b] + nums[c] + nums[d] == target
+// 你可以按 任意顺序 返回答案 。
+
+// 来源：力扣（LeetCode）
+// 链接：https://leetcode.cn/problems/4sum
+// 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+function fourSum(nums, target) {
+  let result = [];
+  if (nums == null || nums.length < 4) {
+    return result;
+  }
+  nums.sort((a, b) => a - b);
+  let length = nums.length;
+  for (let k = 0; k < length - 3; k++) {
+    if (k > 0 && nums[k] == nums[k - 1]) {
+      continue;
+    }
+    let min1 = nums[k] + nums[k + 1] + nums[k + 2] + nums[k + 3];
+    if (min1 > target) {
+      break;
+    }
+    let max1 = nums[k] + nums[length - 1] + nums[length - 2] + nums[length - 3];
+    if (max1 < target) {
+      continue;
+    }
+    for (let i = k + 1; i < length - 2; i++) {
+      if (i > k + 1 && nums[i] == nums[i - 1]) {
+        continue;
+      }
+      let j = i + 1;
+      let h = length - 1;
+      let min = nums[k] + nums[i] + nums[j] + nums[j + 1];
+      if (min > target) {
+        continue;
+      }
+      let max = nums[k] + nums[i] + nums[h] + nums[h - 1];
+      if (max < target) {
+        continue;
+      }
+      while (j < h) {
+        let curr = nums[k] + nums[i] + nums[j] + nums[h];
+        if (curr == target) {
+          result.push([nums[k], nums[i], nums[j], nums[h]]);
+          j++;
+          h--;
+          while (j < h && nums[j] == nums[j - 1]) {
+            j++;
+          }
+          while (j < h && nums[h] == nums[h + 1]) {
+            h--;
+          }
+        } else if (curr > target) {
+          h--;
+        } else {
+          j++;
+        }
+      }
+    }
+  }
+  return result;
+}
+
+// 给你一个长度为 n 、下标从 1 开始的二进制字符串，所有位最开始都是 0 。
+// 我们会按步翻转该二进制字符串的所有位（即，将 0 变为 1）。
+
+// 给你一个下标从 1 开始的整数数组 flips ，其中 flips[i] 表示对应下标 i 的位将会在第 i 步翻转。
+
+// 二进制字符串 前缀一致 需满足：在第 i 步之后，在 闭 区间 [1, i] 内的所有位都是 1 ，而其他位都是 0 。
+
+// 返回二进制字符串在翻转过程中 前缀一致 的次数。
+
+// 示例 1：
+
+// 输入：flips = [3,2,4,1,5]
+// 输出：2
+// 解释：二进制字符串最开始是 "00000" 。
+// 执行第 1 步：字符串变为 "00100" ，不属于前缀一致的情况。
+// 执行第 2 步：字符串变为 "01100" ，不属于前缀一致的情况。
+// 执行第 3 步：字符串变为 "01110" ，不属于前缀一致的情况。
+// 执行第 4 步：字符串变为 "11110" ，属于前缀一致的情况。
+// 执行第 5 步：字符串变为 "11111" ，属于前缀一致的情况。
+// 在翻转过程中，前缀一致的次数为 2 ，所以返回 2 。
+// 示例 2：
+
+// 输入：flips = [4,1,2,3]
+// 输出：1
+// 解释：二进制字符串最开始是 "0000" 。
+// 执行第 1 步：字符串变为 "0001" ，不属于前缀一致的情况。
+// 执行第 2 步：字符串变为 "1001" ，不属于前缀一致的情况。
+// 执行第 3 步：字符串变为 "1101" ，不属于前缀一致的情况。
+// 执行第 4 步：字符串变为 "1111" ，属于前缀一致的情况。
+// 在翻转过程中，前缀一致的次数为 1 ，所以返回 1 。
+//
+
+// 提示：
+
+// n == flips.length
+// 1 <= n <= 5 * 104
+// flips 是范围 [1, n] 中所有整数构成的一个排列
+
+// 来源：力扣（LeetCode）
+// 链接：https://leetcode.cn/problems/number-of-times-binary-string-is-prefix-aligned
+// 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+/**
+ * @param {number[]} flips
+ * @return {number}
+ */
+
+/**
+ * 计算在翻转过程中，二进制字符串前缀一致的次数。
+ * @param {number[]} flips - 一个整数数组，表示每次翻转的位置。
+ * @return {number} - 在翻转过程中，二进制字符串前缀一致的次数。
+ */
+var numTimesAllBlue = function (flips) {
+  let max = 0; // 记录当前最大值
+  let result = 0; // 记录前缀一致的次数
+  for (let i = 0; i < flips.length; i++) {
+    max = Math.max(max, flips[i]); // 更新最大值
+    if (max == i + 1) {
+      // 如果最大值等于当前位置加一，说明前缀一致
+      result++; // 前缀一致次数加一
+    }
+  }
+  return result; // 返回前缀一致次数
+};
+
+// 给你一个字符串 s，请你对 s 的子串进行检测。
+
+// 每次检测，待检子串都可以表示为 queries[i] = [left, right, k]。
+// 我们可以 重新排列 子串 s[left], ..., s[right]，并从中选择 最多 k 项替换成任何小写英文字母。
+
+// 如果在上述检测过程中，子串可以变成回文形式的字符串，那么检测结果为 true，否则结果为 false。
+
+// 返回答案数组 answer[]，其中 answer[i] 是第 i 个待检子串 queries[i] 的检测结果。
+
+// 注意：在替换时，子串中的每个字母都必须作为 独立的 项进行计数，也就是说，如果 s[left..right] = "aaa" 且 k = 2，
+// 我们只能替换其中的两个字母。（另外，任何检测都不会修改原始字符串 s，可以认为每次检测都是独立的）
+
+//
+
+// 示例：
+
+// 输入：s = "abcda", queries = [[3,3,0],[1,2,0],[0,3,1],[0,3,2],[0,4,1]]
+// 输出：[true,false,false,true,true]
+// 解释：
+// queries[0] : 子串 = "d"，回文。
+// queries[1] : 子串 = "bc"，不是回文。
+// queries[2] : 子串 = "abcd"，只替换 1 个字符是变不成回文串的。
+// queries[3] : 子串 = "abcd"，可以变成回文的 "abba"。 也可以变成 "baab"，先重新排序变成 "bacd"，然后把 "cd" 替换为 "ab"。
+// queries[4] : 子串 = "abcda"，可以变成回文的 "abcba"。
+//
+
+// 提示：
+
+// 1 <= s.length, queries.length <= 10^5
+// 0 <= queries[i][0] <= queries[i][1] < s.length
+// 0 <= queries[i][2] <= s.length
+// s 中只有小写英文字母
+
+// 来源：力扣（LeetCode）
+// 链接：https://leetcode.cn/problems/can-make-palindrome-from-substring
+// 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+/**
+ * @param {string} s
+ * @param {number[][]} queries
+ * @return {boolean[]}
+ */
+
+/**
+ * 判断给定字符串的子串是否可以通过最多 k 次字符替换变成回文字符串。
+ * @param {string} s - 给定字符串。
+ * @param {number[][]} queries - 待检测的子串数组，每个子串由三个数字组成：left、right 和 k。
+ * @return {boolean[]} - 每个子串是否可以变成回文字符串的检测结果。
+ */
+// 判断给定字符串的子串是否可以通过最多 k 次字符替换变成回文字符串。
+/**
+ * @param {string} s - 给定字符串。
+ * @param {number[][]} queries - 待检测的子串数组，每个子串由三个数字组成：left、right 和 k。
+ * @return {boolean[]} - 每个子串是否可以变成回文字符串的检测结果。
+ */
+var canMakePaliQueries = function (s, queries) {
+  const result = [];
+  for (let i = 0; i < queries.length; i++) {
+    const [left, right, k] = queries[i];
+    const str = s.slice(left, right + 1); // 获取子串
+    const obj = {}; // 用于记录子串中每个字符出现的次数
+    for (let j = 0; j < str.length; j++) {
+      const char = str[j];
+      obj[char] = obj[char] ? obj[char] + 1 : 1; // 统计字符出现次数
+    }
+    let odd = 0; // 记录出现奇数次的字符个数
+    for (let key in obj) {
+      if (obj[key] % 2 !== 0) {
+        odd++;
+      }
+    }
+    if (odd - 2 * k > 1) {
+      // 判断是否可以通过最多 k 次字符替换变成回文字符串
+      result.push(false);
+    } else {
+      result.push(true);
+    }
+  }
+  return result;
+};
+var canMakePaliQueries = function (s, queries) {
+  const n = s.length;
+  const prefixSum = new Array(n + 1)
+    .fill(null)
+    .map(() => new Array(26).fill(0));
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < 26; j++) {
+      prefixSum[i + 1][j] = prefixSum[i][j];
+    }
+    prefixSum[i + 1][s.charCodeAt(i) - "a".charCodeAt(0)]++;
+  }
+  const result = [];
+  for (let i = 0; i < queries.length; i++) {
+    const [left, right, k] = queries[i];
+    let odd = 0;
+    for (let j = 0; j < 26; j++) {
+      const count = prefixSum[right + 1][j] - prefixSum[left][j];
+      if (count % 2 !== 0) {
+        odd++;
+      }
+    }
+    if (odd - 2 * k > 1) {
+      result.push(false);
+    } else {
+      result.push(true);
+    }
+  }
+  return result;
+};
+
+
+/**
+ * 判断给定字符串的子串是否可以通过最多 k 次字符替换变成回文字符串。
+ * @param {string} s - 给定字符串。
+ * @param {number[][]} queries - 待检测的子串数组，每个子串由三个数字组成：left、right 和 k。
+ * @return {boolean[]} - 每个子串是否可以变成回文字符串的检测结果。
+ */
+var canMakePaliQueries = function(s, queries) {
+  const n = s.length;
+  const count = Array(n + 1).fill(0);
+  for (let i = 0; i < n; i++) {
+    count[i + 1] = count[i] ^ (1 << (s[i].charCodeAt(0) - 'a'.charCodeAt(0)));
+    // 将 s[i] 转换为二进制数，然后将其转换为十进制数，再将其异或上前一个位置的值，得到 count[i+1]
+    // 这样 count[i+1] 存储了 s 的前 i 个字符的二进制数的异或和
+  }
+  const res = [];
+  for (const query of queries) {
+    const l = query[0], r = query[1], k = query[2];
+    let bits = 0, x = count[r + 1] ^ count[l];
+    // 计算 s[l:r+1] 的二进制数的异或和
+    while (x > 0) {
+      x &= x - 1;
+      bits++;
+      // 统计二进制数中 1 的个数
+    }
+    res.push(bits <= k * 2 + 1);
+    // 如果二进制数中 1 的个数小于等于 2k+1，则 s[l:r+1] 可以通过最多 k 次字符替换变成回文字符串
+  }
+  return res;
+}
+
+// 华为机试
+
+// 1.题目描述
+// 写出一个程序，接受一个十六进制的数，输出该数值的十进制表示。（多组同时输入 ）
+
+// 2.输入描述:
+// 输入一个十六进制的数值字符串。
+
+// 3.输出描述:
+// 输出该数值的十进制字符串。
+
+// 4.示例1
+// 输入
+// 0xA
+// 输出
+// 10
+
+function hexToDec(str) {
+  for(let i = 0; i< str.length; i++){
+    if(str[i] === 'x' || str[i] === 'X'){
+      str = str.slice(i+1)
+      break
+    }
+  }
+  let res = 0
+  const map = {
+    'a': 10,
+    'b': 11,
+    'c': 12,
+    'd': 13,
+    'e': 14,
+    'f':15
+  }
+  for(let i = 0; i< str.length; i++){
+    let num = 0
+    if(str[i] >= '0' && str[i] <= '9'){
+      num = str[i] - '0'
+    }else if(str[i] >= 'a' && str[i] <= 'f'){
+      num =map[str[i]]
+    }else if(str[i] >= 'A' && str[i] <= 'F'){
+      num =map[(str[i]).toLowerCase()]
+    }
+    res = res + num
+  }
+  return res
+}
+
+// 这段代码实现了将一个十进制数转换为十六进制数的功能。
+// 具体实现方式是将十进制数每四位一组转换为十六进制数，然后将这些十六进制数拼接起来。
+// 其中，数字 0 的十六进制表示为 "0"，
+// 数字 1-9 的十六进制表示为 "1"-"9"，数字 10-15 的十六进制表示为 "a"-"f"。
+var toHex = function(num) {
+  if (num === 0) {
+      return "0";
+  }
+  const sb = [];
+  for (let i = 7; i >= 0; i --) {
+    // 右移 4 位，每次取 4 位，与 0xf 做与运算，得到的就是这 4 位的十进制数
+      const val = (num >> (4 * i)) & 0xf;
+      if (sb.length > 0 || val > 0) {
+        // 跟10 做比较，比10 大的话，就是 a-f
+          const digit = val < 10 ? String.fromCharCode('0'.charCodeAt() + val) : String.fromCharCode('a'.charCodeAt() + val - 10);
+          sb.push(digit);
+      }
+  }
+  return sb.join('');
+}
+
 
