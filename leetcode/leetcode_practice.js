@@ -680,25 +680,27 @@ var canMakePaliQueries = function (s, queries) {
   return result;
 };
 
-
 /**
  * 判断给定字符串的子串是否可以通过最多 k 次字符替换变成回文字符串。
  * @param {string} s - 给定字符串。
  * @param {number[][]} queries - 待检测的子串数组，每个子串由三个数字组成：left、right 和 k。
  * @return {boolean[]} - 每个子串是否可以变成回文字符串的检测结果。
  */
-var canMakePaliQueries = function(s, queries) {
+var canMakePaliQueries = function (s, queries) {
   const n = s.length;
   const count = Array(n + 1).fill(0);
   for (let i = 0; i < n; i++) {
-    count[i + 1] = count[i] ^ (1 << (s[i].charCodeAt(0) - 'a'.charCodeAt(0)));
+    count[i + 1] = count[i] ^ (1 << (s[i].charCodeAt(0) - "a".charCodeAt(0)));
     // 将 s[i] 转换为二进制数，然后将其转换为十进制数，再将其异或上前一个位置的值，得到 count[i+1]
     // 这样 count[i+1] 存储了 s 的前 i 个字符的二进制数的异或和
   }
   const res = [];
   for (const query of queries) {
-    const l = query[0], r = query[1], k = query[2];
-    let bits = 0, x = count[r + 1] ^ count[l];
+    const l = query[0],
+      r = query[1],
+      k = query[2];
+    let bits = 0,
+      x = count[r + 1] ^ count[l];
     // 计算 s[l:r+1] 的二进制数的异或和
     while (x > 0) {
       x &= x - 1;
@@ -709,7 +711,7 @@ var canMakePaliQueries = function(s, queries) {
     // 如果二进制数中 1 的个数小于等于 2k+1，则 s[l:r+1] 可以通过最多 k 次字符替换变成回文字符串
   }
   return res;
-}
+};
 
 // 华为机试
 
@@ -729,60 +731,63 @@ var canMakePaliQueries = function(s, queries) {
 // 10
 
 function hexToDec(str) {
-  for(let i = 0; i< str.length; i++){
-    if(str[i] === 'x' || str[i] === 'X'){
-      str = str.slice(i+1)
-      break
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === "x" || str[i] === "X") {
+      str = str.slice(i + 1);
+      break;
     }
   }
-  let res = 0
+  let res = 0;
   const map = {
-    'a': 10,
-    'b': 11,
-    'c': 12,
-    'd': 13,
-    'e': 14,
-    'f':15
-  }
-  for(let i = 0; i< str.length; i++){
-    let num = 0
-    if(str[i] >= '0' && str[i] <= '9'){
-      num = str[i] - '0'
-    }else if(str[i] >= 'a' && str[i] <= 'f'){
-      num =map[str[i]]
-    }else if(str[i] >= 'A' && str[i] <= 'F'){
-      num =map[(str[i]).toLowerCase()]
+    a: 10,
+    b: 11,
+    c: 12,
+    d: 13,
+    e: 14,
+    f: 15,
+  };
+  for (let i = 0; i < str.length; i++) {
+    let num = 0;
+    if (str[i] >= "0" && str[i] <= "9") {
+      num = str[i] - "0";
+    } else if (str[i] >= "a" && str[i] <= "f") {
+      num = map[str[i]];
+    } else if (str[i] >= "A" && str[i] <= "F") {
+      num = map[str[i].toLowerCase()];
     }
-    res = res + num
+    res = res + num;
   }
-  return res
+  return res;
 }
 
 // 这段代码实现了将一个十进制数转换为十六进制数的功能。
 // 具体实现方式是将十进制数每四位一组转换为十六进制数，然后将这些十六进制数拼接起来。
 // 其中，数字 0 的十六进制表示为 "0"，
 // 数字 1-9 的十六进制表示为 "1"-"9"，数字 10-15 的十六进制表示为 "a"-"f"。
-var toHex = function(num) {
+var toHex = function (num) {
   if (num === 0) {
-      return "0";
+    return "0";
   }
   const sb = [];
-  for (let i = 7; i >= 0; i --) {
+  for (let i = 7; i >= 0; i--) {
     // 右移 4 位，每次取 4 位，与 0xf 做与运算，得到的就是这 4 位的十进制数
-      const val = (num >> (4 * i)) & 0xf;
-      if (sb.length > 0 || val > 0) {
-        // 跟10 做比较，比10 大的话，就是 a-f
-          const digit = val < 10 ? String.fromCharCode('0'.charCodeAt() + val) : String.fromCharCode('a'.charCodeAt() + val - 10);
-          sb.push(digit);
-      }
+    const val = (num >> (4 * i)) & 0xf;
+    if (sb.length > 0 || val > 0) {
+      // 跟10 做比较，比10 大的话，就是 a-f
+      const digit =
+        val < 10
+          ? String.fromCharCode("0".charCodeAt() + val)
+          : String.fromCharCode("a".charCodeAt() + val - 10);
+      sb.push(digit);
+    }
   }
-  return sb.join('');
-}
+  return sb.join("");
+};
 
 function nextGreaterElements(nums) {
   const stack = [];
   const result = new Array(nums.length).fill(-1);
-  
+
   for (let i = 0; i < nums.length * 2; i++) {
     // 循环数组，所以取模 循环两次
     const num = nums[i % nums.length];
@@ -795,10 +800,508 @@ function nextGreaterElements(nums) {
       stack.push(i);
     }
   }
-  
+
   return result;
 }
 
-const nums = [2, 5, 3, 7, 6, 8, 1];
+let nums = [2, 5, 3, 7, 6, 8, 1];
 console.log(nextGreaterElements(nums)); // 输出：[5, 7, 7, 8, 8, -1, 2]
 
+// 1. 递归：计算斐波那契数列的第n个数。
+
+function fibonacci(n) {
+  if (n <= 1) {
+    return n;
+  }
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+console.log(fibonacci(5)); // 输出：5
+
+// 2. 分治：合并排序的数组。
+
+function mergeSort(arr) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+
+  const mid = Math.floor(arr.length / 2);
+  const left = mergeSort(arr.slice(0, mid));
+  const right = mergeSort(arr.slice(mid));
+
+  return merge(left, right);
+}
+
+function merge(left, right) {
+  const merged = [];
+  let i = 0;
+  let j = 0;
+
+  while (i < left.length && j < right.length) {
+    if (left[i] <= right[j]) {
+      merged.push(left[i]);
+      i++;
+    } else {
+      merged.push(right[j]);
+      j++;
+    }
+  }
+
+  return merged.concat(left.slice(i)).concat(right.slice(j));
+}
+
+const arr = [3, 1, 4, 1, 5, 9, 2, 6];
+console.log(mergeSort(arr)); // 输出：[1, 1, 2, 3, 4, 5, 6, 9]
+
+// 3. 单调栈：找到数组中每个元素的下一个更大的元素。
+
+function nextGreaterElements(nums) {
+  const stack = [];
+  const result = new Array(nums.length).fill(-1);
+
+  for (let i = 0; i < nums.length * 2; i++) {
+    const num = nums[i % nums.length];
+    while (stack.length > 0 && num > nums[stack[stack.length - 1]]) {
+      const index = stack.pop();
+      result[index] = num;
+    }
+    if (i < nums.length) {
+      stack.push(i);
+    }
+  }
+
+  return result;
+}
+
+nums = [2, 5, 3, 7, 6, 8, 1];
+console.log(nextGreaterElements(nums)); // 输出：[5, 7, 7, 8, 8, -1, 2]
+
+// 4. 并查集：判断图中是否存在环。
+
+class UnionFind {
+  constructor(size) {
+    this.parent = new Array(size).fill(-1);
+  }
+
+  find(x) {
+    if (this.parent[x] === -1) {
+      return x;
+    }
+    return this.find(this.parent[x]);
+  }
+
+  union(x, y) {
+    const rootX = this.find(x);
+    const rootY = this.find(y);
+    if (rootX !== rootY) {
+      this.parent[rootX] = rootY;
+    }
+  }
+}
+
+function hasCycle(graph) {
+  const uf = new UnionFind(graph.length);
+
+  for (let i = 0; i < graph.length; i++) {
+    for (let j = 0; j < graph[i].length; j++) {
+      const u = i;
+      const v = graph[i][j];
+      if (uf.find(u) === uf.find(v)) {
+        return true;
+      }
+      uf.union(u, v);
+    }
+  }
+
+  return false;
+}
+
+const graph = [
+  [1, 2],
+  [2, 3],
+  [3, 1],
+];
+console.log(hasCycle(graph)); // 输出：true
+
+// 5. 滑动窗口：找到数组中满足条件的最短子数组的长度。
+
+function minSubArrayLen(target, nums) {
+  let minLength = Infinity;
+  let sum = 0;
+  let left = 0;
+
+  for (let right = 0; right < nums.length; right++) {
+    sum += nums[right];
+
+    while (sum >= target) {
+      minLength = Math.min(minLength, right - left + 1);
+      sum -= nums[left];
+      left++;
+    }
+  }
+
+  return minLength !== Infinity ? minLength : 0;
+}
+
+const target = 7;
+nums = [2, 3, 1, 2, 4, 3];
+console.log(minSubArrayLen(target, nums)); // 输出：2
+
+// 6. 前缀和：计算数组中所有子数组的和。
+
+function subarraySum(nums) {
+  const prefixSum = new Map();
+  prefixSum.set(0, 1);
+  let count = 0;
+  let sum = 0;
+
+  for (let i = 0; i < nums.length; i++) {
+    sum += nums[i];
+
+    if (prefixSum.has(sum)) {
+      count += prefixSum.get(sum);
+    }
+
+    prefixSum.set(sum, (prefixSum.get(sum) || 0) + 1);
+  }
+
+  return count;
+}
+
+nums = [1, 1, 1];
+console.log(subarraySum(nums)); // 输出：3
+
+// 7. 查分：给定一个区间，将其所有元素增加一个固定值。
+
+function addRange(nums, left, right, val) {
+  nums[left] += val;
+  if (right + 1 < nums.length) {
+    nums[right + 1] -= val;
+  }
+}
+
+function restoreArray(nums) {
+  for (let i = 1; i < nums.length; i++) {
+    nums[i] += nums[i - 1];
+  }
+
+  return nums;
+}
+
+nums = [1, 2, 3, 4, 5];
+addRange(nums, 1, 3, 10);
+console.log(restoreArray(nums)); // 输出：[1, 12, 13, 14, 5]
+
+// 8. 二分查找：在有序数组中查找目标元素的索引。
+
+function binarySearch(nums, target) {
+  let left = 0;
+  let right = nums.length - 1;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (nums[mid] === target) {
+      return mid;
+    } else if (nums[mid] < target) {
+      left = mid + 1;
+    } else {
+      right = mid - 1;
+    }
+  }
+
+  return -1;
+}
+
+nums = [1, 3, 5, 7, 9];
+ target = 5;
+console.log(binarySearch(nums, target)); // 输出：2
+
+// 9. BFS广搜：计算从起点到目标的最短路径长度。
+
+function shortestPath(graph, start, end) {
+  const queue = [start];
+  const visited = new Set();
+  let steps = 0;
+
+  while (queue.length > 0) {
+    const size = queue.length;
+
+    for (let i = 0; i < size; i++) {
+      const node = queue.shift();
+
+      if (node === end) {
+        return steps;
+      }
+
+      if (!visited.has(node)) {
+        visited.add(node);
+        queue.push(...graph[node]);
+      }
+    }
+
+    steps++;
+  }
+
+  return -1;
+}
+
+graph = {
+  0: [1, 2],
+  1: [2],
+  2: [3],
+  3: [],
+};
+start = 0;
+end = 3;
+console.log(shortestPath(graph, start, end)); // 输出：3
+
+// 10. DFS深搜：查找图中从起点到目标的路径。
+
+function findPath(graph, start, end) {
+  const visited = new Set();
+  const path = [];
+
+  dfs(start);
+
+  function dfs(node) {
+    visited.add(node);
+    path.push(node);
+
+    if (node === end) {
+      return true;
+    }
+
+    for (const neighbor of graph[node]) {
+      if (!visited.has(neighbor) && dfs(neighbor)) {
+        return true;
+      }
+    }
+
+    path.pop();
+    return false;
+  }
+
+  return path;
+}
+
+graph = {
+  0: [1, 2],
+  1: [2, 3],
+  2: [3],
+  3: [],
+};
+start = 0;
+end = 3;
+console.log(findPath(graph, start, end)); // 输出：[0, 1, 2, 3]
+
+
+// 实现一个LazyMan，可以按照以下方式调用:
+// LazyMan(“Hank”)输出:
+// Hi! This is Hank!
+
+// LazyMan(“Hank”).sleep(10).eat(“dinner”)输出
+// Hi! This is Hank!
+// //等待10秒..
+// Wake up after 10
+// Eat dinner~
+
+// LazyMan(“Hank”).eat(“dinner”).eat(“supper”)输出
+// Hi This is Hank!
+// Eat dinner~
+// Eat supper~
+
+// LazyMan(“Hank”).eat(“supper”).sleepFirst(5)输出
+// //等待5秒
+// Wake up after 5
+// Hi This is Hank!
+// Eat supper
+
+function LazyMan(name) {
+  return new _LazyMan(name);
+}
+function _LazyMan(name) {
+  this.tasks = [];
+  console.log(`Hi! This is ${name}!`);
+  const task = () => {
+    this.next();
+  };
+  this.tasks.push(task);
+  setTimeout(() => {
+    this.next();
+  }, 0);
+  this.next = () => {
+    const task = this.tasks.shift();
+    task && task();
+  }
+  this.eat = (food) => { 
+    const task = () => {
+      console.log(`Eat ${food}~`);
+      this.next();
+    };
+    this.tasks.push(task);
+    return this;
+  }
+  this.sleepFirst = (time) => {
+    const task = () => {
+      setTimeout(() => {
+        console.log(`Wake up after ${time}`);
+        this.next();
+      }, time * 1000);
+    };
+    this.tasks.unshift(task);
+    return this;
+  }
+
+  this.sleep = (time) => {
+    const task = () => {
+      setTimeout(() => {
+        console.log(`Wake up after ${time}`);
+        this.next();
+      }, time * 1000);
+    };
+    this.tasks.push(task);
+    return this;
+  }
+}
+
+// 反转链表
+function reverseList(head) {
+  let prev = null; // 前一个节点
+  let curr = head; // 当前节点
+
+  while (curr) {
+    const next = curr.next; // 下一个节点
+    curr.next = prev; // 当前节点指向前一个节点
+    prev = curr; // 前一个节点更新为当前节点
+    curr = next; // 当前节点更新为下一个节点
+  }
+
+  return prev; // 返回反转后的头节点
+}
+
+
+// 实现一个函数，输入一个数字，将这个数字转成十进制
+function convertToDecimal(num) {
+  let res = 0;
+  let i = 0;
+  while (num) {
+    res += (num % 10) * Math.pow(2, i);
+    num = Math.floor(num / 10);
+    i++;
+  }
+  return res;
+}
+
+// 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+/**
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
+ */
+var removeNthFromEnd = function(head, n) {
+  
+    let fast = head; // 快指针
+    let slow = head; // 慢指针
+    while (n--) { // 快指针先走n步
+      fast = fast.next;
+    }
+    if (!fast) { // 如果快指针已经走到链表末尾，说明要删除的是头节点
+      return head.next;
+    }
+    while (fast.next) { // 快指针和慢指针一起走，直到快指针走到链表末尾
+      fast = fast.next;
+      slow = slow.next;
+    }
+    slow.next = slow.next.next; // 删除倒数第n个节点
+    return head;
+};
+
+
+// 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+
+// 有效字符串需满足：
+
+// 左括号必须用相同类型的右括号闭合。
+// 左括号必须以正确的顺序闭合。
+// 每个右括号都有一个对应的相同类型的左括号。
+
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var isValid = function(s) {
+  const stack = [];
+  const map = {
+    '(': ')',
+    '[': ']',
+    '{': '}',
+  };
+
+  for (const c of s) {
+    if (c in map) {
+      stack.push(c);
+    } else {
+      if (c !== map[stack.pop()]) {
+        return false;
+      }
+    }
+  }
+  return !stack.length;
+};
+
+/**
+ * 
+ * 
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} list1
+ * @param {ListNode} list2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function(list1, list2) {
+  // 将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 
+  const dummy = new ListNode();
+  let curr = dummy;
+  while (list1 && list2) {
+    if (list1.val < list2.val) {
+      curr.next = list1;
+      list1 = list1.next;
+    } else {
+      curr.next = list2;
+      list2 = list2.next;
+    }
+    curr = curr.next;
+  }
+  curr.next = list1 || list2;
+  return dummy.next;
+};
+
+/**
+ * 
+ * 数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+ * @param {number} n
+ * @return {string[]}
+ */
+var generateParenthesis = function(n) {
+  const res = [];
+  // dfs 深度优先遍历
+  const dfs = (lRemain, rRemain, str) => {
+    if (str.length === 2 * n) {
+      res.push(str);
+      return;
+    }
+    if (lRemain > 0) {
+      dfs(lRemain - 1, rRemain, str + '(');
+    }
+    if (lRemain < rRemain) {
+      dfs(lRemain, rRemain - 1, str + ')');
+    }
+  }
+  dfs(n, n, '');
+  return res;
+};
